@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bioevidence-agent"
+version = "0.3.0"
+description = "Auditable biomedical evidence retrieval with public-benchmark diagnostics"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{name = "Liang Chenyu"}]
+keywords = [
+  "biomedical",
+  "information-retrieval",
+  "evidence",
+  "pubmed",
+  "agent",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+dependencies = ["numpy>=1.26,<3"]
+
+[project.urls]
+Repository = "https://github.com/AnswerLiang-wq/bioevidence-agent"
+
+[project.scripts]
+bioevidence = "bioevidence.portfolio_cli:main"
+
+[project.optional-dependencies]
+benchmark = ["scikit-learn>=1.5,<2"]
+retrieval = ["torch>=2.2,<3", "transformers>=4.41,<6"]
+dev = ["build>=1.2,<2", "pytest>=8,<9", "ruff>=0.12,<1"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+bioevidence = ["fixtures/*.jsonl"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["E402"]
