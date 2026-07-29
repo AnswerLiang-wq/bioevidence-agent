@@ -1,0 +1,97 @@
+{
+  "artifacts": {
+    ".github/workflows/ci.yml": "5c06e8193b4372cbdb2d2f756624a75b5799432eef94bf8b1123efb6dd4b3d57",
+    ".github/workflows/heavy-evaluation.yml": "8be49c91ce71286b951baf0b35ca9be18b95288c813e20219e610248d4c075e0",
+    ".gitignore": "502512e593236227b8809bf758658c76686dddc62af7fb3c9ad2f9a76d4d0c24",
+    "CITATION.cff": "658c477a40c8ac2a679a9e406fbc6329f0bee8defdfe796385663044ee81863c",
+    "LICENSE": "c02af6f5f0357b7309ddfddb608e1183b1779b229050a673f5b5235f7f79a16b",
+    "README.md": "19c72bdc4f57fb09cbc53e4321f950d34a1ae240ebcce837a70208a57f9bc2e6",
+    "THIRD_PARTY_NOTICES.md": "c29e98186d0e714aec934a87237072545a35252ef5202e68f50ecc1aabc2cb3d",
+    "artifacts/bioevidence_agent-0.3.0-py3-none-any.whl": "85fe755935eb03334d38e7d36e20a8776b29615d5d356f51246daa21b45c4334",
+    "docs/architecture.md": "bb81c0c3c51c6b59890145b7088fb6e7580c5c6708e0dc01a20d541926c27cf0",
+    "docs/limitations.md": "ac2a81fc2f98136910a179d5d50b55c123982d12f2db39d1a272c656638b5a83",
+    "docs/methodology.md": "962af610f663d04783fb495f5bea570bbef70b8309b212b6158071effa7a0990",
+    "docs/resume_and_interview.md": "75b7986fc6125cef2be48eda35effaab739c5f42febc56deb028b7d8870c1a4d",
+    "pyproject.toml": "67b1db1e0e749eec9c5585791928476e64e74e02a5b7dd2d3375d8597f4b5086",
+    "reports/failures/abstract_only_rank_drops.json": "1c5f39c3f6af6ae7062c30a2794598cafe15a54e6e93c10c974430512eb34baf",
+    "reports/failures/title_assisted_answer_failures.json": "1379d97f6914ed3bf79acecabd617830cbd2efe3349f123373804aa2363c318d",
+    "reports/pubmedqa_abstract_only_retrieval_v1.json": "7dbd41e62b2696cb6c720395856fb96fd71253acca771b28cc809aad62cc267f",
+    "reports/pubmedqa_abstract_only_retrieval_v1.md": "993792bfec71f71a71f446c398c3012c4991056b51d97acdb4fec32c66765f56",
+    "reports/pubmedqa_evidence_utilization_v1.json": "7b7e098f9d6d3842b5fd2c8309d2cd41a8b9569b02b1ce6fc157e5781959e91d",
+    "reports/pubmedqa_evidence_utilization_v1.md": "2bda2a72d5d7539c015e0bc6dba5aa5e9435b0c794f8c897481388666761597d",
+    "reports/pubmedqa_title_assisted_v1.json": "bce09c77d17b964ee770c2e6894b61bd1d97f6df7691c8499670627e60a6d974",
+    "reports/pubmedqa_title_assisted_v1.md": "d4a25c7588963eea7cefc525246976abc26dd51718e7e7e0dff53d00bd21c7b1",
+    "requirements/ci.lock": "41b8762de71bf2c793183e1a348d69b6b216a6f5c74e53aa595158cedc62baa9",
+    "requirements/heavy.lock": "d22b3a73f1469d25d0a1b987967c6d6ddbc6385b346aec7ce580664b975cf838",
+    "scripts/verify_release.py": "286c14d8907e9866af2eb8119bf7a29553dd98c3e6b225013216c0ecc9745dea",
+    "src/bioevidence/__init__.py": "b21cabfcaacd2fc852c0fce417e493e7a2b3bde54617924f7efde1e3e1558ed3",
+    "src/bioevidence/bm25.py": "e34e38394a48acbff47d9f49d8efbe107f3ec50e593e39f15e1719c23f55602f",
+    "src/bioevidence/corpus.py": "d89d910dfbec83afc4505df36f8138904febd753079b52a2d173b03b736172fc",
+    "src/bioevidence/evidence_utilization.py": "987d371396c9e9024fc432861d76b05931711ffa6df13e5db01c7b777d5ca1df",
+    "src/bioevidence/fixtures/__init__.py": "8949028c36a081cc1a9888bb0e406166df6d9c63ad76561919d435e6ba91ca2b",
+    "src/bioevidence/fixtures/tiny_corpus.jsonl": "1d15daf378a305cf991c60889cc72f66a63bfec52deef45f592fec75ce150b55",
+    "src/bioevidence/hybrid.py": "b159832b5c6291159c96e813bdb12ec62496a5f35da029c46062c0bc55dd1a74",
+    "src/bioevidence/portfolio_cli.py": "5e76fde7c40681554de3195730c10b8116cfecc599dd93caa6219cff1a3cdcfb",
+    "src/bioevidence/product_contracts.py": "79c8381c676e5c0d3c2b6cf9ac6f90df7649c0608ad5ec3d35cb143083ebfbfe",
+    "src/bioevidence/pubmed.py": "591e968558b47f867468e7cc9847e15b0f608977390dd3c80c51fc244ce93a0d",
+    "src/bioevidence/pubmedqa.py": "e1fb3316b1018a61922dbc47df5af4c4c1cd6d23f3c4639ba8ec3d5f8f051ad5",
+    "src/bioevidence/pubmedqa_agent.py": "5dc6ab3c4a9c0d66d48fec756a04a31f1def363c58d5ac3f81bd3167aacd6aa5",
+    "src/bioevidence/pubmedqa_eval.py": "13971d93ca061ab74c2e2bf9f6f1f94eee6bdbfde0f501a119900bca68e55e97",
+    "src/bioevidence/pubmedqa_stress.py": "0e747858498b228ca43ce21b26219875d17351635056e0f63ff222c0a0f0b873",
+    "src/bioevidence/reranker.py": "927095ed188c53a70f016707407b90a52cbb6d5edae34a4348699b4d0b0e4c5b",
+    "src/bioevidence/retrievers.py": "1baa683623485a10f6116b8d8e4a88741e2379d6b77d1daf5ccd06b39251e003",
+    "src/bioevidence/tools.py": "ddf20ff9e964d37930b58159e03d840d5ed01a6e5bf7f3d9f2e388813930f080",
+    "src/bioevidence/vector.py": "5145622accced2111170a075b567280c4a123109e22622b4b89d7355cc722194",
+    "tests/test_core.py": "a92a7462352c1b1151d6128b2950020790ab42531320a5a1f0bb3f683ef2ba16",
+    "tests/test_diagnostics.py": "bbd4be2fa1136e49c7dbfb3478eee4345ad786acf32dd7aff89c2fe297fc1aa3"
+  },
+  "claims_not_made": [
+    "private blind performance",
+    "open-world retrieval completeness",
+    "semantic hallucination rate",
+    "clinical validity or medical advice"
+  ],
+  "excluded": [
+    "Day27-63 logs and archival governance/ACL workspaces",
+    "raw PubMedQA files and test labels",
+    "model weights and caches",
+    "dense embeddings and local run rankings",
+    "secrets, temporary files, and local absolute paths"
+  ],
+  "frozen_results": {
+    "abstract_only": {
+      "rank_drop_count": 12,
+      "reranked_mrr": 0.982,
+      "reranked_recall_at_10": 0.99,
+      "test_cases": 500
+    },
+    "evidence_controls": {
+      "correct_context_accuracy": 0.536,
+      "exact_mcnemar_p": 0.06614291,
+      "non_test_oof_cases": 500,
+      "shuffled_context_accuracy": 0.486
+    },
+    "title_assisted": {
+      "answer_accuracy": 0.558,
+      "answer_macro_f1": 0.383221,
+      "reranked_recall_at_10": 1.0,
+      "test_cases": 500
+    }
+  },
+  "manifest_version": "1.0.0",
+  "package": {
+    "version": "0.3.0",
+    "wheel": "artifacts/bioevidence_agent-0.3.0-py3-none-any.whl",
+    "wheel_sha256": "85fe755935eb03334d38e7d36e20a8776b29615d5d356f51246daa21b45c4334"
+  },
+  "release_id": "bioevidence-agent-v0.3.0",
+  "release_scope": "solo public PubMedQA portfolio release; public closed-corpus diagnostics, not blind or clinical validation",
+  "verification": {
+    "fresh_wheel_install_passed": true,
+    "github_ci_status": "pending_authentication",
+    "original_active_tests_passed": 98,
+    "out_of_tree_demo_passed": true,
+    "portfolio_tests_passed": 8,
+    "ruff_passed": true
+  }
+}

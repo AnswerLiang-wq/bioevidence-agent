@@ -1,0 +1,14 @@
+# Exact dependency set for lightweight CI. Generated/verified on 2026-07-29.
+numpy==2.2.6
+scipy==1.15.3
+scikit-learn==1.7.2
+joblib==1.5.1
+threadpoolctl==3.6.0
+pytest==8.4.1
+pluggy==1.6.0
+iniconfig==2.1.0
+packaging==25.0
+Pygments==2.19.2
+ruff==0.12.4
+build==1.2.2.post1
+pyproject-hooks==1.2.0

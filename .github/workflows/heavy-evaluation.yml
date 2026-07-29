@@ -1,0 +1,66 @@
+name: heavy-public-evaluation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pubmedqa-cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements/heavy.lock
+      - name: Cache pinned Hugging Face models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: bioevidence-hf-v1
+      - name: Install exact heavy dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements/heavy.lock
+          python -m pip install --no-deps -e .
+      - name: Prepare hash-pinned PubMedQA
+        run: bioevidence prepare --output-dir data/pubmedqa/v1
+      - name: Build title-assisted index and evaluate
+        run: |
+          bioevidence vector-index-build \
+            --benchmark-dir data/pubmedqa/v1 \
+            --index-dir indexes/title_assisted_e5_v1
+          bioevidence evaluate \
+            --benchmark-dir data/pubmedqa/v1 \
+            --index-dir indexes/title_assisted_e5_v1 \
+            --responses runs/title_assisted/responses.jsonl \
+            --output-json runs/title_assisted/report.json \
+            --output-markdown runs/title_assisted/report.md
+      - name: Build abstract-only index and evaluate
+        run: |
+          bioevidence abstract-index-build \
+            --benchmark-dir data/pubmedqa/v1 \
+            --index-dir indexes/abstract_only_e5_v1
+          bioevidence abstract-stress \
+            --benchmark-dir data/pubmedqa/v1 \
+            --index-dir indexes/abstract_only_e5_v1 \
+            --rankings runs/abstract_only/rankings.jsonl \
+            --ranking-manifest runs/abstract_only/manifest.json \
+            --title-assisted-report runs/title_assisted/report.json \
+            --output-json runs/abstract_only/report.json \
+            --output-markdown runs/abstract_only/report.md
+      - name: Run evidence-utilization controls
+        run: |
+          bioevidence evidence-controls \
+            --benchmark-dir data/pubmedqa/v1 \
+            --run-dir runs/evidence_controls \
+            --output-json runs/evidence_controls.json \
+            --output-markdown runs/evidence_controls.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bioevidence-public-evaluation
+          path: runs/

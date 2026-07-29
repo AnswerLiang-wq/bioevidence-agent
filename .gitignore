@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+build/
+dist/
+
+# Downloaded benchmark data and generated run artifacts
+data/
+runs/
+indexes/
+models/
+cache/
+
+# Local credentials and platform files
+.env
+.env.*
+!.env.example
+.DS_Store
+*.pem
+*.key
