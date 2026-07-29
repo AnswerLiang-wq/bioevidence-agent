@@ -1,0 +1,325 @@
+{
+  "baseline_id": "bioevidence-pubmedqa-evidence-utilization-cv-v1",
+  "benchmark_id": "pubmedqa-pqal-public-closed-v1",
+  "case_count": 500,
+  "claims_not_made": [
+    "official test-set performance",
+    "blind generalization performance",
+    "causal proof that the model reasons correctly",
+    "clinical validity"
+  ],
+  "deltas": {
+    "context_only": {
+      "accuracy_minus_majority": -0.018,
+      "macro_f1_minus_majority": 0.12716
+    },
+    "question_correct_context": {
+      "accuracy_minus_majority": -0.016,
+      "macro_f1_minus_majority": 0.118612
+    },
+    "question_only": {
+      "accuracy_minus_majority": -0.04,
+      "macro_f1_minus_majority": 0.144372
+    },
+    "question_shuffled_context": {
+      "accuracy_minus_majority": -0.066,
+      "macro_f1_minus_majority": 0.064664
+    }
+  },
+  "environment": {
+    "platform": "macOS-15.7.7-arm64-arm-64bit-Mach-O",
+    "python": "3.13.9"
+  },
+  "evaluation_scope": "fixed stratified five-fold out-of-fold diagnostic on the 500 official non-test PubMedQA records; not a test-set estimate",
+  "fold_count": 5,
+  "inputs": {
+    "design_manifest_sha256": "33f4fd27bbbbd01443f8c14833488c3b3dc5684601b2784c6e191919d96210e7",
+    "fold_assignments_sha256": "420dbf4318dd04be4deb4b162c87f21225c0803996227e2c89d8b2228e32625f",
+    "oof_predictions_sha256": "ab3d8b00b0c90782193b1a372ab9eeb6c2a5d1d03794786ef998030819d7f427",
+    "shuffled_context_map_sha256": "587e7b8ea8ad6710fa6ed2f73fafcd17d0d016dd5813ac64a803873873aecda6"
+  },
+  "metrics": {
+    "context_only": {
+      "accuracy": 0.534,
+      "confusion_matrix_gold_rows_predicted_columns": [
+        [
+          209,
+          64,
+          3
+        ],
+        [
+          110,
+          56,
+          3
+        ],
+        [
+          41,
+          12,
+          2
+        ]
+      ],
+      "correct": 267,
+      "labels": [
+        "yes",
+        "no",
+        "maybe"
+      ],
+      "macro_f1": 0.364273,
+      "per_label": {
+        "maybe": {
+          "f1": 0.063492,
+          "precision": 0.25,
+          "recall": 0.036364,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.372093,
+          "precision": 0.424242,
+          "recall": 0.331361,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.657233,
+          "precision": 0.580556,
+          "recall": 0.757246,
+          "support": 276
+        }
+      },
+      "total": 500
+    },
+    "majority": {
+      "accuracy": 0.552,
+      "confusion_matrix_gold_rows_predicted_columns": [
+        [
+          276,
+          0,
+          0
+        ],
+        [
+          169,
+          0,
+          0
+        ],
+        [
+          55,
+          0,
+          0
+        ]
+      ],
+      "correct": 276,
+      "labels": [
+        "yes",
+        "no",
+        "maybe"
+      ],
+      "macro_f1": 0.237113,
+      "per_label": {
+        "maybe": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.71134,
+          "precision": 0.552,
+          "recall": 1.0,
+          "support": 276
+        }
+      },
+      "total": 500
+    },
+    "question_correct_context": {
+      "accuracy": 0.536,
+      "confusion_matrix_gold_rows_predicted_columns": [
+        [
+          211,
+          62,
+          3
+        ],
+        [
+          109,
+          56,
+          4
+        ],
+        [
+          39,
+          15,
+          1
+        ]
+      ],
+      "correct": 268,
+      "labels": [
+        "yes",
+        "no",
+        "maybe"
+      ],
+      "macro_f1": 0.355725,
+      "per_label": {
+        "maybe": {
+          "f1": 0.031746,
+          "precision": 0.125,
+          "recall": 0.018182,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.370861,
+          "precision": 0.421053,
+          "recall": 0.331361,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.664567,
+          "precision": 0.587744,
+          "recall": 0.764493,
+          "support": 276
+        }
+      },
+      "total": 500
+    },
+    "question_only": {
+      "accuracy": 0.512,
+      "confusion_matrix_gold_rows_predicted_columns": [
+        [
+          182,
+          70,
+          24
+        ],
+        [
+          80,
+          70,
+          19
+        ],
+        [
+          35,
+          16,
+          4
+        ]
+      ],
+      "correct": 256,
+      "labels": [
+        "yes",
+        "no",
+        "maybe"
+      ],
+      "macro_f1": 0.381485,
+      "per_label": {
+        "maybe": {
+          "f1": 0.078431,
+          "precision": 0.085106,
+          "recall": 0.072727,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.430769,
+          "precision": 0.448718,
+          "recall": 0.414201,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.635253,
+          "precision": 0.612795,
+          "recall": 0.65942,
+          "support": 276
+        }
+      },
+      "total": 500
+    },
+    "question_shuffled_context": {
+      "accuracy": 0.486,
+      "confusion_matrix_gold_rows_predicted_columns": [
+        [
+          202,
+          69,
+          5
+        ],
+        [
+          127,
+          41,
+          1
+        ],
+        [
+          38,
+          17,
+          0
+        ]
+      ],
+      "correct": 243,
+      "labels": [
+        "yes",
+        "no",
+        "maybe"
+      ],
+      "macro_f1": 0.301777,
+      "per_label": {
+        "maybe": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.277027,
+          "precision": 0.322835,
+          "recall": 0.242604,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.628305,
+          "precision": 0.550409,
+          "recall": 0.731884,
+          "support": 276
+        }
+      },
+      "total": 500
+    }
+  },
+  "model_policy": {
+    "each_case_has_exactly_one_oof_prediction_per_system": true,
+    "recipe": "same frozen word/character TF-IDF plus balanced logistic regression parameters as v0.2",
+    "same_combined_model_for_correct_and_shuffled_validation": true,
+    "same_fold_mapping_for_all_systems": true,
+    "tuning_after_results": false
+  },
+  "paired_correct_context_vs": {
+    "context_only": {
+      "exact_mcnemar_two_sided_p": 1.0,
+      "losses": 10,
+      "ties": 479,
+      "wins": 11
+    },
+    "majority": {
+      "exact_mcnemar_two_sided_p": 0.52641631,
+      "losses": 65,
+      "ties": 378,
+      "wins": 57
+    },
+    "question_only": {
+      "exact_mcnemar_two_sided_p": 0.36267876,
+      "losses": 67,
+      "ties": 354,
+      "wins": 79
+    },
+    "question_shuffled_context": {
+      "exact_mcnemar_two_sided_p": 0.06614291,
+      "losses": 73,
+      "ties": 329,
+      "wins": 98
+    }
+  },
+  "report_version": "1.0.0",
+  "scientific_questions": {
+    "does_context_only_carry_signal": "Context-only accuracy is 0.534 versus majority 0.552.",
+    "does_correct_context_help_maybe": "The maybe-label F1 delta versus question-only is -0.047.",
+    "does_correct_context_improve_over_question_only": "Accuracy delta +0.024; macro-F1 delta -0.026.",
+    "does_shuffling_damage_performance": "Correct-context minus shuffled-context accuracy is +0.050; the paired exact McNemar p-value is 0.066. This pattern is consistent with context sensitivity but is not strong evidence of reliable evidence use.",
+    "what_is_the_bottleneck": "The fixed linear answerer is context-sensitive but the shuffle contrast is not conventionally significant (p=0.066); it remains weak on the minority maybe class. Label imbalance and evidence interpretation are the main bottlenecks."
+  },
+  "seed": 20260729
+}

@@ -1,0 +1,233 @@
+{
+  "baseline_id": "bioevidence-pubmedqa-abstract-only-retrieval-v1",
+  "benchmark_id": "pubmedqa-pqal-public-closed-v1",
+  "case_count": 500,
+  "claims_not_made": [
+    "blind or independent generalization performance",
+    "open-world literature retrieval completeness",
+    "clinical validity"
+  ],
+  "comparison_with_title_assisted_v1": {
+    "bm25": {
+      "abstract_only": {
+        "mrr": 0.953187,
+        "ndcg_at_10": 0.959679,
+        "recall_at_10": 0.98,
+        "recall_at_5": 0.976
+      },
+      "mrr_delta_abstract_minus_title": -0.046813,
+      "title_assisted": {
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0,
+        "recall_at_10": 1.0,
+        "recall_at_5": 1.0
+      }
+    },
+    "hybrid_reranked": {
+      "abstract_only": {
+        "mrr": 0.982,
+        "ndcg_at_10": 0.983909,
+        "recall_at_10": 0.99,
+        "recall_at_5": 0.99
+      },
+      "mrr_delta_abstract_minus_title": -0.018,
+      "title_assisted": {
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0,
+        "recall_at_10": 1.0,
+        "recall_at_5": 1.0
+      }
+    },
+    "hybrid_rrf": {
+      "abstract_only": {
+        "mrr": 0.977744,
+        "ndcg_at_10": 0.980026,
+        "recall_at_10": 0.988,
+        "recall_at_5": 0.984
+      },
+      "mrr_delta_abstract_minus_title": -0.022256,
+      "title_assisted": {
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0,
+        "recall_at_10": 1.0,
+        "recall_at_5": 1.0
+      }
+    },
+    "vector": {
+      "abstract_only": {
+        "mrr": 0.97923,
+        "ndcg_at_10": 0.981682,
+        "recall_at_10": 0.99,
+        "recall_at_5": 0.99
+      },
+      "mrr_delta_abstract_minus_title": -0.02077,
+      "title_assisted": {
+        "mrr": 1.0,
+        "ndcg_at_10": 1.0,
+        "recall_at_10": 1.0,
+        "recall_at_5": 1.0
+      }
+    }
+  },
+  "difficulty_statement": "The v1 title-assisted and v1 abstract-only conditions are different retrieval tasks. The former exposes the title-derived question inside the indexed document; the latter does not.",
+  "environment": {
+    "platform": "macOS-15.7.7-arm64-arm-64bit-Mach-O",
+    "python": "3.13.9"
+  },
+  "evaluation_scope": "500 official public PubMedQA test questions over the frozen 1,000-document corpus; model-side passages contain abstracts only",
+  "failure_examples": [
+    {
+      "abstract_only_rank": 774,
+      "case_id": "PUBMEDQA-TEST-0189",
+      "category": "miss_at_10",
+      "expected_pmid": "18359123",
+      "rank_drop": 773,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 209,
+      "case_id": "PUBMEDQA-TEST-0061",
+      "category": "miss_at_10",
+      "expected_pmid": "11570976",
+      "rank_drop": 208,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 55,
+      "case_id": "PUBMEDQA-TEST-0216",
+      "category": "miss_at_10",
+      "expected_pmid": "19106867",
+      "rank_drop": 54,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 45,
+      "case_id": "PUBMEDQA-TEST-0241",
+      "category": "miss_at_10",
+      "expected_pmid": "20064872",
+      "rank_drop": 44,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 27,
+      "case_id": "PUBMEDQA-TEST-0376",
+      "category": "miss_at_10",
+      "expected_pmid": "24139705",
+      "rank_drop": 26,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 4,
+      "case_id": "PUBMEDQA-TEST-0208",
+      "category": "rank_drop",
+      "expected_pmid": "18719011",
+      "rank_drop": 3,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 3,
+      "case_id": "PUBMEDQA-TEST-0454",
+      "category": "rank_drop",
+      "expected_pmid": "26460153",
+      "rank_drop": 2,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 3,
+      "case_id": "PUBMEDQA-TEST-0500",
+      "category": "rank_drop",
+      "expected_pmid": "29112560",
+      "rank_drop": 2,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 2,
+      "case_id": "PUBMEDQA-TEST-0100",
+      "category": "rank_drop",
+      "expected_pmid": "14599616",
+      "rank_drop": 1,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 2,
+      "case_id": "PUBMEDQA-TEST-0128",
+      "category": "rank_drop",
+      "expected_pmid": "15995461",
+      "rank_drop": 1,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 2,
+      "case_id": "PUBMEDQA-TEST-0175",
+      "category": "rank_drop",
+      "expected_pmid": "18041059",
+      "rank_drop": 1,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 2,
+      "case_id": "PUBMEDQA-TEST-0452",
+      "category": "rank_drop",
+      "expected_pmid": "26418441",
+      "rank_drop": 1,
+      "title_assisted_rank": 1
+    }
+  ],
+  "inputs": {
+    "ranking_manifest_sha256": "15f899d3442358519040578d73b070c0a12fff003547c64c690b4be767e8b1ee",
+    "rankings_sha256": "64386ec6f8a016b7b39e7f79037d548d7cf8979826f3cdf255b7ac51bd501b74",
+    "test_gold_sha256": "973c876966095b7a30ecdbebbac885cd7f758f10ef8eb4cd7a45765280c17419",
+    "title_assisted_report_sha256": "a760538d23ea42dde3747b596d095a281296956efbbfd04302b02fb2695e591f"
+  },
+  "latency_ms": {
+    "bm25": {
+      "count": 500,
+      "median": 2.476,
+      "p95": 3.222
+    },
+    "hybrid_reranked": {
+      "count": 500,
+      "median": 1108.533,
+      "p95": 1251.85
+    },
+    "hybrid_rrf": {
+      "count": 500,
+      "median": 18.552,
+      "p95": 21.227
+    },
+    "vector": {
+      "count": 500,
+      "median": 14.173,
+      "p95": 16.984
+    }
+  },
+  "latency_scope": "model load and one-time index build excluded; hybrid totals add per-query BM25, vector and fusion time; reranked totals also add cross-encoder time",
+  "rank_drop_count": 12,
+  "report_version": "1.0.0",
+  "retrieval_metrics": {
+    "bm25": {
+      "mrr": 0.953187,
+      "ndcg_at_10": 0.959679,
+      "recall_at_10": 0.98,
+      "recall_at_5": 0.976
+    },
+    "hybrid_reranked": {
+      "mrr": 0.982,
+      "ndcg_at_10": 0.983909,
+      "recall_at_10": 0.99,
+      "recall_at_5": 0.99
+    },
+    "hybrid_rrf": {
+      "mrr": 0.977744,
+      "ndcg_at_10": 0.980026,
+      "recall_at_10": 0.988,
+      "recall_at_5": 0.984
+    },
+    "vector": {
+      "mrr": 0.97923,
+      "ndcg_at_10": 0.981682,
+      "recall_at_10": 0.99,
+      "recall_at_5": 0.99
+    }
+  }
+}

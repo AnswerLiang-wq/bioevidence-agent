@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "BioEvidence Agent"
+version: 0.3.0
+date-released: 2026-07-29
+authors:
+  - family-names: "Liang"
+    given-names: "Chenyu"
+license: MIT
+repository-code: "https://github.com/AnswerLiang-wq/bioevidence-agent"
+keywords:
+  - biomedical information retrieval
+  - PubMedQA
+  - evidence provenance
+  - retrieval diagnostics

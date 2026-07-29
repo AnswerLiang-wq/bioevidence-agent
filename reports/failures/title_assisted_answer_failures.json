@@ -1,0 +1,116 @@
+{
+  "count": 10,
+  "examples": [
+    {
+      "case_id": "PUBMEDQA-TEST-0003",
+      "categories": [
+        "label_no_to_yes"
+      ],
+      "expected_label": "no",
+      "expected_pmid": "7547656",
+      "predicted_label": "yes",
+      "question": "Does continuous intravenous infusion of low-concentration epinephrine impair uterine blood flow in pregnant ewes?",
+      "retrieved_pmid": "7547656"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0004",
+      "categories": [
+        "label_no_to_yes"
+      ],
+      "expected_label": "no",
+      "expected_pmid": "7664228",
+      "predicted_label": "yes",
+      "question": "Discharging patients earlier from Winnipeg hospitals: does it adversely affect quality of care?",
+      "retrieved_pmid": "7664228"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0009",
+      "categories": [
+        "label_no_to_yes"
+      ],
+      "expected_label": "no",
+      "expected_pmid": "8521557",
+      "predicted_label": "yes",
+      "question": "The insertion allele of the ACE gene I/D polymorphism. A candidate gene for insulin resistance?",
+      "retrieved_pmid": "8521557"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0010",
+      "categories": [
+        "label_no_to_yes"
+      ],
+      "expected_label": "no",
+      "expected_pmid": "8566975",
+      "predicted_label": "yes",
+      "question": "Serovar specific immunity to Neisseria gonorrhoeae: does it exist?",
+      "retrieved_pmid": "8566975"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0011",
+      "categories": [
+        "label_no_to_yes"
+      ],
+      "expected_label": "no",
+      "expected_pmid": "8738894",
+      "predicted_label": "yes",
+      "question": "Diabetes mellitus among Swedish art glass workers--an effect of arsenic exposure?",
+      "retrieved_pmid": "8738894"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0015",
+      "categories": [
+        "label_no_to_yes"
+      ],
+      "expected_label": "no",
+      "expected_pmid": "8921484",
+      "predicted_label": "yes",
+      "question": "Does gestational age misclassification explain the difference in birthweights for Australian aborigines and whites?",
+      "retrieved_pmid": "8921484"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0016",
+      "categories": [
+        "label_no_to_yes"
+      ],
+      "expected_label": "no",
+      "expected_pmid": "9100537",
+      "predicted_label": "yes",
+      "question": "Can nonproliferative breast disease and proliferative breast disease without atypia be distinguished by fine-needle aspiration cytology?",
+      "retrieved_pmid": "9100537"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0022",
+      "categories": [
+        "label_yes_to_no"
+      ],
+      "expected_label": "yes",
+      "expected_pmid": "9483814",
+      "predicted_label": "no",
+      "question": "Does para-cervical block offer additional advantages in abortion induction with gemeprost in the 2nd trimester?",
+      "retrieved_pmid": "9483814"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0026",
+      "categories": [
+        "label_no_to_yes"
+      ],
+      "expected_label": "no",
+      "expected_pmid": "9603166",
+      "predicted_label": "yes",
+      "question": "Should all human immunodeficiency virus-infected patients with end-stage renal disease be excluded from transplantation?",
+      "retrieved_pmid": "9603166"
+    },
+    {
+      "case_id": "PUBMEDQA-TEST-0030",
+      "categories": [
+        "label_yes_to_no"
+      ],
+      "expected_label": "yes",
+      "expected_pmid": "10135926",
+      "predicted_label": "no",
+      "question": "Is oral endotracheal intubation efficacy impaired in the helicopter environment?",
+      "retrieved_pmid": "10135926"
+    }
+  ],
+  "scope": "representative public answer failures from the frozen v0.2 report"
+}

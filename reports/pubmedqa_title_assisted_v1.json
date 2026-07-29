@@ -1,0 +1,278 @@
+{
+  "answer_metrics": {
+    "bm25": {
+      "accuracy": 0.558,
+      "correct": 279,
+      "macro_f1": 0.383221,
+      "per_label": {
+        "maybe": {
+          "f1": 0.0625,
+          "precision": 0.222222,
+          "recall": 0.036364,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.412162,
+          "precision": 0.480315,
+          "recall": 0.360947,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.675,
+          "precision": 0.593407,
+          "recall": 0.782609,
+          "support": 276
+        }
+      },
+      "total": 500
+    },
+    "hybrid_reranked": {
+      "accuracy": 0.558,
+      "correct": 279,
+      "macro_f1": 0.383221,
+      "per_label": {
+        "maybe": {
+          "f1": 0.0625,
+          "precision": 0.222222,
+          "recall": 0.036364,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.412162,
+          "precision": 0.480315,
+          "recall": 0.360947,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.675,
+          "precision": 0.593407,
+          "recall": 0.782609,
+          "support": 276
+        }
+      },
+      "total": 500
+    },
+    "hybrid_rrf": {
+      "accuracy": 0.558,
+      "correct": 279,
+      "macro_f1": 0.383221,
+      "per_label": {
+        "maybe": {
+          "f1": 0.0625,
+          "precision": 0.222222,
+          "recall": 0.036364,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.412162,
+          "precision": 0.480315,
+          "recall": 0.360947,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.675,
+          "precision": 0.593407,
+          "recall": 0.782609,
+          "support": 276
+        }
+      },
+      "total": 500
+    },
+    "vector": {
+      "accuracy": 0.558,
+      "correct": 279,
+      "macro_f1": 0.383221,
+      "per_label": {
+        "maybe": {
+          "f1": 0.0625,
+          "precision": 0.222222,
+          "recall": 0.036364,
+          "support": 55
+        },
+        "no": {
+          "f1": 0.412162,
+          "precision": 0.480315,
+          "recall": 0.360947,
+          "support": 169
+        },
+        "yes": {
+          "f1": 0.675,
+          "precision": 0.593407,
+          "recall": 0.782609,
+          "support": 276
+        }
+      },
+      "total": 500
+    }
+  },
+  "baseline_id": "bioevidence-pubmedqa-public-closed-tfidf-logreg-reranked-v1",
+  "benchmark_id": "pubmedqa-pqal-public-closed-v1",
+  "case_count": 500,
+  "claims_not_made": [
+    "private blind performance",
+    "open-world literature-retrieval completeness",
+    "new-disease or real-world generalization",
+    "clinical validity, treatment efficacy, or medical advice",
+    "independently confirmed semantic hallucination rate",
+    "semantic citation precision without independent human review"
+  ],
+  "corpus_document_count": 1000,
+  "environment": {
+    "platform": "macOS-15.7.7-arm64-arm-64bit-Mach-O",
+    "python": "3.13.9"
+  },
+  "evaluation_scope": "fixed 500-case official PubMedQA public test in a 1,000-document closed corpus; not blind or open-world generalization",
+  "failure_taxonomy": {
+    "label_maybe_to_no": 9,
+    "label_maybe_to_yes": 44,
+    "label_no_to_maybe": 4,
+    "label_no_to_yes": 104,
+    "label_yes_to_maybe": 3,
+    "label_yes_to_no": 57
+  },
+  "headline_system": "hybrid_reranked",
+  "inputs": {
+    "corpus_sha256": "609ae26505a2d0b6b307e0880718fa9401bd6dfb1573c4f687efc652488f9552",
+    "manifest_sha256": "e33a45b30c673e23f347743a3fffc4789e123e61e8108e01588add0d065e4ff6",
+    "responses_sha256": "f7553b1dfad39765d3aec7b83845ee27f23ed96aa0fc797cc255c3454782e075",
+    "test_gold_sha256": "973c876966095b7a30ecdbebbac885cd7f758f10ef8eb4cd7a45765280c17419",
+    "test_inputs_sha256": "55a174b64c820dc96732358ce92747218de505c8ebbd00cea83118abe1310fee",
+    "train_sha256": "6966eaa4d0aadb879853deaaf227ef4276684da1d3b6102b7af795c0dd3270ab",
+    "vector_manifest_sha256": "52046f5d8033d43b5ceac991c01b74ef5451e6c26e47bbd13f0af327874461ea"
+  },
+  "interpretation_limits": [
+    "Questions are article titles or title-derived and the corpus contains those titles, so retrieval is a favorable source-localization task.",
+    "The official test labels are public; results are public benchmark performance, not a private blind estimate.",
+    "PubMedQA contexts omit the conclusion and do not establish open-world literature-search completeness or clinical validity.",
+    "Answer labels are public expert annotations, but the fixed answerer is a small engineering baseline and its probability is not evidence strength.",
+    "Exact-span and PMID-source metrics verify structure and source identity, not whether every generated sentence is semantically complete.",
+    "No test-case error was used to tune this v1 baseline after the run; improvements require a new baseline ID."
+  ],
+  "models": {
+    "answerer": {
+      "baseline_id": "bioevidence-pubmedqa-tfidf-logreg-v1",
+      "character_tfidf": {
+        "analyzer": "char_wb",
+        "max_features": 40000,
+        "min_df": 3,
+        "ngram_range": [
+          3,
+          5
+        ],
+        "sublinear_tf": true
+      },
+      "classifier": {
+        "C": 1.0,
+        "class_weight": "balanced",
+        "max_iter": 1000,
+        "random_state": 0,
+        "solver": "lbfgs",
+        "type": "logistic_regression"
+      },
+      "model_id": "tfidf-word-char-logistic-regression",
+      "training_policy": "fit on the 500 records outside official PubMedQA test IDs; no LONG_ANSWER or official-test labels used as model input",
+      "word_tfidf": {
+        "max_df": 0.98,
+        "max_features": 60000,
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "sublinear_tf": true
+      }
+    },
+    "reranker": {
+      "batch_size": 16,
+      "candidate_k": 20,
+      "device": "cpu",
+      "max_length": 512,
+      "model_id": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+      "model_revision": "1427fd652930e4ba29e8149678df786c240d8825"
+    },
+    "vector": {
+      "embedding_dimension": 384,
+      "max_length": 512,
+      "model_id": "intfloat/multilingual-e5-small",
+      "model_revision": "fd1525a9fd15316a2d503bf26ab031a61d056e98"
+    }
+  },
+  "report_version": "1.0.0",
+  "retrieval_metrics": {
+    "bm25": {
+      "mrr": 1.0,
+      "ndcg_at_10": 1.0,
+      "recall_at_10": 1.0,
+      "recall_at_5": 1.0
+    },
+    "hybrid_reranked": {
+      "mrr": 1.0,
+      "ndcg_at_10": 1.0,
+      "recall_at_10": 1.0,
+      "recall_at_5": 1.0
+    },
+    "hybrid_rrf": {
+      "mrr": 1.0,
+      "ndcg_at_10": 1.0,
+      "recall_at_10": 1.0,
+      "recall_at_5": 1.0
+    },
+    "vector": {
+      "mrr": 1.0,
+      "ndcg_at_10": 1.0,
+      "recall_at_10": 1.0,
+      "recall_at_5": 1.0
+    }
+  },
+  "runtime": {
+    "end_to_end_latency_ms": {
+      "count": 500,
+      "mean": 1092.1,
+      "median": 1108.533,
+      "p95": 1234.633,
+      "total": 546049.873
+    },
+    "model_api_cost_usd": {
+      "mean": 0.0,
+      "p95": 0.0,
+      "total": 0.0
+    },
+    "reranker": {
+      "batch_size": 16,
+      "call_count": 500,
+      "device": "cpu",
+      "latency_scope": "reranker scoring only; model load excluded",
+      "median_latency_ms": 1082.461,
+      "p95_latency_ms": 1205.778,
+      "scored_pair_count": 10000
+    }
+  },
+  "source_full_report_sha256": "a760538d23ea42dde3747b596d095a281296956efbbfd04302b02fb2695e591f",
+  "structural_grounding": {
+    "citation_source_match": {
+      "count": 500,
+      "rate": 1.0,
+      "total": 500
+    },
+    "claim_citation_coverage": {
+      "count": 500,
+      "rate": 1.0,
+      "total": 500
+    },
+    "exact_span_integrity": {
+      "count": 500,
+      "rate": 1.0,
+      "total": 500
+    },
+    "schema_valid": {
+      "count": 500,
+      "rate": 1.0,
+      "total": 500
+    },
+    "source_hash_integrity": {
+      "count": 500,
+      "rate": 1.0,
+      "total": 500
+    }
+  }
+}

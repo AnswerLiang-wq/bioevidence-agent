@@ -1,0 +1,102 @@
+{
+  "count": 12,
+  "examples": [
+    {
+      "abstract_only_rank": 774,
+      "case_id": "PUBMEDQA-TEST-0189",
+      "category": "miss_at_10",
+      "expected_pmid": "18359123",
+      "rank_drop": 773,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 209,
+      "case_id": "PUBMEDQA-TEST-0061",
+      "category": "miss_at_10",
+      "expected_pmid": "11570976",
+      "rank_drop": 208,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 55,
+      "case_id": "PUBMEDQA-TEST-0216",
+      "category": "miss_at_10",
+      "expected_pmid": "19106867",
+      "rank_drop": 54,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 45,
+      "case_id": "PUBMEDQA-TEST-0241",
+      "category": "miss_at_10",
+      "expected_pmid": "20064872",
+      "rank_drop": 44,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 27,
+      "case_id": "PUBMEDQA-TEST-0376",
+      "category": "miss_at_10",
+      "expected_pmid": "24139705",
+      "rank_drop": 26,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 4,
+      "case_id": "PUBMEDQA-TEST-0208",
+      "category": "rank_drop",
+      "expected_pmid": "18719011",
+      "rank_drop": 3,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 3,
+      "case_id": "PUBMEDQA-TEST-0454",
+      "category": "rank_drop",
+      "expected_pmid": "26460153",
+      "rank_drop": 2,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 3,
+      "case_id": "PUBMEDQA-TEST-0500",
+      "category": "rank_drop",
+      "expected_pmid": "29112560",
+      "rank_drop": 2,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 2,
+      "case_id": "PUBMEDQA-TEST-0100",
+      "category": "rank_drop",
+      "expected_pmid": "14599616",
+      "rank_drop": 1,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 2,
+      "case_id": "PUBMEDQA-TEST-0128",
+      "category": "rank_drop",
+      "expected_pmid": "15995461",
+      "rank_drop": 1,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 2,
+      "case_id": "PUBMEDQA-TEST-0175",
+      "category": "rank_drop",
+      "expected_pmid": "18041059",
+      "rank_drop": 1,
+      "title_assisted_rank": 1
+    },
+    {
+      "abstract_only_rank": 2,
+      "case_id": "PUBMEDQA-TEST-0452",
+      "category": "rank_drop",
+      "expected_pmid": "26418441",
+      "rank_drop": 1,
+      "title_assisted_rank": 1
+    }
+  ],
+  "scope": "all final-system rank drops in the frozen abstract-only stress test"
+}
