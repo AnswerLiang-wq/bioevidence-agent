@@ -315,11 +315,11 @@
   },
   "report_version": "1.0.0",
   "scientific_questions": {
-    "does_context_only_carry_signal": "Context-only accuracy is 0.534 versus majority 0.552.",
-    "does_correct_context_help_maybe": "The maybe-label F1 delta versus question-only is -0.047.",
-    "does_correct_context_improve_over_question_only": "Accuracy delta +0.024; macro-F1 delta -0.026.",
-    "does_shuffling_damage_performance": "Correct-context minus shuffled-context accuracy is +0.050; the paired exact McNemar p-value is 0.066. This pattern is consistent with context sensitivity but is not strong evidence of reliable evidence use.",
-    "what_is_the_bottleneck": "The fixed linear answerer is context-sensitive but the shuffle contrast is not conventionally significant (p=0.066); it remains weak on the minority maybe class. Label imbalance and evidence interpretation are the main bottlenecks."
+    "does_context_provide_measurable_gain": "Versus question-only, accuracy changes by +0.024 and macro-F1 by -0.026; paired accuracy p=0.363. The gain is mixed rather than robust.",
+    "does_shuffling_context_clearly_reduce_results": "Correct-context minus shuffled-context accuracy is +0.050; the paired exact McNemar p-value is 0.066. This pattern is consistent with context sensitivity but is not strong evidence of reliable evidence use.",
+    "is_current_answerer_significantly_better_than_majority": "No on paired accuracy in this fixed development diagnostic: correct-context accuracy is 0.536 versus majority 0.552, with exact McNemar p=0.526. Its macro-F1 is higher because majority never predicts no/maybe.",
+    "is_primary_bottleneck_retrieval_or_evidence_interpretation": "The fixed linear answerer is context-sensitive but the shuffle contrast is not conventionally significant (p=0.066); it remains weak on the minority maybe class. Label imbalance and evidence interpretation are the main bottlenecks. Retrieval is not the dominant bottleneck in this closed corpus.",
+    "why_is_maybe_weak": "Both class imbalance and evidence-use limitations contribute: maybe has only 55 cases, and correct-context maybe F1 is 0.032, a -0.047 change versus question-only."
   },
   "seed": 20260729
 }

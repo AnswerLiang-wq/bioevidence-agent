@@ -24,7 +24,7 @@ from bioevidence.pubmedqa_stress import (
 
 ROOT = Path(__file__).resolve().parents[1]
 ABSTRACT_REPORT = ROOT / "reports/pubmedqa_abstract_only_retrieval_v1.json"
-CONTROL_REPORT = ROOT / "reports/pubmedqa_evidence_utilization_v1.json"
+CONTROL_REPORT = ROOT / "reports/pubmedqa_evidence_utilization_cv_v1.json"
 
 
 class _Encoder:
@@ -156,8 +156,15 @@ def test_frozen_reports_have_honest_complete_denominators() -> None:
     assert controls["model_policy"][
         "same_combined_model_for_correct_and_shuffled_validation"
     ]
+    assert set(controls["scientific_questions"]) == {
+        "is_current_answerer_significantly_better_than_majority",
+        "does_context_provide_measurable_gain",
+        "does_shuffling_context_clearly_reduce_results",
+        "why_is_maybe_weak",
+        "is_primary_bottleneck_retrieval_or_evidence_interpretation",
+    }
     assert "not strong evidence" in controls["scientific_questions"][
-        "does_shuffling_damage_performance"
+        "does_shuffling_context_clearly_reduce_results"
     ]
 
 
@@ -169,8 +176,8 @@ def test_json_and_markdown_headline_numbers_match() -> None:
             ("0.9900", "0.9820"),
         ),
         (
-            "pubmedqa_evidence_utilization_v1.json",
-            "pubmedqa_evidence_utilization_v1.md",
+            "pubmedqa_evidence_utilization_cv_v1.json",
+            "pubmedqa_evidence_utilization_cv_v1.md",
             ("0.5360", "0.3557"),
         ),
     ):
@@ -209,6 +216,6 @@ def test_release_tree_contains_no_local_absolute_paths() -> None:
 def test_report_hashes_can_be_recomputed() -> None:
     for name in (
         "pubmedqa_abstract_only_retrieval_v1.json",
-        "pubmedqa_evidence_utilization_v1.json",
+        "pubmedqa_evidence_utilization_cv_v1.json",
     ):
         assert len(sha256_file(ROOT / "reports" / name)) == 64

@@ -306,34 +306,48 @@ def run_evidence_utilization_controls(
         - question["per_label"]["maybe"]["f1"]
     )
     answers = {
-        "does_correct_context_improve_over_question_only": (
-            f"Accuracy delta {context_gain:+.3f}; macro-F1 delta "
-            f"{correct['macro_f1'] - question['macro_f1']:+.3f}."
+        "is_current_answerer_significantly_better_than_majority": (
+            "No on paired accuracy in this fixed development diagnostic: "
+            f"correct-context accuracy is {correct['accuracy']:.3f} versus "
+            f"majority {metrics['majority']['accuracy']:.3f}, with exact "
+            "McNemar p="
+            f"{paired['majority']['exact_mcnemar_two_sided_p']:.3f}. "
+            "Its macro-F1 is higher because majority never predicts no/maybe."
         ),
-        "does_shuffling_damage_performance": (
+        "does_context_provide_measurable_gain": (
+            f"Versus question-only, accuracy changes by {context_gain:+.3f} "
+            f"and macro-F1 by "
+            f"{correct['macro_f1'] - question['macro_f1']:+.3f}; paired "
+            "accuracy p="
+            f"{paired['question_only']['exact_mcnemar_two_sided_p']:.3f}. "
+            "The gain is mixed rather than robust."
+        ),
+        "does_shuffling_context_clearly_reduce_results": (
             f"Correct-context minus shuffled-context accuracy is "
             f"{shuffle_damage:+.3f}; the paired exact McNemar p-value is "
             f"{paired['question_shuffled_context']['exact_mcnemar_two_sided_p']:.3f}. "
             "This pattern is consistent with context sensitivity but is not "
             "strong evidence of reliable evidence use."
         ),
-        "does_context_only_carry_signal": (
-            f"Context-only accuracy is {metrics['context_only']['accuracy']:.3f} "
-            f"versus majority {metrics['majority']['accuracy']:.3f}."
+        "why_is_maybe_weak": (
+            "Both class imbalance and evidence-use limitations contribute: "
+            f"maybe has only {correct['per_label']['maybe']['support']} cases, "
+            f"and correct-context maybe F1 is "
+            f"{correct['per_label']['maybe']['f1']:.3f}, a "
+            f"{maybe_delta:+.3f} change versus question-only."
         ),
-        "does_correct_context_help_maybe": (
-            f"The maybe-label F1 delta versus question-only is "
-            f"{maybe_delta:+.3f}."
-        ),
-        "what_is_the_bottleneck": _bottleneck_statement(
-            metrics,
-            context_gain=context_gain,
-            shuffle_damage=shuffle_damage,
-            shuffle_p=float(
-                paired["question_shuffled_context"][
-                    "exact_mcnemar_two_sided_p"
-                ]
-            ),
+        "is_primary_bottleneck_retrieval_or_evidence_interpretation": (
+            _bottleneck_statement(
+                metrics,
+                context_gain=context_gain,
+                shuffle_damage=shuffle_damage,
+                shuffle_p=float(
+                    paired["question_shuffled_context"][
+                        "exact_mcnemar_two_sided_p"
+                    ]
+                ),
+            )
+            + " Retrieval is not the dominant bottleneck in this closed corpus."
         ),
     }
     report = {
