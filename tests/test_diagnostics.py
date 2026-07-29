@@ -207,7 +207,7 @@ def test_release_tree_contains_no_local_absolute_paths() -> None:
         if (
             path.is_file()
             and path.suffix.lower() in scanned_suffixes
-            and ".git" not in path.parts
+            and not {".git", ".venv"}.intersection(path.parts)
         ):
             text = path.read_text(encoding="utf-8")
             assert not any(value in text for value in forbidden), path

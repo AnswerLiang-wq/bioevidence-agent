@@ -23,7 +23,7 @@
     "reports/pubmedqa_title_assisted_v1.md": "d4a25c7588963eea7cefc525246976abc26dd51718e7e7e0dff53d00bd21c7b1",
     "requirements/ci.lock": "41b8762de71bf2c793183e1a348d69b6b216a6f5c74e53aa595158cedc62baa9",
     "requirements/heavy.lock": "d22b3a73f1469d25d0a1b987967c6d6ddbc6385b346aec7ce580664b975cf838",
-    "scripts/verify_release.py": "286c14d8907e9866af2eb8119bf7a29553dd98c3e6b225013216c0ecc9745dea",
+    "scripts/verify_release.py": "59c31d90d51dd792059157ebef12c79031fe19371e80c887f9c599afc19f77d3",
     "src/bioevidence/__init__.py": "b21cabfcaacd2fc852c0fce417e493e7a2b3bde54617924f7efde1e3e1558ed3",
     "src/bioevidence/bm25.py": "e34e38394a48acbff47d9f49d8efbe107f3ec50e593e39f15e1719c23f55602f",
     "src/bioevidence/corpus.py": "d89d910dfbec83afc4505df36f8138904febd753079b52a2d173b03b736172fc",
@@ -43,7 +43,7 @@
     "src/bioevidence/tools.py": "ddf20ff9e964d37930b58159e03d840d5ed01a6e5bf7f3d9f2e388813930f080",
     "src/bioevidence/vector.py": "5145622accced2111170a075b567280c4a123109e22622b4b89d7355cc722194",
     "tests/test_core.py": "a92a7462352c1b1151d6128b2950020790ab42531320a5a1f0bb3f683ef2ba16",
-    "tests/test_diagnostics.py": "3c4f29231ecc96bcfd85e365bbd24b686442143de9112cf3ddc5eaf8856701dd"
+    "tests/test_diagnostics.py": "2f7e7062fd1059208b44f221d4050a0641bcf1c07a252a64a3d84601e0f65af8"
   },
   "claims_not_made": [
     "private blind performance",

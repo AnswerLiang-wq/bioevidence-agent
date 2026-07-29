@@ -13,6 +13,7 @@ IGNORED_PARTS = {
     ".git",
     ".pytest_cache",
     ".ruff_cache",
+    ".venv",
     "__pycache__",
     "build",
     "dist",
