@@ -1,8 +1,11 @@
 # BioEvidence Agent Product Demo — one-pager (G1 draft)
 
-Status: hypothesis, not validated product evidence  
-Draft date: 2026-08-05  
-Baseline: BioEvidence Agent v0.3.0  
+Status: hypothesis, not validated product evidence
+
+Draft date: 2026-08-05
+
+Baseline: BioEvidence Agent v0.3.0
+
 Proposed product-demo line: v0.4 candidate; no tag or Release authorized
 
 ## Product statement

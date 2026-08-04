@@ -1,7 +1,9 @@
 # Phase 0 audit: Agent baseline and productization boundary
 
-Audit date: 2026-08-05  
-Productization branch: `codex/bioevidence-product-demo`  
+Audit date: 2026-08-05
+
+Productization branch: `codex/bioevidence-product-demo`
+
 Engineering baseline: `v0.3.0`, commit
 `46afee6ca5b5a4066cdcafa9532abcc7d6e805ef`
 
