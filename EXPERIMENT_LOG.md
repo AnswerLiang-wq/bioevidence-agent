@@ -50,3 +50,24 @@ anonymous participants.
 - VEPS observations: 0
 
 No simulated or model-generated behavior is counted as participant evidence.
+## E-003 — Product Demo internal workflow and fault audit
+
+- Date: 2026-08-05
+- Type: engineering/internal usability audit; no participants
+- Surfaces: local HTTP API, desktop browser, 390 x 844 responsive browser,
+  standard fixed-PMID mode, and live PubMed ESearch/EFetch mode.
+- Public live question: `Does tocilizumab reduce mortality in adults
+  hospitalized with severe COVID-19?`
+- Deterministic checks: happy path, empty search, missing abstracts, fetch
+  failure, mixed and insufficient packs, forged-card rejection, question
+  bounds, medical-advice boundary, privacy logs, and original core regression.
+- Result: 25/25 Python tests passed in the final full run, including an
+  out-of-tree launcher regression; Ruff passed.
+- Live observation: the first run exposed duplicate same-title PubMed records.
+  Exact-title deduplication and visible publication types were implemented;
+  the same query then displayed five distinct titles.
+- Browser observation: both standard and live tasks rendered, card acceptance
+  updated the pack counter, and the narrow layout had no horizontal overflow.
+- Limitation: no real participant was involved. This experiment cannot supply
+  VEPS, efficiency, trust, reuse, or product-value evidence.
+- Detailed record: `docs/product_case/INTERNAL_TEST_REPORT.md`.

@@ -44,7 +44,7 @@ does not contain participant data.
 ## D-004 — Isolate product orchestration from Agent capability code
 
 - Date: 2026-08-05
-- Status: proposed; awaiting G1
+- Status: implemented after G1 confirmation
 - Evidence: PubMed, corpus, retriever, typed-tool, exact-span, and hash
   components already expose reusable Python interfaces.
 - Decision: place web UI and workflow orchestration in `apps/product_demo/`,
@@ -56,7 +56,7 @@ does not contain participant data.
 ## D-005 — Separate deterministic and live task modes
 
 - Date: 2026-08-05
-- Status: proposed; awaiting G1 and implementation test
+- Status: implemented and internally tested
 - Evidence: the packaged fixture is stable but not representative of a live
   research workflow; PubMed ESearch/EFetch works but depends on an external
   service and has variable retrieval results.
@@ -64,3 +64,43 @@ does not contain participant data.
   a visibly labelled live-research mode for participant-owned safe questions.
   Metrics from different modes are never pooled without an explicit mode
   field and comparable task definition.
+## D-007 — Preserve the v0.3.0 manifest as historical evidence
+
+- Date: 2026-08-05
+- Status: decided
+- Evidence: Stage 2 adds explicit private-research ignore rules, so the current
+  `.gitignore` no longer matches the SHA-256 frozen in the v0.3.0 release
+  manifest. The original tagged checkout and GitHub Release remain unchanged.
+- Decision: do not update `reports/release_manifest_v0.3.0.json`. Its full-tree
+  verifier is expected to fail on the product branch once a v0.3.0-bound file
+  changes. Create a separate product-version manifest at final release audit.
+- Verification during development: run all tests, lint, privacy checks, and
+  explicit frozen-report checks; rerun the v0.3.0 verifier only against the
+  v0.3.0 tagged checkout.
+
+## D-008 — Use a zero-new-dependency local web layer
+
+- Date: 2026-08-05
+- Status: implemented
+- Evidence: the repository already depends on Python and exposes reusable
+  PubMed, BM25, typed-tool, exact-snippet, and hashing interfaces. The first
+  product iteration does not require accounts, cloud persistence, or a large
+  frontend framework.
+- Decision: use Python's local `ThreadingHTTPServer` plus static HTML, CSS, and
+  JavaScript. Bind only to `127.0.0.1`, apply a restrictive CSP, keep session
+  evidence in memory, and write only allowlisted privacy-minimized events.
+- Trade-off: this is appropriate for moderated local research, not a
+  production deployment architecture.
+
+## D-009 — Deduplicate only exact normalized titles in live results
+
+- Date: 2026-08-05
+- Status: implemented after internal live QA
+- Evidence: a real tocilizumab query returned two language/indexing records
+  with the same normalized title. The duplicate displaced another candidate
+  in a five-card interface.
+- Decision: remove exact normalized-title duplicates before BM25 ranking and
+  show PubMed publication types on each card. Do not apply fuzzy semantic
+  deduplication without user evidence because similar titles can describe
+  scientifically distinct studies.
+- Baseline impact: none; the change is confined to `apps/product_demo/`.

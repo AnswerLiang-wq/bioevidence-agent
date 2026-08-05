@@ -1,0 +1,16 @@
+[
+  {
+    "description": "Hospitalized adults; keep mortality separate from recovery time, outpatient prevention, and safety endpoints.",
+    "id": "standard-remdesivir-mortality",
+    "pmids": ["32445440", "32423584", "33264556", "34937145", "32706859"],
+    "question": "Remdesivir reduces all-cause mortality in adults hospitalized with COVID-19.",
+    "title": "Remdesivir and mortality in hospitalized adults"
+  },
+  {
+    "description": "Hospitalized adults; distinguish 28-day mortality from clinical-status, outpatient, prophylaxis, and mechanistic endpoints.",
+    "id": "standard-hydroxychloroquine-mortality",
+    "pmids": ["33031652", "33165621", "32706953", "33264556"],
+    "question": "Hydroxychloroquine reduces 28-day mortality in adults hospitalized with COVID-19.",
+    "title": "Hydroxychloroquine and 28-day mortality"
+  }
+]

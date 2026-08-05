@@ -77,7 +77,7 @@ can reduce coordination effort while preserving human scientific judgment.
    - PMID and DOI;
    - PubMed source link;
    - exact abstract snippet;
-   - source and snippet SHA-256;
+   - normalized-record and snippet SHA-256;
    - provisional `supports / opposes / unclear` suggestion;
    - abstract-only and uncertainty boundaries.
 4. User accepts or excludes each card and records a note and their own
