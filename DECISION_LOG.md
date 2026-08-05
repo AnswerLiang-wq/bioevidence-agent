@@ -53,17 +53,19 @@ does not contain participant data.
 - Core-change rule: modify `src/bioevidence/` only for a demonstrated adapter
   blocker, with a regression test and rollback note.
 
-## D-005 — Separate deterministic and live task modes
+## D-005 — Separate fixed-candidate and live-discovery task modes
 
 - Date: 2026-08-05
 - Status: implemented and internally tested
 - Evidence: the packaged fixture is stable but not representative of a live
   research workflow; PubMed ESearch/EFetch works but depends on an external
   service and has variable retrieval results.
-- Decision: provide a deterministic standard-demo mode for repeatability and
-  a visibly labelled live-research mode for participant-owned safe questions.
-  Metrics from different modes are never pooled without an explicit mode
-  field and comparable task definition.
+- Decision: provide a fixed-PMID standard-demo mode for repeatable candidate
+  identity and a visibly labelled live-research mode for participant-owned
+  safe questions. Both fetch current PubMed records and remain exposed to
+  external-service change or failure. Metrics from different modes are never
+  pooled without an explicit mode field and comparable task definition.
+
 ## D-007 — Preserve the v0.3.0 manifest as historical evidence
 
 - Date: 2026-08-05

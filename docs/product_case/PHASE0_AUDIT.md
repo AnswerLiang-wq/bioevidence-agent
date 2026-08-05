@@ -115,8 +115,9 @@ must have a regression test and a documented rollback.
 
 Proposed runtime modes:
 
-1. `standard-demo`: a deterministic real-PubMed task fixture for unattended
-   demonstration and repeatable user-test rehearsal;
+1. `standard-demo`: a fixed-candidate real-PubMed task mode for repeatable
+   rehearsal; the candidate PMIDs are stable but fetched records and external
+   availability are not frozen;
 2. `live-research`: PubMed ESearch/EFetch candidate discovery followed by
    local ranking and evidence extraction for participant-owned questions;
 3. an explicit degraded BM25 mode if local transformer dependencies are not

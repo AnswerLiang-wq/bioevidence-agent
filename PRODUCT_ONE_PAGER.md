@@ -169,7 +169,8 @@ In scope:
 - minimal local event log for task metrics;
 - clear empty, partial, timeout, and external-service error states;
 - medical-advice and abstract-only boundary messages;
-- a deterministic standard-demo mode and a labelled live-research mode.
+- a fixed-PMID standard-demo mode and a labelled live-research mode; both
+  fetch current records from PubMed and therefore depend on external access.
 
 Out of scope:
 
