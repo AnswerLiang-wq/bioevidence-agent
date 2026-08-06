@@ -96,6 +96,49 @@ def test_standard_search_builds_source_bound_human_review_cards() -> None:
     assert result["tool_trace"][0]["tool_name"] == "search_literature"
 
 
+def test_scope_like_language_never_becomes_an_automatic_verdict() -> None:
+    abstracts = (
+        "A mouse model measured viral load after remdesivir.",
+        "Hospitalized adults received interferon beta-1a; mortality was measured.",
+        "Hospitalized adults received remdesivir; the endpoint was time to recovery.",
+    )
+    articles = [
+        PubMedArticle(
+            pmid=str(2000 + index),
+            title=f"Synthetic scope signal {index}",
+            doi=None,
+            publication_types=("Journal Article",),
+            journal="Synthetic Test Journal",
+            year=2026,
+            first_author="Test Author",
+            abstract=abstract,
+        )
+        for index, abstract in enumerate(abstracts, start=1)
+    ]
+    service = ProductDemoService(
+        client=FakePubMedClient(articles),
+        standard_tasks=[
+            {
+                "id": "scope-language-test",
+                "title": "Scope language test",
+                "description": "Synthetic regression only.",
+                "question": QUESTION,
+                "pmids": [article.pmid for article in articles],
+            }
+        ],
+    )
+    result = service.search(
+        session_id="session-scope-0001",
+        mode="standard",
+        task_id="scope-language-test",
+    )
+    assert result["cards"]
+    assert {
+        card["system_suggestion"]["direction"] for card in result["cards"]
+    } == {"unclear"}
+    assert all("人工确认" in card["system_suggestion"]["label"] for card in result["cards"])
+
+
 def test_export_uses_only_trusted_session_cards_and_user_judgment() -> None:
     service = _service()
     search = service.search(

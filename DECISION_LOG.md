@@ -19,18 +19,21 @@ does not contain participant data.
 ## D-002 — Preserve v0.3.0 and work on a local feature branch
 
 - Date: 2026-08-05
-- Status: decided
+- Status: implemented; v0.4 closeout continues on
+  `codex/bioevidence-portfolio-v0.4`
 - Evidence: `main`, tag `v0.3.0`, GitHub Release, and hosted CI all point to
   commit `46afee6ca5b5a4066cdcafa9532abcc7d6e805ef`.
-- Decision: use `codex/bioevidence-product-demo`; do not rewrite history,
-  merge, push, tag, or release before the corresponding user gate.
+- Decision: begin on `codex/bioevidence-product-demo`, preserve its history,
+  and complete the portfolio closeout on
+  `codex/bioevidence-portfolio-v0.4`. Do not rewrite the v0.3.0 tag. Publish
+  v0.4 only after its explicit release checklist passes.
 - Rollback: discard or retain the feature branch; the baseline remains
   addressable by both `main` and `v0.3.0`.
 
 ## D-003 — Do not reuse the PubMedQA answerer as an open-world judge
 
 - Date: 2026-08-05
-- Status: decided for the first prototype; subject to G1 confirmation
+- Status: decided and retained for v0.4
 - Evidence: public-test macro-F1 is 0.383, `maybe` F1 is 0.063, and the
   correct-versus-shuffled diagnostic has `p=0.066`. Training labels represent
   PubMedQA article-level yes/no/maybe questions, not arbitrary claim-level
@@ -44,7 +47,7 @@ does not contain participant data.
 ## D-004 — Isolate product orchestration from Agent capability code
 
 - Date: 2026-08-05
-- Status: implemented after G1 confirmation
+- Status: implemented
 - Evidence: PubMed, corpus, retriever, typed-tool, exact-span, and hash
   components already expose reusable Python interfaces.
 - Decision: place web UI and workflow orchestration in `apps/product_demo/`,
@@ -106,3 +109,55 @@ does not contain participant data.
   deduplication without user evidence because similar titles can describe
   scientifically distinct studies.
 - Baseline impact: none; the change is confined to `apps/product_demo/`.
+
+## D-010 — Treat PILOT01 as formative and non-evaluable
+
+- Date: 2026-08-06
+- Status: decided
+- Evidence: one anonymous pilot produced two attempted task rows, but timing,
+  mode, logging, and evidence-scope conflicts made both
+  `metric_record_complete=false` and `veps=not_evaluable`.
+- Decision: preserve the original private evidence and additive audit; report
+  1 formative pilot, 2 attempted rows, 0 evaluable rows, and 0 VEPS
+  observations.
+- Claims excluded: VEPS percentage, time saving, trust, reuse,
+  unassisted-completion, or product-value conclusions.
+- Integrity rule: do not overwrite the first attempt or repair it into a
+  successful observation.
+
+## D-011 — Stop human-study scale-up for the portfolio release
+
+- Date: 2026-08-06
+- Status: decided
+- Evidence: additional recruitment would not resolve the measurement defects
+  in the consumed pilot, and the original engineering/product portfolio is
+  otherwise demonstrable without a causal user-value claim.
+- Decision: cancel the planned second pilot and larger main study as v0.4
+  completion requirements. Close the project through automated engineering,
+  safety, privacy, packaging, and documentation gates.
+- Interpretation: user value remains unknown. This is a resource and evidence
+  quality decision, not a positive or negative product-effect conclusion.
+
+## D-012 — Convert evidence-scope risks into synthetic fail-closed controls
+
+- Date: 2026-08-06
+- Status: implemented
+- Evidence: authentic PMIDs in the formative pilot still included decisive
+  endpoint and intervention mismatches.
+- Decision: freeze eight synthetic declared-metadata cases covering direct
+  match; population, species, intervention, endpoint, and timepoint mismatch;
+  context-only evidence; and unknown scope. A flagged case cannot become a
+  candidate for decisive human review.
+- Boundary: these controls do not extract metadata from prose, judge real
+  papers, infer evidence direction, or measure biomedical NLI accuracy. Every
+  case retains `requires_human_review=true`.
+
+## D-013 — Define a finite v0.4 portfolio stop condition
+
+- Date: 2026-08-06
+- Status: decided
+- Decision: publish and stop when lint, full tests, package build, release
+  manifest, privacy scan, local search/review/export, eight scope controls,
+  documentation consistency, and GitHub tag/Release all pass.
+- Out of scope after closeout: new model training, benchmark expansion, cloud
+  deployment, and additional human research.

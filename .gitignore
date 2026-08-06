@@ -14,6 +14,8 @@ runs/
 indexes/
 models/
 cache/
+private/
+apps/product_demo/session_data/
 
 # Local credentials and platform files
 .env

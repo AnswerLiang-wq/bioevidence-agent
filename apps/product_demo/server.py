@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from .event_store import EventStore, EventValidationError
-from .service import ProductDemoError, ProductDemoService
+from .service import PRODUCT_VERSION, ProductDemoError, ProductDemoService
 
 
 APP_ROOT = Path(__file__).resolve().parent
@@ -29,7 +29,7 @@ def create_handler(
     event_store: EventStore,
 ) -> type[BaseHTTPRequestHandler]:
     class ProductDemoHandler(BaseHTTPRequestHandler):
-        server_version = "BioEvidenceProductDemo/0.4-dev"
+        server_version = f"BioEvidenceProductDemo/{PRODUCT_VERSION}"
 
         def do_GET(self) -> None:  # noqa: N802
             if self.path == "/api/health":
@@ -38,7 +38,7 @@ def create_handler(
                     {
                         "status": "ok",
                         "scope": "local_research_demo",
-                        "product_version": "0.4.0-dev",
+                        "product_version": PRODUCT_VERSION,
                     },
                 )
                 return

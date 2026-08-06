@@ -1,0 +1,133 @@
+{
+  "basis": "synthetic_declared_metadata",
+  "claims_not_made": [
+    "No biomedical natural-language-inference accuracy is measured.",
+    "No automatic population, species, intervention, endpoint, or time extraction is measured.",
+    "No real-paper scope judgment is validated.",
+    "No clinical effectiveness or safety conclusion is produced.",
+    "No open-world mismatch-detection performance is claimed."
+  ],
+  "control_count": 8,
+  "failed_count": 0,
+  "passed_count": 8,
+  "report_version": "product-scope-controls-v1",
+  "results": [
+    {
+      "basis": "declared_metadata_only",
+      "candidate_for_decisive_human_review": true,
+      "case_id": "direct_scope_match",
+      "expected_candidate_for_decisive_human_review": true,
+      "expected_flags": [],
+      "flags": [],
+      "passed": true,
+      "requires_human_review": true,
+      "scientific_judgment": "not_performed"
+    },
+    {
+      "basis": "declared_metadata_only",
+      "candidate_for_decisive_human_review": false,
+      "case_id": "population_mismatch",
+      "expected_candidate_for_decisive_human_review": false,
+      "expected_flags": [
+        "population_mismatch"
+      ],
+      "flags": [
+        "population_mismatch"
+      ],
+      "passed": true,
+      "requires_human_review": true,
+      "scientific_judgment": "not_performed"
+    },
+    {
+      "basis": "declared_metadata_only",
+      "candidate_for_decisive_human_review": false,
+      "case_id": "species_mismatch",
+      "expected_candidate_for_decisive_human_review": false,
+      "expected_flags": [
+        "species_mismatch"
+      ],
+      "flags": [
+        "species_mismatch"
+      ],
+      "passed": true,
+      "requires_human_review": true,
+      "scientific_judgment": "not_performed"
+    },
+    {
+      "basis": "declared_metadata_only",
+      "candidate_for_decisive_human_review": false,
+      "case_id": "intervention_mismatch",
+      "expected_candidate_for_decisive_human_review": false,
+      "expected_flags": [
+        "intervention_mismatch"
+      ],
+      "flags": [
+        "intervention_mismatch"
+      ],
+      "passed": true,
+      "requires_human_review": true,
+      "scientific_judgment": "not_performed"
+    },
+    {
+      "basis": "declared_metadata_only",
+      "candidate_for_decisive_human_review": false,
+      "case_id": "endpoint_mismatch",
+      "expected_candidate_for_decisive_human_review": false,
+      "expected_flags": [
+        "endpoint_mismatch"
+      ],
+      "flags": [
+        "endpoint_mismatch"
+      ],
+      "passed": true,
+      "requires_human_review": true,
+      "scientific_judgment": "not_performed"
+    },
+    {
+      "basis": "declared_metadata_only",
+      "candidate_for_decisive_human_review": false,
+      "case_id": "timepoint_mismatch",
+      "expected_candidate_for_decisive_human_review": false,
+      "expected_flags": [
+        "timepoint_mismatch"
+      ],
+      "flags": [
+        "timepoint_mismatch"
+      ],
+      "passed": true,
+      "requires_human_review": true,
+      "scientific_judgment": "not_performed"
+    },
+    {
+      "basis": "declared_metadata_only",
+      "candidate_for_decisive_human_review": false,
+      "case_id": "context_only_not_decisive",
+      "expected_candidate_for_decisive_human_review": false,
+      "expected_flags": [
+        "evidence_role_context_only"
+      ],
+      "flags": [
+        "evidence_role_context_only"
+      ],
+      "passed": true,
+      "requires_human_review": true,
+      "scientific_judgment": "not_performed"
+    },
+    {
+      "basis": "declared_metadata_only",
+      "candidate_for_decisive_human_review": false,
+      "case_id": "scope_unknown_not_decisive",
+      "expected_candidate_for_decisive_human_review": false,
+      "expected_flags": [
+        "endpoint_unknown"
+      ],
+      "flags": [
+        "endpoint_unknown"
+      ],
+      "passed": true,
+      "requires_human_review": true,
+      "scientific_judgment": "not_performed"
+    }
+  ],
+  "scientific_judgment": "not_performed"
+}

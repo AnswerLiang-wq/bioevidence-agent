@@ -1,217 +1,131 @@
-# BioEvidence Agent Product Demo — one-pager (G1 draft)
+# BioEvidence Agent v0.4 — portfolio one-pager
 
-Status: hypothesis, not validated product evidence
+Status: release candidate; engineering validation completed, user value not
+validated
 
-Draft date: 2026-08-05
+Closeout decision date: 2026-08-06
 
-Baseline: BioEvidence Agent v0.3.0
+Engineering baseline: `v0.3.0`
 
-Proposed product-demo line: v0.4 candidate; no tag or Release authorized
+Product candidate: `v0.4.0`; tag and Release are created only after the final
+privacy, test, package, and documentation checks pass
 
 ## Product statement
 
-BioEvidence Agent Product Demo helps life-science researchers turn a specific
-biomedical claim into a small, traceable evidence pack. It retrieves candidate
-PubMed records, presents exact abstract evidence with stable identifiers and
-source links, and lets the researcher accept, exclude, annotate, and export
-the evidence without delegating the final scientific judgment to the model.
+BioEvidence Agent helps a life-science researcher turn one bounded biomedical
+claim into a small, inspectable PubMed evidence pack. It retrieves candidate
+records, displays exact abstract snippets with stable source identifiers, and
+lets the user accept, exclude, annotate, and export evidence without asking the
+system to make a clinical decision.
 
-This is a second-stage productization of an existing Agent engineering
-prototype. It is not presented as the project's original purpose.
+The product layer is a portfolio demonstration built on an existing Agent
+engineering project. It is not a validated medical product, systematic-review
+tool, or autonomous scientific judge.
 
-## Target user
+## Target user and job to be done
 
-Primary target:
+Primary user: a life-science graduate student or junior researcher who searches
+biomedical literature regularly and can judge whether an abstract is relevant.
 
-- master's students, doctoral students, and junior researchers in life
-  science, pharmacy, bioinformatics, or medical research;
-- currently search biomedical literature at least weekly;
-- need to verify a concrete claim before experiment design, proposal writing,
-  or manuscript argumentation;
-- can independently judge whether an abstract is relevant to their research.
+Job to be done:
 
-Excluded from the first study:
+> When I need to check a specific biomedical claim before research planning or
+> writing, help me organize a few source-bound records so I can inspect the
+> evidence and retain a path back to the original article.
 
-- patients or members of the public seeking personal medical advice;
-- users asking the tool to make diagnosis or treatment decisions;
-- systematic-review teams requiring exhaustive/full-text screening;
-- tasks containing patient data, unpublished confidential results, or other
-  information the participant cannot safely share;
-- users who do not regularly perform biomedical literature work.
+Excluded uses include patient-specific advice, diagnosis or treatment
+decisions, confidential or identifiable inputs, exhaustive systematic review,
+and claims that require full-text evidence.
 
-## Job to be done
+## Product workflow
 
-When I need to verify a specific biomedical claim before designing or writing
-research, help me find and organize a few inspectable source records so that I
-can decide what the evidence says without losing the path back to the original
-article.
+1. Enter one concrete, non-clinical biomedical question.
+2. Retrieve candidate PubMed records in a labelled Standard or Live mode.
+3. Review 3–5 cards containing title, year, PMID/DOI, PubMed link, exact
+   abstract snippet, offsets, and SHA-256 provenance.
+4. Accept or exclude cards, add a note, and record a human evidence direction.
+5. Export a JSON or Markdown evidence pack with source lineage and user
+   decisions.
 
-## Current workflow hypothesis
+The web Product Demo uses PubMed retrieval plus a local BM25 ranking adapter.
+The full multilingual-E5, RRF, and cross-encoder stack belongs to the separate
+Agent Engineering evaluation path; it is not silently attributed to the web
+workflow.
 
-The assumed manual workflow is:
+## What is actually validated
 
-1. translate a research question into search terms;
-2. search PubMed or another literature database;
-3. open many records and skim titles/abstracts;
-4. decide which records are relevant;
-5. copy identifiers, links, and notes into a document or spreadsheet;
-6. revisit sources to check whether notes overstate the evidence.
+| Evidence layer | Frozen result | Defensible interpretation |
+|---|---|---|
+| Public title-assisted PubMedQA test | 500 cases; answer accuracy 0.558, macro-F1 0.383 | closed-corpus engineering baseline, not open-world accuracy |
+| Abstract-only retrieval stress test | 500 cases; reranked Recall@10 0.990, MRR 0.982, nDCG@10 0.984; 12 rank drops and 5 top-10 misses | retrieval remains strong after removing indexed titles, with visible failures |
+| Evidence-utilization negative control | 500 non-test OOF cases; correct context 0.536 vs shuffled 0.486; exact McNemar `p=0.066` | context-sensitive pattern, not strong evidence of reliable reasoning |
+| Product engineering checks | 46/46 deterministic tests passed in the full localhost-capable run; Ruff passed | software behavior, not user success |
+| Synthetic scope controls | 8/8 passed | deterministic policy over declared metadata, not biomedical NLI accuracy |
+| Formative human pilot | 1 anonymous pilot, 2 attempted task rows, 0 evaluable tasks, 0 VEPS observations | workflow risks discovered; no efficiency, trust, reuse, or product-value conclusion |
 
-This workflow and its pain points are hypotheses until discovery interviews
-and observed tasks confirm, reject, or refine them.
+All model inference in the frozen engineering experiments was local CPU, with
+USD 0.00 model/API cost. The latency figures belong to that fixed benchmark,
+not to general PubMed availability or end-user task time.
 
-## Core problem
+## Product decision after the formative pilot
 
-General-purpose language models can produce fluent answers without a stable
-mapping from each claim to inspectable source text. Manual search preserves
-control but can require repetitive opening, screening, and copying. The
-product hypothesis is that a structured, source-bound evidence-pack workflow
-can reduce coordination effort while preserving human scientific judgment.
+The single pilot exposed conflicting timestamps, a Standard-to-Live mode
+switch, incomplete source-open telemetry, invalid spreadsheet placeholders,
+and two accepted citations that did not match the decisive intervention or
+endpoint. Because neither attempted task produced a reliable metric record,
+scaling recruitment would have generated more rows without repairing
+measurement validity.
 
-## MVP workflow
+The product decision was therefore to:
 
-1. User enters one concrete, non-clinical biomedical claim or question.
-2. System retrieves candidate PubMed records and ranks them.
-3. System displays 3–5 evidence cards containing, when available:
-   - title and year;
-   - PMID and DOI;
-   - PubMed source link;
-   - exact abstract snippet;
-   - normalized-record and snippet SHA-256;
-   - provisional `supports / opposes / unclear` suggestion;
-   - abstract-only and uncertainty boundaries.
-4. User accepts or excludes each card and records a note and their own
-   direction judgment.
-5. System exports a JSON and Markdown evidence pack with source lineage and
-   user decisions.
-6. The system logs only the task events required for usability analysis.
+- retain the original private pilot as an immutable formative failure;
+- report 0 evaluable tasks and 0 VEPS observations rather than repair the data
+  into a success;
+- cancel the planned larger user study for this portfolio release;
+- convert the highest-risk evidence-scope failures into deterministic,
+  synthetic regression controls;
+- stop after a reproducible, privacy-safe v0.4 portfolio release.
 
-Because the existing answerer is weak and benchmark-specific, live-mode
-direction defaults to `unclear / needs human review` unless a later component
-is separately validated. Model confidence is never displayed as evidence
-strength.
+This decision does not show that users benefit or do not benefit. It shows
+that the available pilot cannot answer that question and that further
+recruitment was not justified for the current portfolio objective.
 
-## User value hypothesis
+## Eight synthetic scope controls
 
-For suitable tasks, the workflow may shorten time to the first useful source,
-reduce manual copying, and make later verification easier. It may fail when
-PubMed retrieval is poor, the abstract omits decisive details, sources
-conflict, or users need full-text/systematic-review coverage.
+The v0.4 suite covers one direct declared-scope match and seven fail-closed
+conditions:
 
-## North-star metric
+1. direct scope match;
+2. population mismatch;
+3. species mismatch;
+4. intervention mismatch;
+5. endpoint mismatch;
+6. timepoint mismatch;
+7. context-only evidence must not be treated as decisive;
+8. an unknown scope dimension must not be treated as decisive.
 
-**Verified Evidence Pack Success (VEPS)**
+The controls compare pre-declared synthetic metadata only. They do not extract
+scope from prose, judge real papers, determine support or contradiction, or
+measure clinical correctness. Every result still requires human review.
 
-A session succeeds only if all conditions hold:
+## Claims deliberately not made
 
-1. completed within 12 minutes of task start;
-2. exported at least 3 distinct PMID-backed evidence cards;
-3. participant marked at least 2 cards useful for the task;
-4. every exported source link was accessible during the session;
-5. every exported snippet matched the stored abstract bytes and offsets;
-6. zero fabricated citations;
-7. an evidence-insufficient task was not exported as a certain conclusion.
+- no validated time saving, VEPS rate, trust, reuse, or unassisted-completion
+  claim;
+- no open-world PubMed recall or semantic citation-correctness claim;
+- no claim that the web Demo runs the full hybrid/reranker stack;
+- no biomedical NLI or automatic endpoint-extraction accuracy claim;
+- no zero-hallucination, clinical reliability, safety, or treatment claim;
+- no population inference from one purposive formative pilot.
 
-VEPS is computed per participant-task pair. Pilot and main-study results are
-reported separately. With a small purposive sample, VEPS is exploratory and
-has no population confidence claim.
+## Portfolio stop conditions
 
-## Supporting metrics and operational definitions
+The v0.4 effort ends when lint and tests pass, the package and release manifest
+verify, the local Demo completes search/review/export, all 8 scope controls
+pass, private pilot material remains outside Git, documentation numbers agree,
+and the GitHub tag and Release are published. It does not expand into another
+model-training cycle, a larger benchmark, cloud deployment, or additional
+human research.
 
-| Metric | Operational definition |
-|---|---|
-| Time to First Useful Evidence | seconds from task start to first card the participant marks useful |
-| Evidence-pack completion time | seconds from task start to successful export, or timeout at 12 minutes |
-| Manual-flow time change | `(Agent time - manual time) / manual time`, paired only within the same participant and comparable task |
-| Top-5 acceptance rate | accepted cards divided by cards shown among the first five |
-| Citation accessibility | source links successfully opened during audit divided by exported citations |
-| Snippet consistency | byte/offset-valid exported snippets divided by exported snippets |
-| Unsupported-conclusion rate | exported conclusion claims lacking an accepted supporting/contradicting card divided by conclusion claims, manually audited |
-| Fabricated citations | count of exported identifiers not resolvable to the claimed source; target is zero |
-| Unassisted completion | participant completed the defined flow without moderator procedural help |
-| Trust | post-task 1–5 response to a fixed trust item, reported with individual values and median |
-| Reuse intent | post-task 1–5 response to a fixed reuse item, reported with individual values and median |
-| Failure types | pre-defined taxonomy plus new observed categories; report counts and denominators |
-
-Manual and Agent timing comparisons require task-order recording. They are not
-called causal efficiency gains in this small, non-randomized study.
-
-## Product hypotheses
-
-- H1: at least some target users can independently complete the evidence-pack
-  flow without moderator help.
-- H2: exact snippets and direct source links reduce re-verification friction.
-- H3: accept/exclude/note controls are more trustworthy than an uneditable
-  generated conclusion.
-- H4: the standard task is sufficiently representative to reveal workflow
-  problems but does not expose participant research secrets.
-- H5: a live PubMed mode adds value for real tasks despite weaker and more
-  variable retrieval than the closed benchmark.
-
-## Risk hypotheses
-
-- Users may mistake ranking or model confidence for evidence strength.
-- A relevant abstract may not contain the decisive full-text result.
-- Provisional direction may anchor user judgment.
-- Live external-service failures may prevent task completion.
-- Research questions or notes may contain identifying or confidential data.
-- A fast but incomplete evidence pack may create false confidence.
-
-## Scope for the first product-demo iteration
-
-In scope:
-
-- local web application;
-- one standard real-PubMed task and a participant-owned safe task;
-- 3–5 evidence cards;
-- accept/exclude/note and user direction;
-- JSON/Markdown export;
-- minimal local event log for task metrics;
-- clear empty, partial, timeout, and external-service error states;
-- medical-advice and abstract-only boundary messages;
-- a fixed-PMID standard-demo mode and a labelled live-research mode; both
-  fetch current records from PubMed and therefore depend on external access.
-
-Out of scope:
-
-- diagnosis, treatment, or patient-specific recommendations;
-- exhaustive systematic review or full-text claim;
-- autonomous final scientific conclusions;
-- login, cloud account, payment, sharing, or long-term memory;
-- multi-Agent orchestration or a large backend framework;
-- production deployment and analytics collection;
-- any new model or feature not justified by observed user evidence.
-
-## Engineering boundary
-
-- Preserve `src/bioevidence/` as the Agent capability layer.
-- Add the UI and orchestration adapter under `apps/product_demo/`.
-- Import existing PubMed, retrieval, evidence inspection, hashing, and typed
-  tool contracts; do not duplicate them.
-- Keep public blank research templates separate from ignored raw participant
-  records.
-- Keep Agent benchmark numbers, Product Demo technical checks, and real-user
-  metrics in separate tables with version, sample, method, and limitations.
-
-## README dual-entry draft
-
-The existing engineering narrative remains first-class.
-
-1. **Agent Engineering**: architecture, retrieval/reranking, typed tools,
-   provenance, frozen public benchmark, CI, reproducibility, and limitations.
-2. **Product Demo / Case Study**: target user, evidence-pack workflow, local
-   startup, study protocol, anonymized aggregate findings, evidence-driven
-   iteration, product boundaries, and roadmap.
-
-No README metric changes are made before real product evidence exists.
-
-## G1 decisions requested
-
-1. Confirm or revise the primary target user.
-2. Confirm the claim-verification scenario as the single MVP scenario.
-3. Confirm VEPS and the 12-minute threshold as an initial test definition.
-4. Confirm the safe default: live direction is `unclear / needs human review`
-   until separately validated.
-5. Confirm the repository isolation and dual-entry README plan.
-6. Confirm that product work remains local on the feature branch until the
-   final publication gate.
+The full product reasoning is documented in
+[`docs/product_case/PORTFOLIO_CASE_STUDY.md`](docs/product_case/PORTFOLIO_CASE_STUDY.md).

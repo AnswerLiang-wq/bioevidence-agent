@@ -20,6 +20,7 @@ from bioevidence.pubmedqa_stress import (
     abstract_passages,
     rerank_abstract_candidates,
 )
+from scripts.verify_release import audit_tracked_tree
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -188,29 +189,7 @@ def test_json_and_markdown_headline_numbers_match() -> None:
 
 
 def test_release_tree_contains_no_local_absolute_paths() -> None:
-    forbidden = (
-        "/" + "Users/",
-        "/" + "private/tmp/",
-        "未来规划/" + "BioEvidenceAgent",
-    )
-    scanned_suffixes = {
-        ".md",
-        ".py",
-        ".toml",
-        ".json",
-        ".yml",
-        ".yaml",
-        ".cff",
-        ".lock",
-    }
-    for path in ROOT.rglob("*"):
-        if (
-            path.is_file()
-            and path.suffix.lower() in scanned_suffixes
-            and not {".git", ".venv"}.intersection(path.parts)
-        ):
-            text = path.read_text(encoding="utf-8")
-            assert not any(value in text for value in forbidden), path
+    assert audit_tracked_tree(ROOT) > 0
 
 
 def test_report_hashes_can_be_recomputed() -> None:
