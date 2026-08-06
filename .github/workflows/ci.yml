@@ -27,20 +27,31 @@ jobs:
           python -m pip install -r requirements/ci.lock
           python -m pip install --no-deps -e .
       - name: Lint
-        run: ruff check src tests
+        run: ruff check src apps tests scripts
+      - name: Check browser JavaScript syntax when Node.js is available
+        run: |
+          if command -v node >/dev/null 2>&1; then
+            node --check apps/product_demo/static/app.js
+          else
+            echo "Node.js unavailable; skipping JavaScript syntax check"
+          fi
       - name: Test
-        run: pytest -q
-      - name: Verify release allowlist and hashes
+        run: python -m pytest -q
+      - name: Verify v0.4.0 release hashes and public boundary
         run: python scripts/verify_release.py
       - name: Build wheel and sdist
         run: python -m build
       - name: Fresh out-of-tree wheel smoke
         run: |
-          python -m venv --system-site-packages /tmp/bioevidence-smoke
-          /tmp/bioevidence-smoke/bin/python -m pip install --no-deps dist/*.whl
-          cd /tmp
-          /tmp/bioevidence-smoke/bin/bioevidence demo \
+          SMOKE_ENV="${RUNNER_TEMP}/bioevidence-smoke"
+          SMOKE_JSON="${RUNNER_TEMP}/bioevidence-demo.json"
+          python -m venv --system-site-packages "${SMOKE_ENV}"
+          "${SMOKE_ENV}/bin/python" -m pip install --no-deps \
+            "${GITHUB_WORKSPACE}"/dist/*.whl
+          "${SMOKE_ENV}/bin/python" -c \
+            'import bioevidence; assert bioevidence.__version__ == "0.4.0"'
+          "${SMOKE_ENV}/bin/bioevidence" demo \
             --question "Do mitochondria participate in programmed cell death?" \
-            > /tmp/bioevidence-demo.json
-          /tmp/bioevidence-smoke/bin/python -c \
-            'import json; d=json.load(open("/tmp/bioevidence-demo.json")); assert d["retrieved"]["pmid"] == "1001"'
+            > "${SMOKE_JSON}"
+          SMOKE_JSON="${SMOKE_JSON}" "${SMOKE_ENV}/bin/python" -c \
+            'import json, os; d=json.load(open(os.environ["SMOKE_JSON"])); assert d["retrieved"]["pmid"] == "1001"'

@@ -1,5 +1,20 @@
 # Methodology
 
+## Evaluation surfaces
+
+Two evidence bases are reported separately:
+
+1. **Agent Engineering:** deterministic experiments on public PubMedQA with a
+   frozen corpus, split, model revisions, and scoring procedures.
+2. **Product Case Study:** a repository-run PubMed evidence-card workflow,
+   deterministic synthetic scope controls, and one formative pilot whose two
+   task rows were not evaluable.
+
+The Product Demo's fixed-PMID/ESearch + EFetch + BM25 path must not be described
+as the BM25 + E5 + RRF + cross-encoder benchmark pipeline. Conversely, the
+closed-corpus benchmark does not establish live PubMed retrieval quality or
+user value.
+
 ## Frozen public benchmark
 
 The source is PubMedQA PQA-L at repository commit
@@ -69,9 +84,67 @@ Reported metrics include accuracy, macro-F1, per-label precision/recall/F1 and
 support, confusion matrices, deltas, paired win/loss/tie counts, and exact
 two-sided McNemar tests.
 
+## Product Demo retrieval and evidence packs
+
+The local web workflow has two candidate sources:
+
+- **Standard task:** use a pre-checked fixed PMID list, then fetch current
+  PubMed records with EFetch.
+- **Live research:** send a public, non-sensitive question to PubMed ESearch,
+  take at most 15 returned PMIDs, then fetch them with EFetch.
+
+Records without abstracts are removed and only exact normalized-title
+duplicates are deduplicated. Local BM25 ranks the remaining abstracts and at
+most five evidence cards are shown. Each card carries a canonical PubMed URL,
+PMID, publication metadata, an exact abstract span, normalized-record hash,
+snippet hash, and bounded tool trace. The user—not the system—accepts or
+excludes a card and records its direction.
+
+This method measures no open-world recall and does not use the benchmark
+answerer to label real PubMed claims. ESearch order, PubMed availability, and
+returned record bytes are external and may change.
+
+## Synthetic scope controls
+
+Eight versioned fixtures declare claim and evidence metadata in advance. They
+cover a direct match plus population, species, intervention, endpoint,
+timepoint, context-only, and unknown-scope cases. A control passes when the
+software produces the pre-declared flags and only the direct match remains a
+candidate for decisive human review.
+
+The report is reproducible with:
+
+```bash
+python scripts/run_product_scope_controls.py
+```
+
+The frozen result is [8/8 controls passed](../reports/product_scope_controls_v1.md).
+Because the inputs contain declared metadata, this is an invariant test—not
+automatic field extraction, real-paper scope classification, or biomedical
+natural-language-inference accuracy.
+
+## Formative pilot disposition
+
+One real target-user formative pilot exercised one manual task and one Agent
+task. The audit found conflicting or incomplete timing, mode, and task records;
+both rows were therefore marked not evaluable. The valid quantitative status
+is **1 pilot and 0 evaluable tasks**.
+
+No missing value was repaired into a success and no second participant cohort
+was added. The pilot informs product risks and the synthetic control design,
+but it is excluded from product-effect estimates. Consequently there is no
+reported user-value, time-savings, completion-rate, trust, reuse-intent, or
+VEPS result. See the
+[AI Product Case Study](product_case/PORTFOLIO_CASE_STUDY.md) for the decision
+to stop the exploratory study and close the portfolio scope.
+
 ## Reproducibility
 
 CI runs lint, lightweight tests, a wheel build, and a fresh out-of-tree
 model-free demo on Python 3.10, 3.12, and 3.13. The transformer-heavy
 evaluation is a separate manual workflow so normal pushes do not download
 models or execute the full reranker workload.
+
+The wheel intentionally packages the core CLI only. Product Demo verification
+runs from the repository because its `apps/product_demo/` UI and
+`scripts/run_product_demo.py` launcher are not wheel entry points.

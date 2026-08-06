@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BioEvidence Agent · Evidence Pack</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="BioEvidence Agent home">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <span>
+          <strong>BioEvidence Agent</strong>
+          <small>Verified evidence workspace</small>
+        </span>
+      </a>
+      <div class="status-pill"><span></span>Local research demo</div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">SOURCE-BOUND · HUMAN-IN-THE-LOOP</p>
+          <h1>把一项生物医学主张，整理成可回到来源核验的证据包。</h1>
+          <p class="lede">
+            检索 PubMed、检查摘要原文、保留或排除证据，再导出带 PMID、
+            精确片段与 Hash 的结构化记录。系统不替你作最终科学判断。
+          </p>
+        </div>
+        <aside class="boundary-card">
+          <span class="boundary-icon" aria-hidden="true">!</span>
+          <div>
+            <strong>研究信息工具，不是医疗建议</strong>
+            <p>摘要不能替代全文；排序和置信度不能代表证据强度。</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="workspace" aria-label="Evidence pack workflow">
+        <aside class="steps" aria-label="Workflow steps">
+          <div class="step active" data-step="1"><span>1</span><div><strong>定义问题</strong><small>明确人群、干预与终点</small></div></div>
+          <div class="step" data-step="2"><span>2</span><div><strong>审查证据</strong><small>打开来源并标记卡片</small></div></div>
+          <div class="step" data-step="3"><span>3</span><div><strong>导出证据包</strong><small>保留判断与证据边界</small></div></div>
+          <div class="timer-card">
+            <small>任务计时</small>
+            <strong id="timer">12:00</strong>
+            <span id="timer-status">尚未开始</span>
+          </div>
+          <div class="privacy-note">
+            <strong>最小化记录</strong>
+            <p>事件日志不保存问题、摘要或备注正文，只记录任务操作和耗时。</p>
+          </div>
+        </aside>
+
+        <div class="main-panel">
+          <section class="panel query-panel" aria-labelledby="query-title">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">STEP 01</p>
+                <h2 id="query-title">定义可核验问题</h2>
+              </div>
+              <span class="mode-label" id="mode-label">标准任务</span>
+            </div>
+
+            <div class="mode-switch" role="group" aria-label="Task mode">
+              <button class="mode-button active" type="button" data-mode="standard">标准任务</button>
+              <button class="mode-button" type="button" data-mode="live">Live research</button>
+            </div>
+
+            <div id="standard-fields">
+              <label for="task-select">标准任务</label>
+              <select id="task-select"></select>
+              <p class="field-help" id="task-description"></p>
+            </div>
+
+            <div id="live-fields" hidden>
+              <label for="question">脱敏后的生物医学主张或问题</label>
+              <textarea id="question" rows="5" maxlength="600" placeholder="例如：某种干预是否改变特定人群或模型中的一个明确终点？"></textarea>
+              <p class="field-help">不要输入患者信息、未公开实验数据、内部项目或临床决策请求。</p>
+            </div>
+
+            <label class="safety-check">
+              <input id="safety-confirm" type="checkbox">
+              <span>我确认这是科研文献核验任务，不含患者、个人、未公开或机密信息。</span>
+            </label>
+
+            <div id="message" class="message" role="status" hidden></div>
+
+            <button id="search-button" class="primary-button" type="button">
+              <span>生成证据卡片</span><span aria-hidden="true">→</span>
+            </button>
+          </section>
+
+          <section id="results-section" class="results-section" hidden aria-labelledby="results-title">
+            <div class="section-heading results-heading">
+              <div>
+                <p class="section-kicker">STEP 02</p>
+                <h2 id="results-title">审查证据卡片</h2>
+              </div>
+              <div class="result-meta"><span id="result-count">0 cards</span><span id="result-mode">BM25</span></div>
+            </div>
+            <div class="result-warning">
+              系统方向统一为“需人工确认”。请打开来源，区分直接终点、间接背景与摘要缺失。
+            </div>
+            <div id="cards" class="cards"></div>
+            <details class="provenance">
+              <summary>查看检索与工具调用溯源</summary>
+              <pre id="trace"></pre>
+            </details>
+          </section>
+
+          <section id="export-section" class="panel export-panel" hidden aria-labelledby="export-title">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">STEP 03</p>
+                <h2 id="export-title">形成你的证据包</h2>
+              </div>
+              <div class="pack-counter"><strong id="accepted-count">0</strong><span>已接受</span></div>
+            </div>
+            <div class="export-grid">
+              <div>
+                <label for="pack-status">你的总体判断</label>
+                <select id="pack-status">
+                  <option value="insufficient">证据不足</option>
+                  <option value="supports">支持</option>
+                  <option value="opposes">反对</option>
+                  <option value="mixed">混合</option>
+                </select>
+              </div>
+              <div class="wide-field">
+                <label for="synthesis">简短综合与仍需核验的内容</label>
+                <textarea id="synthesis" rows="4" maxlength="1500" placeholder="用你自己的话说明决定性证据、冲突和全文核验需求。"></textarea>
+              </div>
+            </div>
+            <div class="export-actions">
+              <button id="export-json" class="secondary-button" type="button">导出 JSON</button>
+              <button id="export-markdown" class="primary-button" type="button">导出 Markdown</button>
+            </div>
+            <p class="field-help">导出包保留你的人工判断；导出成功不代表科学结论正确或用户价值已验证。</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <strong>BioEvidence Agent v0.4.0</strong>
+      <span>Abstract-level research support · Verify before use</span>
+    </footer>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

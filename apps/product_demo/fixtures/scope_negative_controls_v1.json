@@ -1,0 +1,162 @@
+[
+  {
+    "case_id": "direct_scope_match",
+    "claim_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_role": "direct",
+    "expected_flags": [],
+    "expected_candidate_for_decisive_human_review": true
+  },
+  {
+    "case_id": "population_mismatch",
+    "claim_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_scope": {
+      "species": "human",
+      "population": "outpatients",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_role": "direct",
+    "expected_flags": ["population_mismatch"],
+    "expected_candidate_for_decisive_human_review": false
+  },
+  {
+    "case_id": "species_mismatch",
+    "claim_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_scope": {
+      "species": "mouse",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_role": "direct",
+    "expected_flags": ["species_mismatch"],
+    "expected_candidate_for_decisive_human_review": false
+  },
+  {
+    "case_id": "intervention_mismatch",
+    "claim_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "interferon_beta_1a",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_role": "direct",
+    "expected_flags": ["intervention_mismatch"],
+    "expected_candidate_for_decisive_human_review": false
+  },
+  {
+    "case_id": "endpoint_mismatch",
+    "claim_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "time_to_recovery",
+      "timepoint": "day_28"
+    },
+    "evidence_role": "direct",
+    "expected_flags": ["endpoint_mismatch"],
+    "expected_candidate_for_decisive_human_review": false
+  },
+  {
+    "case_id": "timepoint_mismatch",
+    "claim_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_14"
+    },
+    "evidence_role": "direct",
+    "expected_flags": ["timepoint_mismatch"],
+    "expected_candidate_for_decisive_human_review": false
+  },
+  {
+    "case_id": "context_only_not_decisive",
+    "claim_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_role": "context_only",
+    "expected_flags": ["evidence_role_context_only"],
+    "expected_candidate_for_decisive_human_review": false
+  },
+  {
+    "case_id": "scope_unknown_not_decisive",
+    "claim_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "all_cause_mortality",
+      "timepoint": "day_28"
+    },
+    "evidence_scope": {
+      "species": "human",
+      "population": "hospitalized_adults",
+      "intervention": "remdesivir",
+      "endpoint": "unknown",
+      "timepoint": "day_28"
+    },
+    "evidence_role": "direct",
+    "expected_flags": ["endpoint_unknown"],
+    "expected_candidate_for_decisive_human_review": false
+  }
+]
