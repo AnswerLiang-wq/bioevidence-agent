@@ -24,6 +24,8 @@ CLAIMS_NOT_MADE = [
     "No clinical effectiveness or safety conclusion is produced.",
     "No open-world mismatch-detection performance is claimed.",
 ]
+DEFAULT_OUTPUT_JSON = ROOT / "reports" / "product_scope_controls_v1.json"
+DEFAULT_OUTPUT_MARKDOWN = ROOT / "reports" / "product_scope_controls_v1.md"
 
 
 def build_report() -> dict[str, object]:
@@ -78,8 +80,18 @@ def render_markdown(report: dict[str, object]) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output-json", type=Path, required=True)
-    parser.add_argument("--output-markdown", type=Path, required=True)
+    parser.add_argument(
+        "--output-json",
+        type=Path,
+        default=DEFAULT_OUTPUT_JSON,
+        help="JSON output path (default: frozen report path)",
+    )
+    parser.add_argument(
+        "--output-markdown",
+        type=Path,
+        default=DEFAULT_OUTPUT_MARKDOWN,
+        help="Markdown output path (default: frozen report path)",
+    )
     args = parser.parse_args(argv)
     report = build_report()
     args.output_json.parent.mkdir(parents=True, exist_ok=True)

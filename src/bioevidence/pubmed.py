@@ -14,7 +14,7 @@ from typing import Iterable
 
 
 EUTILS_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
-USER_AGENT = "BioEvidenceAgent/0.4.0 (research; PubMed metadata lookup)"
+USER_AGENT = "BioEvidenceAgent/0.4.1 (research; PubMed metadata lookup)"
 
 
 class PubMedError(RuntimeError):

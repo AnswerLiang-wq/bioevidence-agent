@@ -5,7 +5,7 @@
 - Question: Hydroxychloroquine lowers 28-day mortality in adults hospitalized with COVID-19.
 - User status: `opposes`
 - Mode: `standard`
-- Pack SHA-256: `f0ee44fad0daae1b62b274e2b8f29ed572b4ba76d509d0b982b5cd7db2aa5111`
+- Pack SHA-256: `27314556024b858f73d43e15798205b1bd4af62db9861cd66c1c7ce4ac9971ca`
 
 ## User synthesis
 
@@ -21,9 +21,9 @@ Illustrative user judgment: the retained randomized-trial abstracts do not show 
 - User direction: `opposes`
 - Useful: `true`
 - Note: Public example: mortality evidence retained for human review.
-- Exact abstract snippet: The primary outcome was 28-day mortality.
-- Normalized record SHA-256: `2f4c152d4057ee828866f2152195dadd250b6cecc2e7ea2bea3d3c8933db7bdd`
-- Snippet SHA-256: `9c61b7db079c028b2549791229b0f2819fc5036743159c8dc4875af28cec9388`
+- Exact abstract snippet: Death within 28 days occurred in 421 patients (27.0%) in the hydroxychloroquine group and in 790 (25.0%) in the usual-care group.
+- Normalized record SHA-256: `76300f20d59d7354fe4a6c1af272e70e4951e24ed353fa3cf34e201a18763e3f`
+- Snippet SHA-256: `7f05c9ff3d48fd300ae55a0cdf10a55e8f1b7fce1337addbbed23d43aa14eb9b`
 
 ### 2. Repurposed Antiviral Drugs for Covid-19 - Interim WHO Solidarity Trial Results
 

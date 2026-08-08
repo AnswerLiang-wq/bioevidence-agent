@@ -159,3 +159,36 @@ evaluable denominator; it is not a 0% success result.
   an effectiveness measure, or evidence of product value.
 - Related release assets: `reports/release_manifest_v0.4.0.json`,
   `docs/product_case/screenshots/`, `examples/`.
+
+## E-007 — v0.4.1 post-release integrity maintenance
+
+- Date: 2026-08-08
+- Type: engineering maintenance verification; no participants
+- Scope: repair audited integrity defects only; no new model, benchmark,
+  deployment, human study, or performance claim
+- Repairs:
+  - generate JSON and Markdown from the same finalized evidence-pack object;
+  - replace the endpoint-only hydroxychloroquine example excerpt with a
+    direction-bearing 28-day mortality result from PMID `33031652`;
+  - make the release verifier fail when any tracked public file is omitted;
+  - reject every event-metadata field outside its event-specific allowlist and
+    continue sequence numbering after a local service restart;
+  - execute and validate a real JSON browser download before capturing the
+    export screenshot;
+  - version the renamed evidence-pack audit field as
+    `product-evidence-pack-v0.2` instead of silently changing the v0.1
+    contract;
+  - align release status, user-value hypotheses, Python support, and CI.
+- Results:
+  - Ruff passed and 65/65 Python tests passed;
+  - 8/8 synthetic scope controls regenerated deterministically;
+  - the JSON-declared pack Hash matched the pack Hash displayed in Markdown,
+    and two consecutive generations were byte-identical;
+  - isolated wheel build and dependency-resolving out-of-tree smoke passed;
+  - the v0.4.1 manifest verified exact coverage of 82 artifacts across 83
+    tracked files, excluding only its own self-referential Hash;
+  - v0.4.1 wheel SHA-256:
+    `13d6351c49a073be5a11864a76fcc9ee866257e18714538bbc33457162d3edd2`.
+- Publication boundary: the prepublication manifest does not assert GitHub CI,
+  merge, tag, or Release state. Those facts are verified from GitHub after the
+  immutable commit is published.

@@ -1,22 +1,23 @@
-# BioEvidence Agent v0.4 — portfolio one-pager
+# BioEvidence Agent v0.4.1 — portfolio one-pager
 
-Status: release candidate; engineering validation completed, user value not
-validated
+Status: released portfolio artifact; engineering validation completed, user
+value not validated
 
 Closeout decision date: 2026-08-06
 
 Engineering baseline: `v0.3.0`
 
-Product candidate: `v0.4.0`; tag and Release are created only after the final
-privacy, test, package, and documentation checks pass
+Product release: `v0.4.1` integrity maintenance release; it supersedes v0.4.0
+without rewriting the historical v0.4.0 tag, manifest, wheel, or Git history
 
 ## Product statement
 
-BioEvidence Agent helps a life-science researcher turn one bounded biomedical
-claim into a small, inspectable PubMed evidence pack. It retrieves candidate
-records, displays exact abstract snippets with stable source identifiers, and
-lets the user accept, exclude, annotate, and export evidence without asking the
-system to make a clinical decision.
+BioEvidence Agent is designed to help a life-science researcher turn one
+bounded biomedical claim into a small, inspectable PubMed evidence pack. It
+retrieves candidate records, displays exact abstract snippets with stable
+source identifiers, and lets the user accept, exclude, annotate, and export
+evidence without asking the system to make a clinical decision. This intended
+value remains a product hypothesis rather than a validated user outcome.
 
 The product layer is a portfolio demonstration built on an existing Agent
 engineering project. It is not a validated medical product, systematic-review
@@ -24,10 +25,11 @@ tool, or autonomous scientific judge.
 
 ## Target user and job to be done
 
-Primary user: a life-science graduate student or junior researcher who searches
-biomedical literature regularly and can judge whether an abstract is relevant.
+Hypothesized primary user: a life-science graduate student or junior researcher
+who searches biomedical literature regularly and can judge whether an abstract
+is relevant.
 
-Job to be done:
+Hypothesized job to be done:
 
 > When I need to check a specific biomedical claim before research planning or
 > writing, help me organize a few source-bound records so I can inspect the
@@ -59,7 +61,7 @@ workflow.
 | Public title-assisted PubMedQA test | 500 cases; answer accuracy 0.558, macro-F1 0.383 | closed-corpus engineering baseline, not open-world accuracy |
 | Abstract-only retrieval stress test | 500 cases; reranked Recall@10 0.990, MRR 0.982, nDCG@10 0.984; 12 rank drops and 5 top-10 misses | retrieval remains strong after removing indexed titles, with visible failures |
 | Evidence-utilization negative control | 500 non-test OOF cases; correct context 0.536 vs shuffled 0.486; exact McNemar `p=0.066` | context-sensitive pattern, not strong evidence of reliable reasoning |
-| Product engineering checks | 46/46 deterministic tests passed in the full localhost-capable run; Ruff passed | software behavior, not user success |
+| Product engineering checks | 65/65 deterministic tests passed in the full localhost-capable run; Ruff passed | software behavior, not user success |
 | Synthetic scope controls | 8/8 passed | deterministic policy over declared metadata, not biomedical NLI accuracy |
 | Formative human pilot | 1 anonymous pilot, 2 attempted task rows, 0 evaluable tasks, 0 VEPS observations | workflow risks discovered; no efficiency, trust, reuse, or product-value conclusion |
 
@@ -120,12 +122,12 @@ measure clinical correctness. Every result still requires human review.
 
 ## Portfolio stop conditions
 
-The v0.4 effort ends when lint and tests pass, the package and release manifest
-verify, the local Demo completes search/review/export, all 8 scope controls
-pass, private pilot material remains outside Git, documentation numbers agree,
-and the GitHub tag and Release are published. It does not expand into another
-model-training cycle, a larger benchmark, cloud deployment, or additional
-human research.
+The v0.4.1 maintenance effort ends when lint and tests pass, the package and
+release manifest verify, the local Demo completes search/review/export, all 8
+scope controls pass, private pilot material remains outside Git, documentation
+numbers agree, and the GitHub tag and Release are published. It does not expand
+into another model-training cycle, a larger benchmark, cloud deployment, or
+additional human research.
 
 The full product reasoning is documented in
 [`docs/product_case/PORTFOLIO_CASE_STUDY.md`](docs/product_case/PORTFOLIO_CASE_STUDY.md).

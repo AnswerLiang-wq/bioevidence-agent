@@ -22,7 +22,7 @@ from bioevidence.tools import (
 )
 
 
-PRODUCT_VERSION = "0.4.0"
+PRODUCT_VERSION = "0.4.1"
 MAX_CARDS = 5
 LIVE_CANDIDATE_LIMIT = 15
 SESSION_ID_RE = re.compile(r"^[A-Za-z0-9-]{8,64}$")
@@ -94,7 +94,7 @@ class ProductDemoService:
         elif mode == "live":
             resolved_question = _question(question)
             _reject_medical_advice(resolved_question)
-            resolved_task_id = task_id or "participant-owned"
+            resolved_task_id = "live-research"
             candidate_source = "pubmed_esearch_relevance"
             try:
                 candidate_pmids = self.client.search(
@@ -272,7 +272,7 @@ class ProductDemoService:
                 exclusions.append(row)
 
         pack = {
-            "pack_version": "product-evidence-pack-v0.1",
+            "pack_version": "product-evidence-pack-v0.2",
             "product_version": PRODUCT_VERSION,
             "created_at_utc": datetime.now(timezone.utc).isoformat(),
             "session_id": session_id,
@@ -288,7 +288,7 @@ class ProductDemoService:
                 "accepted_count": len(evidence),
                 "excluded_count": len(exclusions),
                 "useful_count": sum(bool(row["useful"]) for row in accepted),
-                "all_sources_pubmed": all(
+                "all_source_urls_pubmed_formatted": all(
                     str(row["card"]["source_url"]).startswith(
                         "https://pubmed.ncbi.nlm.nih.gov/"
                     )
@@ -299,7 +299,7 @@ class ProductDemoService:
         pack["pack_sha256"] = _sha256_json(pack)
         return {
             "json": pack,
-            "markdown": _markdown_pack(pack),
+            "markdown": render_markdown_pack(pack),
         }
 
 
@@ -424,7 +424,9 @@ def _sha256_json(value: object) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def _markdown_pack(pack: dict[str, object]) -> str:
+def render_markdown_pack(pack: dict[str, object]) -> str:
+    """Render Markdown from a finalized evidence pack."""
+
     lines = [
         "# BioEvidence evidence pack",
         "",
