@@ -161,3 +161,17 @@ does not contain participant data.
   documentation consistency, and GitHub tag/Release all pass.
 - Out of scope after closeout: new model training, benchmark expansion, cloud
   deployment, and additional human research.
+
+## D-014 — Limit v0.4.1 to integrity maintenance
+
+- Date: 2026-08-08
+- Status: implemented for release verification
+- Evidence: the v0.4.0 publication chain was valid, but an independent
+  post-release audit found a cross-format evidence-pack hash mismatch, a
+  non-decisive example snippet labelled with a direction, and release gates
+  that did not fail on every omitted tracked file or unknown event metadata.
+- Decision: publish one additive v0.4.1 maintenance release that fixes those
+  integrity contracts, records a real export screenshot, and aligns release
+  documentation and CI. Preserve the v0.4.0 tag, wheel, manifest, and history.
+- Scope boundary: no new model, benchmark, cloud deployment, performance
+  claim, or human study is authorized by this maintenance release.

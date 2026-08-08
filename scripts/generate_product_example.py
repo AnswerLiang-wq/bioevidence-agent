@@ -18,7 +18,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 
-from apps.product_demo.service import ProductDemoService  # noqa: E402
+from apps.product_demo.service import (  # noqa: E402
+    ProductDemoService,
+    render_markdown_pack,
+)
 from bioevidence.pubmed import PubMedArticle  # noqa: E402
 
 
@@ -41,7 +44,11 @@ class CuratedExampleClient:
                 journal="The New England Journal of Medicine",
                 year=2020,
                 first_author="RECOVERY Collaborative Group",
-                abstract="The primary outcome was 28-day mortality.",
+                abstract=(
+                    "Death within 28 days occurred in 421 patients (27.0%) in the "
+                    "hydroxychloroquine group and in 790 (25.0%) in the usual-care "
+                    "group."
+                ),
             ),
             PubMedArticle(
                 pmid="33264556",
@@ -173,6 +180,7 @@ def main(argv: list[str] | None = None) -> int:
     }
     pack.pop("pack_sha256", None)
     pack["pack_sha256"] = _canonical_sha256(pack)
+    markdown = render_markdown_pack(pack)
     notice = (
         "> **Example boundary:** deterministic abridged public example; no live "
         "PubMed fetch was performed. Hashes bind these local example records.\n\n"
@@ -185,7 +193,7 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(pack, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    markdown_path.write_text(notice + exported["markdown"], encoding="utf-8")
+    markdown_path.write_text(notice + markdown, encoding="utf-8")
     print(
         json.dumps(
             {

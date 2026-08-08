@@ -1,4 +1,4 @@
-"""Capture desensitized Product Demo screenshots for the v0.4.0 portfolio.
+"""Capture desensitized Product Demo screenshots for the v0.4.1 portfolio.
 
 The capture runs the Standard-mode task with fixed public PMIDs only, so the
 resulting images contain public PubMed-derived content and no participant or
@@ -9,6 +9,8 @@ and Playwright with its Chromium browser.
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import sys
 from pathlib import Path
 
@@ -56,7 +58,8 @@ def main(argv: list[str] | None = None) -> int:
         page.locator("#search-button").click()
         page.wait_for_selector("#cards .evidence-card", timeout=120_000)
         page.wait_for_timeout(800)
-        page.screenshot(path=str(cards_png), full_page=True)
+        page.locator("#results-section").scroll_into_view_if_needed()
+        page.screenshot(path=str(cards_png), full_page=False)
 
         first_card = page.locator(".evidence-card").first
         first_card.locator('.choice-button[data-value="accepted"]').click()
@@ -66,8 +69,31 @@ def main(argv: list[str] | None = None) -> int:
         page.locator("#synthesis").fill(
             "Public demo example: abstract-level evidence only; full-text review required."
         )
-        page.wait_for_timeout(500)
-        page.screenshot(path=str(export_png), full_page=True)
+        with page.expect_download(timeout=30_000) as json_download_info:
+            page.locator("#export-json").click()
+        json_download = json_download_info.value
+        json_path = json_download.path()
+        if json_path is None or not json_download.suggested_filename.endswith(".json"):
+            raise RuntimeError("JSON evidence-pack download was not created")
+        pack = json.loads(json_path.read_text(encoding="utf-8"))
+        if pack.get("audit", {}).get("accepted_count") != 1:
+            raise RuntimeError("downloaded JSON evidence pack failed its audit check")
+        declared_hash = pack.pop("pack_sha256", None)
+        canonical_json = json.dumps(
+            pack,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+        if declared_hash != hashlib.sha256(canonical_json).hexdigest():
+            raise RuntimeError("downloaded JSON evidence-pack hash is invalid")
+
+        page.wait_for_function(
+            "document.querySelector('#export-status').textContent.includes('已生成')",
+            timeout=30_000,
+        )
+        page.locator("#export-section").scroll_into_view_if_needed()
+        page.screenshot(path=str(export_png), full_page=False)
         browser.close()
 
     print(

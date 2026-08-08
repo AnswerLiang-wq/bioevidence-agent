@@ -8,6 +8,10 @@ normalized-record hashes.
 It is a research workflow prototype. It is not a clinical decision tool, a
 systematic review, or an autonomous scientific judge.
 
+Exports use the versioned `product-evidence-pack-v0.2` contract. Compared with
+v0.1, its audit object replaces `all_sources_pubmed` with the narrower
+`all_source_urls_pubmed_formatted`; integrations should inspect `pack_version`.
+
 This is the product entry point. It is intentionally different from the
 closed-corpus engineering benchmark:
 
@@ -94,6 +98,9 @@ ruff check src apps tests scripts
 pytest -q
 python scripts/run_product_scope_controls.py
 ```
+
+With no output flags, this command regenerates the frozen JSON and Markdown
+reports under `reports/`.
 
 The eight deterministic
 [synthetic scope controls](../../reports/product_scope_controls_v1.md) verify

@@ -118,7 +118,9 @@ The report is reproducible with:
 python scripts/run_product_scope_controls.py
 ```
 
-The frozen result is [8/8 controls passed](../reports/product_scope_controls_v1.md).
+With no output flags, the command deterministically rewrites the frozen JSON
+and Markdown reports under `reports/`. The frozen result is
+[8/8 controls passed](../reports/product_scope_controls_v1.md).
 Because the inputs contain declared metadata, this is an invariant test—not
 automatic field extraction, real-paper scope classification, or biomedical
 natural-language-inference accuracy.
@@ -141,7 +143,7 @@ to stop the exploratory study and close the portfolio scope.
 ## Reproducibility
 
 CI runs lint, lightweight tests, a wheel build, and a fresh out-of-tree
-model-free demo on Python 3.10, 3.12, and 3.13. The transformer-heavy
+model-free demo on Python 3.10, 3.11, 3.12, and 3.13. The transformer-heavy
 evaluation is a separate manual workflow so normal pushes do not download
 models or execute the full reranker workload.
 

@@ -1,7 +1,7 @@
 {
   "audit": {
     "accepted_count": 2,
-    "all_sources_pubmed": true,
+    "all_source_urls_pubmed_formatted": true,
     "excluded_count": 2,
     "useful_count": 2
   },
@@ -21,22 +21,22 @@
         "publication_types": [
           "Randomized Controlled Trial"
         ],
-        "record_sha256": "2f4c152d4057ee828866f2152195dadd250b6cecc2e7ea2bea3d3c8933db7bdd",
+        "record_sha256": "76300f20d59d7354fe4a6c1af272e70e4951e24ed353fa3cf34e201a18763e3f",
         "retrieval": {
           "component_ranks": {
             "bm25": 1
           },
           "method": "bm25",
           "rank": 1,
-          "score": 5.94805064
+          "score": 3.67770528
         },
         "snippet": {
-          "end_char": 41,
+          "end_char": 129,
           "relevance_score": 0.27272727,
           "section": "abstract",
-          "snippet_sha256": "9c61b7db079c028b2549791229b0f2819fc5036743159c8dc4875af28cec9388",
+          "snippet_sha256": "7f05c9ff3d48fd300ae55a0cdf10a55e8f1b7fce1337addbbed23d43aa14eb9b",
           "start_char": 0,
-          "text": "The primary outcome was 28-day mortality."
+          "text": "Death within 28 days occurred in 421 patients (27.0%) in the hydroxychloroquine group and in 790 (25.0%) in the usual-care group."
         },
         "source_url": "https://pubmed.ncbi.nlm.nih.gov/33031652/",
         "system_suggestion": {
@@ -57,8 +57,8 @@
     },
     {
       "card": {
-        "card_id": "E4",
-        "display_rank": 4,
+        "card_id": "E3",
+        "display_rank": 3,
         "doi": "10.1056/NEJMoa2023184",
         "journal": "The New England Journal of Medicine",
         "limits": [
@@ -72,11 +72,11 @@
         "record_sha256": "22064138d2b845911ac207da5e096ef87ee6139e8376ccc5944e2459fcd6e335",
         "retrieval": {
           "component_ranks": {
-            "bm25": 4
+            "bm25": 3
           },
           "method": "bm25",
-          "rank": 4,
-          "score": 1.0205639
+          "rank": 3,
+          "score": 1.55384801
         },
         "snippet": {
           "end_char": 131,
@@ -97,7 +97,7 @@
       },
       "user_decision": {
         "action": "accepted",
-        "card_id": "E4",
+        "card_id": "E3",
         "note": "Public example: mortality evidence retained for human review.",
         "useful": true,
         "user_direction": "opposes"
@@ -133,7 +133,7 @@
           },
           "method": "bm25",
           "rank": 2,
-          "score": 2.43502375
+          "score": 2.50533999
         },
         "snippet": {
           "end_char": 68,
@@ -162,8 +162,8 @@
     },
     {
       "card": {
-        "card_id": "E3",
-        "display_rank": 3,
+        "card_id": "E4",
+        "display_rank": 4,
         "doi": "10.1056/NEJMoa2019014",
         "journal": "The New England Journal of Medicine",
         "limits": [
@@ -177,11 +177,11 @@
         "record_sha256": "e243f8199df0227e3f94cda3e5fe6e60bf1f39d88d3cbc05a1b89f98dfac3fe6",
         "retrieval": {
           "component_ranks": {
-            "bm25": 3
+            "bm25": 4
           },
           "method": "bm25",
-          "rank": 3,
-          "score": 1.4970557
+          "rank": 4,
+          "score": 1.53767578
         },
         "snippet": {
           "end_char": 51,
@@ -202,7 +202,7 @@
       },
       "user_decision": {
         "action": "excluded",
-        "card_id": "E3",
+        "card_id": "E4",
         "note": "Public example: non-decisive scope for the exact 28-day claim.",
         "useful": false,
         "user_direction": "unclear"
@@ -210,10 +210,10 @@
     }
   ],
   "mode": "standard",
-  "pack_sha256": "dff6321af22e44f85fa2983c64072c12681fee926c81a0bf0aa9987b4ead5d71",
+  "pack_sha256": "27314556024b858f73d43e15798205b1bd4af62db9861cd66c1c7ce4ac9971ca",
   "pack_status": "opposes",
-  "pack_version": "product-evidence-pack-v0.1",
-  "product_version": "0.4.0",
+  "pack_version": "product-evidence-pack-v0.2",
+  "product_version": "0.4.1",
   "question": "Hydroxychloroquine lowers 28-day mortality in adults hospitalized with COVID-19.",
   "scope_limits": [
     "研究文献信息工具，不提供诊断或治疗建议。",

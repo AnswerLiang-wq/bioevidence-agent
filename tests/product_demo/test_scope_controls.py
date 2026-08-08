@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
@@ -9,6 +10,7 @@ from apps.product_demo.scope_controls import (
     evaluate_declared_scope,
     load_scope_controls,
 )
+from scripts import run_product_scope_controls
 
 
 CONTROLS = load_scope_controls()
@@ -62,3 +64,20 @@ def test_invalid_or_ambiguous_declared_scope_is_rejected() -> None:
     incomplete["evidence_scope"] = {"species": "human"}
     with pytest.raises(ValueError, match="frozen scope dimensions"):
         evaluate_declared_scope(incomplete)
+
+
+def test_report_command_uses_frozen_paths_by_default(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    output_json = tmp_path / "scope.json"
+    output_markdown = tmp_path / "scope.md"
+    monkeypatch.setattr(
+        run_product_scope_controls, "DEFAULT_OUTPUT_JSON", output_json
+    )
+    monkeypatch.setattr(
+        run_product_scope_controls, "DEFAULT_OUTPUT_MARKDOWN", output_markdown
+    )
+
+    assert run_product_scope_controls.main([]) == 0
+    assert json.loads(output_json.read_text(encoding="utf-8"))["passed_count"] == 8
+    assert "Controls passed: 8/8" in output_markdown.read_text(encoding="utf-8")

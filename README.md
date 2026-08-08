@@ -3,6 +3,14 @@
 BioEvidence Agent is a portfolio project with two deliberately separate
 entry points:
 
+Current release: **v0.4.1**, an integrity-only maintenance release over the
+v0.4.0 portfolio closeout. It adds no model, benchmark, deployment, or human
+study.
+
+The exported evidence-pack contract is `product-evidence-pack-v0.2`. It
+replaces the ambiguous v0.1 audit key `all_sources_pubmed` with the narrower
+`all_source_urls_pubmed_formatted`; consumers should branch on `pack_version`.
+
 | Entry point | What it demonstrates | Retrieval path |
 |---|---|---|
 | **Agent Engineering** | reproducible public-benchmark retrieval, answer diagnostics, typed tools, and byte-verifiable citation lineage | BM25 + pinned multilingual-E5 + equal-weight RRF + pinned cross-encoder reranker |
@@ -64,12 +72,14 @@ records.
 
 Screenshots of the Standard-task workflow (fixed public PMIDs only):
 [evidence cards](docs/product_case/screenshots/product_demo_standard_cards.png)
-and [evidence-pack export](docs/product_case/screenshots/product_demo_evidence_export.png).
+and [verified evidence-pack export](docs/product_case/screenshots/product_demo_evidence_export.png).
 
 Use **Live research** only with a public, non-sensitive research question.
-The server binds locally; the event log excludes question, abstract, and note
-text. The Product Demo still requires human review and does not produce an
-autonomous biomedical verdict.
+The server binds locally; the official UI sends only event-specific,
+allowlisted action metadata, and the server rejects unknown metadata fields.
+Question, abstract, and note text are not accepted by that event contract. The
+Product Demo still requires human review and does not produce an autonomous
+biomedical verdict.
 
 Packaging boundary: the wheel installs the core `bioevidence` CLI and its
 model-free fixture. The web app under `apps/product_demo/` and its launcher
@@ -128,7 +138,7 @@ localization—remains the bottleneck.
 
 ## Install and run the core CLI demo
 
-Python 3.10+ is supported.
+Python 3.10–3.13 is supported and exercised by CI.
 
 ```bash
 python -m pip install .
@@ -209,8 +219,9 @@ contracts are fixed in code and manifests.
 - the abstract-only stress-test runner and the five-control CV runner;
 - a repository-run local web workflow for fixed-PMID and live PubMed evidence
   cards;
-- eight synthetic scope controls covering population, species, intervention,
-  endpoint, timepoint, context-only, and unknown-scope safeguards;
+- a standalone synthetic regression harness with eight declared-metadata scope
+  controls covering population, species, intervention, endpoint, timepoint,
+  context-only, and unknown scope;
 - lightweight tests and a model-free smoke fixture;
 - frozen aggregate JSON/Markdown reports and representative failures;
 - exact CI/heavy dependency locks, GitHub Actions, and release metadata.
@@ -223,7 +234,8 @@ See:
 - [AI Product Case Study](docs/product_case/PORTFOLIO_CASE_STUDY.md)
 - [synthetic scope-control report](reports/product_scope_controls_v1.md)
 - [resume and interview notes](docs/resume_and_interview.md)
-- [v0.4.0 release manifest](reports/release_manifest_v0.4.0.json)
+- [v0.4.1 release manifest](reports/release_manifest_v0.4.1.json)
+- [historical v0.4.0 release manifest](reports/release_manifest_v0.4.0.json)
 
 ## Formative pilot status
 
@@ -235,10 +247,11 @@ time saved, task completion, trust, reuse intent, or VEPS improvement.
 
 The pilot exposed mode, timing, record-consistency, and evidence-scope risks.
 Rather than recruiting more participants against an unstable measurement
-protocol, v0.4 closes the portfolio study and converts the reusable failure
-patterns into deterministic synthetic scope controls. Those controls test
-software behavior against declared metadata; they are not real-paper
-scientific validation or biomedical NLI accuracy.
+protocol, v0.4 closed the portfolio study and converted the reusable failure
+patterns into deterministic synthetic scope controls. v0.4.1 only repairs
+integrity contracts found by post-release audit. Those controls test software
+behavior against declared metadata; they are not real-paper scientific
+validation or biomedical NLI accuracy.
 
 ## What this is not
 

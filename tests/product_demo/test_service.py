@@ -163,14 +163,17 @@ def test_export_uses_only_trusted_session_cards_and_user_judgment() -> None:
         synthesis="The accepted abstracts do not support the stated endpoint.",
     )
     pack = exported["json"]
+    assert pack["pack_version"] == "product-evidence-pack-v0.2"
     assert pack["audit"] == {
         "accepted_count": 3,
         "excluded_count": 1,
         "useful_count": 2,
-        "all_sources_pubmed": True,
+        "all_source_urls_pubmed_formatted": True,
     }
+    assert "all_sources_pubmed" not in pack["audit"]
     assert len(pack["pack_sha256"]) == 64
     assert "## Accepted evidence" in exported["markdown"]
+    assert f"Pack SHA-256: `{pack['pack_sha256']}`" in exported["markdown"]
     assert search["cards"][0]["title"] in exported["markdown"]
 
     decisions[0]["card_id"] = "forged-card"
@@ -192,6 +195,14 @@ def test_live_mode_rejects_patient_specific_advice_and_freezes_failures() -> Non
             question="What should I take for my symptoms today?",
         )
     assert error.value.code == "medical_advice_not_supported"
+
+    live_result = service.search(
+        session_id="session-live-01",
+        mode="live",
+        question=QUESTION,
+        task_id="caller-supplied",
+    )
+    assert live_result["task_id"] == "live-research"
 
     failing = ProductDemoService(
         client=FailingPubMedClient([]),
@@ -224,15 +235,15 @@ def test_event_store_logs_metrics_without_questions_or_notes(tmp_path) -> None:
             "task_id": "test-task",
             "card_id": "E1",
             "elapsed_ms": 1234,
-            "metadata": {"action": "accepted", "mode": "standard"},
+            "metadata": {"field": "action", "value": "accepted"},
         }
     )
     assert event["sequence"] == 1
     path = tmp_path / "session-0005.jsonl"
     stored = json.loads(path.read_text())
-    assert stored["metadata"] == {"action": "accepted", "mode": "standard"}
+    assert stored["metadata"] == {"field": "action", "value": "accepted"}
 
-    with pytest.raises(EventValidationError, match="prohibited"):
+    with pytest.raises(EventValidationError, match="event contract"):
         store.append(
             {
                 "session_id": "session-0005",
@@ -242,6 +253,79 @@ def test_event_store_logs_metrics_without_questions_or_notes(tmp_path) -> None:
             }
         )
     assert "private research content" not in path.read_text()
+
+
+@pytest.mark.parametrize("unknown_field", ["user_question", "details"])
+def test_event_store_rejects_unknown_metadata_fields(tmp_path, unknown_field) -> None:
+    store = EventStore(tmp_path)
+    sensitive_text = "private research content"
+
+    with pytest.raises(EventValidationError, match="event contract"):
+        store.append(
+            {
+                "session_id": "session-privacy-01",
+                "event_type": "source_opened",
+                "elapsed_ms": 100,
+                "metadata": {unknown_field: sensitive_text},
+            }
+        )
+
+    path = tmp_path / "session-privacy-01.jsonl"
+    assert not path.exists()
+
+
+def test_event_store_continues_sequence_after_restart(tmp_path) -> None:
+    payload = {
+        "session_id": "session-restart-01",
+        "event_type": "session_started",
+        "elapsed_ms": 0,
+        "metadata": {"mode": "standard"},
+    }
+    assert EventStore(tmp_path).append(payload)["sequence"] == 1
+
+    restarted_store = EventStore(tmp_path)
+    payload["event_type"] = "search_started"
+    payload["elapsed_ms"] = 1
+    assert restarted_store.append(payload)["sequence"] == 2
+
+    stored = [
+        json.loads(line)
+        for line in (tmp_path / "session-restart-01.jsonl").read_text().splitlines()
+    ]
+    assert [event["sequence"] for event in stored] == [1, 2]
+
+
+@pytest.mark.parametrize(
+    ("event_type", "metadata"),
+    [
+        ("session_started", {"mode": "standard"}),
+        ("search_started", {"mode": "live"}),
+        (
+            "search_completed",
+            {"mode": "standard", "card_count": 3, "result_status": "complete"},
+        ),
+        ("search_failed", {"error_code": "external_service_failure"}),
+        ("card_action", {"field": "action", "value": "excluded"}),
+        ("card_action", {"field": "user_direction", "value": "supports"}),
+        ("card_useful", {"useful": True}),
+        ("source_opened", {}),
+        ("note_changed", {"has_content": True}),
+        ("export_started", {"format": "json"}),
+        ("export_completed", {"format": "markdown", "accepted_count": 1}),
+        ("error_shown", {"error_code": "no_results"}),
+        ("timeout", {"threshold_minutes": 12}),
+    ],
+)
+def test_event_store_accepts_ui_event_contracts(tmp_path, event_type, metadata) -> None:
+    event = EventStore(tmp_path).append(
+        {
+            "session_id": f"session-{event_type.replace('_', '-')}",
+            "event_type": event_type,
+            "elapsed_ms": 1,
+            "metadata": metadata,
+        }
+    )
+    assert event["metadata"] == metadata
 
 
 def test_exact_normalized_title_duplicates_are_removed_conservatively() -> None:

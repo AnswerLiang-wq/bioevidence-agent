@@ -1,4 +1,4 @@
-"""Generate the v0.4.0 release manifest by hashing every Git-tracked file.
+"""Generate a version-bound release manifest for every Git-tracked file.
 
 The manifest mirrors the v0.3.0 schema and freezes the current release facts.
 Run it only after staging every file that should ship (the manifest must be
@@ -16,7 +16,6 @@ import tomllib
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = ROOT / "reports" / "release_manifest_v0.4.0.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -48,7 +47,15 @@ def release_version(root: Path = ROOT) -> str:
     return version
 
 
-def build_manifest(root: Path = ROOT) -> dict[str, object]:
+def default_output_path(root: Path = ROOT) -> Path:
+    """Return the manifest path for the version declared by the project."""
+
+    return root / "reports" / f"release_manifest_v{release_version(root)}.json"
+
+
+def build_manifest(
+    root: Path = ROOT, *, output_path: Path | None = None
+) -> dict[str, object]:
     version = release_version(root)
     wheel = f"artifacts/bioevidence_agent-{version}-py3-none-any.whl"
     wheel_path = root.joinpath(*PurePosixPath(wheel).parts)
@@ -57,7 +64,7 @@ def build_manifest(root: Path = ROOT) -> dict[str, object]:
 
     # The manifest cannot hash itself (self-reference has no fixed point),
     # mirroring the v0.3.0 manifest, which also omitted its own entry.
-    manifest_path = DEFAULT_OUTPUT.resolve()
+    manifest_path = (output_path or default_output_path(root)).resolve()
     artifacts: dict[str, str] = {}
     for relative in tracked_relative_paths(root):
         path = root.joinpath(*PurePosixPath(relative).parts)
@@ -121,9 +128,11 @@ def build_manifest(root: Path = ROOT) -> dict[str, object]:
             "demo_core_flow_passed": True,
             "examples_generated": True,
             "fresh_wheel_install_passed": True,
-            "github_ci_status": "pending_merge",
+            "github_publication_status": (
+                "not_asserted_by_prepublication_manifest"
+            ),
             "out_of_tree_demo_passed": True,
-            "portfolio_tests_passed": 46,
+            "portfolio_tests_passed": 65,
             "privacy_scan_passed": True,
             "ruff_passed": True,
             "screenshots_captured": True,
@@ -135,16 +144,18 @@ def build_manifest(root: Path = ROOT) -> dict[str, object]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    default_output = default_output_path()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--output",
         type=Path,
-        default=DEFAULT_OUTPUT,
+        default=default_output,
         help="manifest output path (default: %(default)s)",
     )
     args = parser.parse_args(argv)
-    manifest = build_manifest()
-    args.output.write_text(
+    output_path = args.output if args.output.is_absolute() else ROOT / args.output
+    manifest = build_manifest(output_path=output_path)
+    output_path.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
@@ -153,7 +164,7 @@ def main(argv: list[str] | None = None) -> int:
             {
                 "release_id": manifest["release_id"],
                 "artifact_count": len(manifest["artifacts"]),
-                "output": str(args.output),
+                "output": str(output_path),
             },
             sort_keys=True,
         )

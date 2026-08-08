@@ -34,6 +34,7 @@ const elements = {
   synthesis: document.querySelector("#synthesis"),
   exportJson: document.querySelector("#export-json"),
   exportMarkdown: document.querySelector("#export-markdown"),
+  exportStatus: document.querySelector("#export-status"),
   timer: document.querySelector("#timer"),
   timerStatus: document.querySelector("#timer-status"),
   timerCard: document.querySelector(".timer-card"),
@@ -108,7 +109,7 @@ async function runSearch() {
   hideMessage();
   state.taskId = state.mode === "standard"
     ? elements.taskSelect.value
-    : "participant-owned";
+    : "live-research";
   await sessionStart;
   await logEvent("search_started", {mode: state.mode});
   try {
@@ -160,6 +161,7 @@ function renderResults(result) {
   );
   elements.resultsSection.hidden = false;
   elements.exportSection.hidden = false;
+  elements.exportStatus.textContent = "尚未导出。导出成功不代表科学结论正确或用户价值已验证。";
   setActiveStep(2);
   updateAcceptedCount();
   elements.resultsSection.scrollIntoView({behavior: "smooth", block: "start"});
@@ -359,6 +361,8 @@ async function exportPack(format) {
       format,
       accepted_count: payload.json.audit.accepted_count,
     });
+    stopTimerAfterExport();
+    elements.exportStatus.textContent = `${format.toUpperCase()} 证据包已生成并触发下载；请核对下载文件与 Hash。`;
     showMessage("证据包已导出到本机下载目录。", "success");
   } catch (error) {
     const code = error && error.code ? error.code : "unknown";
@@ -393,6 +397,14 @@ function updateTimer() {
       logEvent("timeout", {threshold_minutes: 12});
     }
   }
+}
+
+function stopTimerAfterExport() {
+  if (state.timerHandle !== null) {
+    window.clearInterval(state.timerHandle);
+    state.timerHandle = null;
+  }
+  elements.timerStatus.textContent = "证据包已导出";
 }
 
 async function logEvent(eventType, metadata = {}, cardId = null) {

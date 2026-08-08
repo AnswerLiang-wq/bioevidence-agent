@@ -113,6 +113,12 @@ def test_local_server_serves_hardened_static_assets(tmp_path) -> None:
         assert b"/api/export" in javascript
         assert b"innerHTML" not in javascript
         assert b"https://" not in javascript
+        assert b"live-research" in javascript
+        assert b"participant-owned" not in javascript
+        assert b"stopTimerAfterExport" in javascript
+        assert b"exportStatus" in javascript
+        assert b"Source-bound evidence workspace" in html
+        assert b'id="export-status"' in html
 
 
 def test_search_export_and_privacy_event_routes(tmp_path) -> None:

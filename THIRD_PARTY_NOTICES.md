@@ -1,7 +1,20 @@
 # Third-party notices
 
-This repository contains integration code and small synthetic demo fixtures.
-It does not redistribute model weights or the raw PubMedQA dataset.
+This repository contains integration code, small synthetic demo fixtures, and
+short source-linked excerpts from public PubMed records. It does not
+redistribute model weights, the raw PubMedQA dataset, or complete PubMed
+abstracts.
+
+## PubMed / NCBI E-utilities
+
+- Service: <https://pubmed.ncbi.nlm.nih.gov/>
+- API: <https://www.ncbi.nlm.nih.gov/books/NBK25501/>
+- Use in this repository: live identifier/metadata retrieval and short,
+  source-linked excerpts in the deterministic public example and screenshots.
+
+PubMed identifiers and links identify the source record. Local record and
+snippet hashes bind repository or fetched bytes; they do not certify
+scientific validity, copyright status, or the current remote webpage bytes.
 
 ## PubMedQA
 

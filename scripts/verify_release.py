@@ -11,7 +11,6 @@ from pathlib import Path, PurePosixPath
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MANIFEST = ROOT / "reports" / "release_manifest_v0.4.0.json"
 PRIVATE_PARTS = {"private", "session_data"}
 IGNORED_TRACKED_PARTS = {".git"}
 FORBIDDEN_NAMES = {
@@ -35,6 +34,18 @@ WINDOWS_ABSOLUTE_RE = re.compile(
     r"(?i)(?<![A-Za-z0-9])(?:[A-Z]:[\\/](?:Users|Temp)[\\/])"
 )
 SHA256_RE = re.compile(r"[0-9a-f]{64}")
+
+
+def default_manifest_path(root: Path = ROOT) -> Path:
+    """Return the release manifest path bound to the project version."""
+
+    project = (root / "pyproject.toml").read_text(encoding="utf-8")
+    project_metadata = project.split("[project]", 1)[-1].split("[", 1)[0]
+    match = re.search(r'^version = "(\d+\.\d+\.\d+)"$', project_metadata, re.M)
+    if match is None:
+        raise ValueError("project version is missing or invalid")
+    version = match.group(1)
+    return root / "reports" / f"release_manifest_v{version}.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -148,6 +159,18 @@ def verify_release(manifest_path: Path, *, root: Path = ROOT) -> dict[str, objec
     tracked = {
         path.relative_to(root).as_posix() for path in tracked_public_files(root)
     }
+    manifest_relative = manifest_path.relative_to(root.resolve()).as_posix()
+    if manifest_relative not in tracked:
+        raise ValueError("release manifest is not Git-tracked")
+    expected_artifacts = tracked - {manifest_relative}
+    observed_artifacts = set(artifacts)
+    if observed_artifacts != expected_artifacts:
+        missing = sorted(expected_artifacts - observed_artifacts)
+        extra = sorted(observed_artifacts - expected_artifacts)
+        raise ValueError(
+            "release artifact set does not match tracked public files: "
+            f"missing={missing}, extra={extra}"
+        )
     for relative, expected in artifacts.items():
         if not isinstance(relative, str) or not isinstance(expected, str):
             raise ValueError("artifact paths and hashes must be strings")
@@ -183,8 +206,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--manifest",
         type=Path,
-        default=DEFAULT_MANIFEST,
-        help="release manifest to verify (default: v0.4.0)",
+        default=default_manifest_path(),
+        help="release manifest to verify (default: project version)",
     )
     return parser
 
