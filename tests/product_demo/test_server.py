@@ -17,7 +17,6 @@ from apps.product_demo.server import create_handler
 from apps.product_demo.service import ProductDemoService
 from bioevidence.pubmed import PubMedArticle
 
-
 QUESTION = "A study measured mortality after treatment in hospitalized adults."
 
 

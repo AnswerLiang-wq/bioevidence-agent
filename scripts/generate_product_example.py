@@ -13,7 +13,6 @@ import json
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
@@ -23,7 +22,6 @@ from apps.product_demo.service import (  # noqa: E402
     render_markdown_pack,
 )
 from bioevidence.pubmed import PubMedArticle  # noqa: E402
-
 
 ACCEPTED_PMIDS = {"33031652", "33264556"}
 FIXED_CREATED_AT_UTC = "2026-08-06T00:00:00+00:00"

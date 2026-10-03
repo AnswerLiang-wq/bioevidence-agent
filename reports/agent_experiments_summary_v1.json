@@ -1,0 +1,675 @@
+{
+  "schema": "bioevidence.agent_experiments_summary",
+  "version": "v1.1",
+  "generated": "2026-10-03",
+  "generated_note": "Primary scoring metrics are extracted from existing frozen reports. Diagnostic tool counts and cost-rounding subtotals are aggregated from recorded cases. No scoring logic was reimplemented and no historical result was overwritten.",
+  "audit_scope": {
+    "what_this_file_supports": "Scoring policies, internal computation and the source hashes it declares can all be inspected here.",
+    "what_requires_the_source_files": "Verifying that a declared hash actually corresponds to the original file, and verifying that a metric was extracted correctly, both require obtaining the corresponding source file.",
+    "cannot_self_certify": "This summary does not independently prove its own provenance. It cites sources; it does not replace them.",
+    "private_raw_records": "Per-case records (tool calls, returned abstracts and snippets, verdicts with rationale) live under the ignored private/ directory and are not published. Auditing an individual case requires access to private/.",
+    "difference": "Aggregate values, policies and declared hashes are readable here; hash-to-file correspondence and single-case trajectories are not."
+  },
+  "model": {
+    "api_model": "deepseek-flash",
+    "note": "All three rounds used deepseek-flash. The designer or coding assistant model is not the experiment model.",
+    "thinking": "disabled",
+    "temperature": 0.0,
+    "max_steps": 8,
+    "max_tokens_per_call": 1024,
+    "request_timeout_seconds": 30.0,
+    "sdk_max_retries": 0
+  },
+  "scoring_policies": {
+    "legacy": {
+      "used_by": [
+        "v1",
+        "v2"
+      ],
+      "mapping": {
+        "supported": "yes",
+        "contradicted": "no",
+        "insufficient": "maybe"
+      },
+      "mixed": "matches no gold label; counted incorrect, reported separately as n_mixed_verdicts",
+      "failure_handling": "errored / budget_exhausted / text_exit are excluded from macro-F1",
+      "macro_f1_coverage": "completed cases only"
+    },
+    "v3": {
+      "used_by": [
+        "v3"
+      ],
+      "mapping": {
+        "supported": "yes",
+        "contradicted": "no",
+        "mixed": "maybe",
+        "insufficient": "maybe"
+      },
+      "mixed": "maps to maybe",
+      "failure_handling": "run_status is checked before verdict; a failed case contributes one FN to its gold class only and no TP or FP",
+      "macro_f1_coverage": "all attempted cases"
+    },
+    "note": "v1/v2 results were not rewritten; legacy remains the default implementation."
+  },
+  "rounds": [
+    {
+      "round": "v1",
+      "report": "private/env_precheck/pipeline_comparison_50_final.json",
+      "report_sha256": "17c6f249afe791945e5bd2a83f7d21af5f032c9e6681b58fb39f534f0831fc4b",
+      "run_date": "2026-10-01T18:35:04Z",
+      "arms": [
+        "A (agent)",
+        "rule-based"
+      ],
+      "sample": {
+        "file": "reports/eval_sample_50_v1_seed20260729.json",
+        "file_sha256": "bcc8753ff470b775ef17f07cf066b4cd659fe7b50459cd85159f98a0acd94b82",
+        "seed": 20260729,
+        "pool": 500,
+        "quota": {
+          "yes": 28,
+          "no": 17,
+          "maybe": 5
+        },
+        "exclusion_set": "none (first draw, pool was the full 500)",
+        "case_ids_sha256": "c42cb816c1714a5f18ae92f7d324fd48acabc2a7876d37658d04e1e3fc4a24dd"
+      },
+      "scoring_policy": "legacy",
+      "results": {
+        "A": {
+          "macro_f1": 0.5638,
+          "accuracy_on_completed": 0.7551,
+          "n_completed": 49,
+          "n_failed": 1,
+          "failure_breakdown": {
+            "errored": 1,
+            "budget_exhausted": 0,
+            "text_exit": 0,
+            "other": 0
+          },
+          "n_mixed_verdicts": 6,
+          "cost_estimate": {
+            "known_subtotal_usd": 0.18653,
+            "cost_complete": false,
+            "usage_coverage_counts": {
+              "confirmed": 49,
+              "partial": 1,
+              "unknown": 0
+            },
+            "semantics": "estimate, not a bill"
+          }
+        },
+        "rule_based": {
+          "macro_f1": 0.4196,
+          "accuracy_on_completed": 0.5,
+          "n_completed": 50,
+          "n_failed": 0,
+          "failure_breakdown": {
+            "errored": 0
+          },
+          "n_mixed_verdicts": 0
+        },
+        "per_class": {
+          "A": {
+            "yes": {
+              "support": 27,
+              "tp": 23,
+              "fp": 3,
+              "fn": 4,
+              "f1": 0.8679
+            },
+            "no": {
+              "support": 17,
+              "tp": 14,
+              "fp": 3,
+              "fn": 3,
+              "f1": 0.8235
+            },
+            "maybe": {
+              "support": 5,
+              "tp": 0,
+              "fp": 0,
+              "fn": 5,
+              "f1": 0.0
+            }
+          },
+          "rule_based": {
+            "yes": {
+              "support": 28,
+              "tp": 19,
+              "fp": 15,
+              "fn": 9,
+              "f1": 0.6129
+            },
+            "no": {
+              "support": 17,
+              "tp": 5,
+              "fp": 10,
+              "fn": 12,
+              "f1": 0.3125
+            },
+            "maybe": {
+              "support": 5,
+              "tp": 1,
+              "fp": 0,
+              "fn": 4,
+              "f1": 0.3333
+            }
+          }
+        }
+      },
+      "acceptance_threshold": null,
+      "criteria_met": null,
+      "acceptance_note": "Not recorded. No frozen protocol file exists for v1 and the report has no acceptance field.",
+      "macro_f1_coverage_detail": "Legacy scoring covers completed cases only. On the same planned 50-case sample, arm A covers 49 cases (1 errored) and the rule arm covers 50."
+    },
+    {
+      "round": "v2",
+      "report": "private/env_precheck/v2_ab_50_final.json",
+      "report_sha256": "9f5ff7a6a4bf9c4ef569ed71772d01805d3ab9f467593bb15b98f6ac7476ba6f",
+      "run_date": "2026-10-02T04:45:39Z",
+      "arms": [
+        "A (agent)",
+        "B (fixed context)",
+        "rule-based"
+      ],
+      "sample": {
+        "file": "reports/eval_sample_v2_50_seed20261002.json",
+        "file_sha256": "5fe5c4ab1b44c5aae9994c284c01eae13603cd23838c1da1b58e05b296d0a64d",
+        "seed": 20261002,
+        "pool": 450,
+        "quota": {
+          "yes": 27,
+          "no": 17,
+          "maybe": 6
+        },
+        "exclusion_set": "v1 frozen sample union v1 attempted cases (= 50 cases)",
+        "case_ids_sha256": "f2d37d740b7fbb3fbdb6ec3742f93ecab4a71234fa835101ec2794ac59392dde"
+      },
+      "scoring_policy": "legacy",
+      "results": {
+        "A": {
+          "macro_f1": 0.6003,
+          "accuracy_on_completed": 0.78,
+          "n_completed": 50,
+          "n_failed": 0,
+          "failure_breakdown": {
+            "errored": 0,
+            "budget_exhausted": 0,
+            "text_exit": 0,
+            "other": 0
+          },
+          "n_mixed_verdicts": 8,
+          "cost_estimate": {
+            "known_subtotal_usd": 0.196013,
+            "cost_complete": true,
+            "usage_coverage_counts": {
+              "confirmed": 50,
+              "partial": 0,
+              "unknown": 0
+            },
+            "semantics": "estimate, not a bill"
+          }
+        },
+        "B": {
+          "macro_f1": 0.5388,
+          "accuracy_on_completed": 0.76,
+          "n_completed": 50,
+          "n_failed": 0,
+          "failure_breakdown": {
+            "errored": 0,
+            "budget_exhausted": 0,
+            "text_exit": 0,
+            "other": 0
+          },
+          "n_mixed_verdicts": 1,
+          "cost_estimate": {
+            "known_subtotal_usd": 0.044505,
+            "cost_complete": true,
+            "usage_coverage_counts": {
+              "confirmed": 50,
+              "partial": 0,
+              "unknown": 0
+            },
+            "semantics": "estimate, not a bill"
+          }
+        },
+        "rule_based": {
+          "macro_f1": 0.4216,
+          "accuracy_on_completed": 0.64,
+          "n_completed": 50,
+          "n_failed": 0,
+          "failure_breakdown": {
+            "errored": 0
+          },
+          "n_mixed_verdicts": 0
+        },
+        "per_class": {
+          "A": {
+            "yes": {
+              "support": 27,
+              "tp": 25,
+              "fp": 2,
+              "fn": 2,
+              "f1": 0.9259
+            },
+            "no": {
+              "support": 17,
+              "tp": 14,
+              "fp": 1,
+              "fn": 3,
+              "f1": 0.875
+            },
+            "maybe": {
+              "support": 6,
+              "tp": 0,
+              "fp": 0,
+              "fn": 6,
+              "f1": 0.0
+            }
+          },
+          "B": {
+            "yes": {
+              "support": 27,
+              "tp": 27,
+              "fp": 11,
+              "fn": 0,
+              "f1": 0.8308
+            },
+            "no": {
+              "support": 17,
+              "tp": 11,
+              "fp": 0,
+              "fn": 6,
+              "f1": 0.7857
+            },
+            "maybe": {
+              "support": 6,
+              "tp": 0,
+              "fp": 0,
+              "fn": 6,
+              "f1": 0.0
+            }
+          },
+          "rule_based": {
+            "yes": {
+              "support": 27,
+              "tp": 25,
+              "fp": 15,
+              "fn": 2,
+              "f1": 0.7463
+            },
+            "no": {
+              "support": 17,
+              "tp": 7,
+              "fp": 3,
+              "fn": 10,
+              "f1": 0.5185
+            },
+            "maybe": {
+              "support": 6,
+              "tp": 0,
+              "fp": 0,
+              "fn": 6,
+              "f1": 0.0
+            }
+          }
+        }
+      },
+      "acceptance_threshold": null,
+      "criteria_met": null,
+      "acceptance_note": "Not recorded. The v2 frozen protocol declares a scoring policy but no acceptance threshold; the 0.002 figure in its section 9 is a cost soft threshold, not an acceptance criterion."
+    },
+    {
+      "round": "v3",
+      "report": "private/v3/v3_ac_50_final.json",
+      "report_sha256": "25c02d6b7c34d710398ef049026cd142b4ef0b04ab0b479e78c7ae0da92a7d91",
+      "run_date": "2026-10-02T06:32:46Z",
+      "arms": [
+        "A (agent)",
+        "C (prompt variant)",
+        "rule-based"
+      ],
+      "sample": {
+        "file": "private/v3/eval_sample_v3_50_seed20261002.json",
+        "file_sha256": "3f0eacad1dc7e822a973f6bcd62e177e35a9f24d1438070def687d122b3dca39",
+        "seed": 20261002,
+        "pool": 400,
+        "quota": {
+          "yes": 28,
+          "no": 17,
+          "maybe": 5
+        },
+        "exclusion_set": "all 100 attempted cases of v1 and v2 (includes the v1 timeout case)",
+        "case_ids_sha256": "115537cbab48dfd992223e6961846d757d382ad428ac9aaa6891988a91e714ca"
+      },
+      "scoring_policy": "v3",
+      "results": {
+        "A": {
+          "macro_f1": 0.57,
+          "accuracy_on_completed": 0.6939,
+          "n_completed": 49,
+          "n_failed": 1,
+          "failure_breakdown": {
+            "errored": 0,
+            "budget_exhausted": 1,
+            "text_exit": 0,
+            "other": 0
+          },
+          "n_mixed_verdicts": 6,
+          "macro_f1_exact": 0.5700247079964061,
+          "cost_estimate": {
+            "known_subtotal_usd": 0.204216,
+            "cost_complete": true,
+            "usage_coverage_counts": {
+              "confirmed": 50,
+              "partial": 0,
+              "unknown": 0
+            },
+            "semantics": "estimate, not a bill"
+          }
+        },
+        "C": {
+          "macro_f1": 0.6074,
+          "accuracy_on_completed": 0.7,
+          "n_completed": 50,
+          "n_failed": 0,
+          "failure_breakdown": {
+            "errored": 0,
+            "budget_exhausted": 0,
+            "text_exit": 0,
+            "other": 0
+          },
+          "n_mixed_verdicts": 7,
+          "macro_f1_exact": 0.607397504456328,
+          "cost_estimate": {
+            "known_subtotal_usd": 0.235161,
+            "cost_complete": true,
+            "usage_coverage_counts": {
+              "confirmed": 50,
+              "partial": 0,
+              "unknown": 0
+            },
+            "semantics": "estimate, not a bill"
+          }
+        },
+        "rule_based": {
+          "macro_f1": 0.3344,
+          "accuracy_on_completed": 0.56,
+          "n_completed": 50,
+          "n_failed": 0,
+          "failure_breakdown": {
+            "errored": 0
+          },
+          "n_mixed_verdicts": 0,
+          "macro_f1_exact": 0.33444816053511706
+        },
+        "per_class": {
+          "A": {
+            "yes": {
+              "support": 28,
+              "tp": 20,
+              "fp": 5,
+              "fn": 8,
+              "f1": 0.7547
+            },
+            "no": {
+              "support": 17,
+              "tp": 13,
+              "fp": 2,
+              "fn": 4,
+              "f1": 0.8125
+            },
+            "maybe": {
+              "support": 5,
+              "tp": 1,
+              "fp": 8,
+              "fn": 4,
+              "f1": 0.1429
+            }
+          },
+          "C": {
+            "yes": {
+              "support": 28,
+              "tp": 20,
+              "fp": 3,
+              "fn": 8,
+              "f1": 0.7843
+            },
+            "no": {
+              "support": 17,
+              "tp": 13,
+              "fp": 3,
+              "fn": 4,
+              "f1": 0.7879
+            },
+            "maybe": {
+              "support": 5,
+              "tp": 2,
+              "fp": 9,
+              "fn": 3,
+              "f1": 0.25
+            }
+          },
+          "rule_based": {
+            "yes": {
+              "support": 28,
+              "tp": 24,
+              "fp": 17,
+              "fn": 4,
+              "f1": 0.6957
+            },
+            "no": {
+              "support": 17,
+              "tp": 4,
+              "fp": 5,
+              "fn": 13,
+              "f1": 0.3077
+            },
+            "maybe": {
+              "support": 5,
+              "tp": 0,
+              "fp": 0,
+              "fn": 5,
+              "f1": 0.0
+            }
+          }
+        }
+      },
+      "acceptance": {
+        "delta_threshold": 0.04,
+        "delta_macro_f1_c_minus_a": 0.037372796459921864,
+        "macro_f1_gain_met": false,
+        "maybe_correct_rate": {
+          "a": 0.2,
+          "c": 0.4,
+          "support": 5,
+          "a_tp": 1,
+          "c_tp": 2,
+          "c_exceeds_a": true
+        },
+        "criteria_met": false,
+        "conclusion_strength": "exploratory engineering criterion not met",
+        "threshold_note": "pre-declared engineering criterion, not a demonstrated noise floor; one 50-case run cannot establish general validity",
+        "caveats": [
+          "single 50-case run; no confidence interval or significance test is claimed",
+          "C and A differ only in prompt material, but the comparison is still observational: one sample, one model, one corpus",
+          "A yes/no F1 cost is reported above; a macro-F1 gain driven only by yes/no shifts is not evidence for H3"
+        ]
+      },
+      "acceptance_threshold": "delta macro-F1 >= 0.04 AND C maybe-correct-rate > A",
+      "criteria_met": false,
+      "acceptance_note": "The maybe-subgroup condition was met (c_exceeds_a = true); the delta condition was not (delta < 0.04), so the joint criterion is not met. Arm A completed 49 of 50 (1 budget_exhausted) while arm C completed 50; v3 macro-F1 covers all 50 attempted cases."
+    }
+  ],
+  "prompt_fingerprints": {
+    "v1": "not recorded anywhere in the v1 report series; original run is complete, cannot be backfilled",
+    "v2": {
+      "segment_reports": "recorded in both raw segments (A and B blocks)",
+      "merged_report": "not recorded",
+      "A_system_prompt_sha256": "84e8d97b91a0940698b93a25db09d821d5ab832e17776d62a114f99d468db880",
+      "B_system_prompt_sha256": "688bcf4de2212d26644421da43d0dc4e02ec693ce806ac937ee317159961990c"
+    },
+    "v3": {
+      "segment_reports": "recorded",
+      "merged_report": "recorded",
+      "A_system_prompt_sha256": "84e8d97b91a0940698b93a25db09d821d5ab832e17776d62a114f99d468db880",
+      "A_tool_schemas_sha256": "98e8916fc0a01162c7d4f178da0b4ff5f1069550cb963651e62a9a11146dcb16",
+      "C_system_prompt_sha256": "ae18019f66f24e411297cec52fb57dafe8a7f9b988a05d3fa39fd734d7c592f1",
+      "C_tool_schemas_sha256": "79e1d3f8e831e9bb58a5c1939a6b2c9cef9b739610e8c92598df5f77a7ea7eb2",
+      "intervention": "mixed-usage clarification only; system prompt delta is insertion-only"
+    }
+  },
+  "input_data": {
+    "files": {
+      "corpus.jsonl": "609ae26505a2d0b6b307e0880718fa9401bd6dfb1573c4f687efc652488f9552",
+      "train.jsonl": "6966eaa4d0aadb879853deaaf227ef4276684da1d3b6102b7af795c0dd3270ab",
+      "test_inputs.jsonl": "55a174b64c820dc96732358ce92747218de505c8ebbd00cea83118abe1310fee",
+      "test_gold.jsonl": "973c876966095b7a30ecdbebbac885cd7f758f10ef8eb4cd7a45765280c17419"
+    },
+    "note": "Identical across all three rounds; re-verified on 2026-10-03."
+  },
+  "diagnostic_subset": {
+    "case_ids": [
+      "PUBMEDQA-TEST-0146",
+      "PUBMEDQA-TEST-0150",
+      "PUBMEDQA-TEST-0248",
+      "PUBMEDQA-TEST-0260",
+      "PUBMEDQA-TEST-0487"
+    ],
+    "unique_cases": 5,
+    "arm_case_records": 10,
+    "note": "These are all five gold=maybe cases of the v3 frozen sample.",
+    "tool_calls": {
+      "non_finish_total": 66,
+      "non_finish_succeeded": 65,
+      "non_finish_failed": 1,
+      "finish": 10,
+      "grand_total": 76,
+      "failure": {
+        "case_id": "PUBMEDQA-TEST-0248",
+        "arm": "A",
+        "evidence_index": 11,
+        "tool": "fetch_record",
+        "pmid": "16147837",
+        "error": "tool-call budget exhausted"
+      }
+    },
+    "method": "single LLM reader, revised through supervisor feedback",
+    "independent_agreement": "not measured",
+    "reader_model_version": "not independently verified",
+    "do_not_claim": [
+      "reader accuracy comparison against the model",
+      "a structural-classification to verdict mapping",
+      "END_OF_ARM as proof of run completion"
+    ]
+  },
+  "known_gaps": [
+    "Python interpreter version is not provided by the existing archive for any round.",
+    "Dependency package versions are not provided by the existing archive for any round.",
+    "The v1 report series provides no prompt or tool-schema fingerprint.",
+    "Acceptance thresholds and criteria_met are not provided by the existing archive for v1 and v2.",
+    "The v1 retrieval condition is not provided by the existing archive; only v2/v3 protocols state it retrospectively.",
+    "The v1 rule-arm training split is not recorded in the v1 report (the v2 protocol states train-only fitting).",
+    "v1 TEST-0402 usage is partial: cost_status=partial, cost_usd=null, known subtotal USD 0.0021603; cost_complete=false.",
+    "v1 macro-F1 covers 49 completed cases for arm A and 50 for the rule arm, on the same planned sample.",
+    "v1 latency average covers 45 cases, not all 50.",
+    "Reader model version not independently verified; no inter-annotator agreement measurement exists.",
+    "Not-provided items mean they are absent from the archive reviewed; this is not evidence that they did not occur."
+  ],
+  "reproduction_prerequisites": {
+    "locked_files_sha256": {
+      "requirements/ci.lock": "126d8ef0199aa505a01421928fc90f11afdb45ad557466fd35bb814c2840e9ef",
+      "requirements/heavy.lock": "d00a2ad49adeb46896af3bf8b38274c6c17616d1cb03bd1f37dc10f8e0569a2d"
+    },
+    "note": "These hashes are the CURRENT files at summary generation time. They are not a snapshot of the dependency set used by any historical run, which was never recorded.",
+    "frozen_sample_sha256": {
+      "v3": "3f0eacad1dc7e822a973f6bcd62e177e35a9f24d1438070def687d122b3dca39"
+    },
+    "exclusion_set_definition": "private/v3/v3_protocol_frozen_20261002.md section 4",
+    "seed_declaration_location": "private/v3/v3_protocol_frozen_20261002.md section 4"
+  },
+  "cost_disclaimer": "All cost figures are estimates computed at recorded peak cache-miss rates. They are not bills. When usage is complete (cost_complete=true) the figure is a conservative estimate under that rate assumption, but it is still not a hard upper bound on a bill: off-peak rates are about half and cache hits are cheaper. When usage is partial (cost_complete=false) the known subtotal covers only the rounds whose usage the server reported, and the direction of the bound on the full run's actual charge is unknown. Unknown usage is never treated as zero and is never imputed.",
+  "revision_note": "Revised 2026-10-03: corrected public audit scope, split cost semantics between complete and partial usage, documented the v2 display-rounding difference, and added per-round retrieval conditions.",
+  "cost_rounding": {
+    "v2": {
+      "per_case_unrounded_sum_usd": 0.2405172,
+      "arm_a_unrounded_usd": 0.1960125,
+      "arm_b_unrounded_usd": 0.0445047,
+      "reported_merged_total_usd": 0.240517,
+      "sum_of_displayed_arm_values_usd": 0.240518,
+      "note": "The reported merged total is the unrounded sum rounded once. It is not equal to the sum of the two rounded arm values. Do not write '0.196013 + 0.044505 = 0.240517' — that exact equality is false. This is a display-rounding difference, not a billing difference."
+    },
+    "v1": {
+      "per_case_unrounded_sum_usd": 0.1865304,
+      "reported_merged_total_usd": 0.18653,
+      "note": "no discrepancy of the v2 kind"
+    },
+    "v3": {
+      "per_case_unrounded_sum_usd": 0.439377,
+      "reported_merged_total_usd": 0.439377,
+      "note": "no discrepancy of the v2 kind"
+    }
+  },
+  "retrieval_conditions": {
+    "corpus": {
+      "documents": 1000,
+      "test_cases": 500,
+      "train_cases": 500,
+      "test_label_distribution": {
+        "yes": 276,
+        "no": 169,
+        "maybe": 55
+      },
+      "source": "data/pubmedqa/v1/manifest.json",
+      "evaluation_scope": "public closed-corpus; not blind; official test labels are public"
+    },
+    "this_round_arm_a": {
+      "condition": "BM25, title-assisted (indexed documents contain the title)",
+      "source": "v2 protocol section 4; v3 protocol section 1 (A identical to v2)",
+      "v1_status": "not provided by the existing archive — the v1 report records no retrieval field at all; the v2 protocol states it retrospectively as identical to v1"
+    },
+    "arm_b": {
+      "condition": "same index as A; one static BM25 search on the original question; fixed top-4 abstracts as context; single request; no tool loop",
+      "top_k": 4,
+      "top_k_basis": "median distinct fetched PMIDs per completed v1 case is 4 (distribution 2:7, 3:11, 4:29, 6:1, 8:1)",
+      "source": "v2 protocol sections 1 and 4; v2 report config.baseline_arm"
+    },
+    "rule_arm_training": {
+      "declared": "TfidfLogisticAnswerer fitted on train split only",
+      "source": "v2 protocol section 1 table",
+      "v1_report_field": "absent — the v1 report records no training-scope field"
+    },
+    "title_visible_condition": {
+      "experiment": "older retrieval benchmark, NOT part of v1/v2/v3",
+      "result": "all four retrievers (bm25, vector, hybrid_rrf, hybrid_reranked) scored 1.000 on Recall@5, Recall@10, MRR and nDCG@10",
+      "interpretation": "questions are titles or title-derived and indexed documents contain those titles, so this is a favorable source-localization condition",
+      "source": "reports/pubmedqa_title_assisted_v1.json"
+    },
+    "abstract_only_stress": {
+      "experiment": "older retrieval benchmark, NOT part of v1/v2/v3",
+      "condition": "titles unavailable to every retriever",
+      "bm25": {
+        "recall_at_5": 0.976,
+        "mrr": 0.953187,
+        "mrr_delta_vs_title_assisted": -0.046813
+      },
+      "hybrid_reranked": {
+        "recall_at_5": 0.99,
+        "mrr": 0.982,
+        "mrr_delta_vs_title_assisted": -0.018
+      },
+      "source": "reports/pubmedqa_abstract_only_retrieval_v1.json"
+    },
+    "old_hybrid_retrieval": {
+      "systems": [
+        "hybrid_rrf",
+        "hybrid_reranked"
+      ],
+      "status": "These metrics belong to the older retrieval benchmark experiments and do not establish the retrieval path or performance of the v1/v2/v3 agents. Conditions for v2/v3 are declared in their protocols; the v1 path remains unconfirmed by its own report.",
+      "source": "reports/pubmedqa_title_assisted_v1.json; reports/pubmedqa_abstract_only_retrieval_v1.json; README.md"
+    },
+    "do_not_conflate": "The title-assisted answer baseline (bm25, macro-F1 0.383221 over all 500 test cases) is not the v1 rule baseline (0.4196 over the v1 50-case sample under legacy scoring). Different source, sample and policy."
+  },
+  "edit_attribution": "This file declares only that it was edited. Working-tree state is not used as evidence of which changes belong to which round of work."
+}

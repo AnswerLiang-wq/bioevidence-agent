@@ -4,12 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable, Sequence
 
 from .pubmed import PubMedArticle, PubMedClient
-
 
 CORPUS_SCHEMA_VERSION = "1.0.0"
 
@@ -38,7 +37,7 @@ class CorpusDocument:
     content_sha256: str
 
     @classmethod
-    def from_pubmed(cls, article: PubMedArticle) -> "CorpusDocument":
+    def from_pubmed(cls, article: PubMedArticle) -> CorpusDocument:
         payload = {
             "pmid": article.pmid.strip(),
             "title": _clean_text(article.title),
@@ -58,7 +57,7 @@ class CorpusDocument:
         return cls(**payload, content_sha256=content_sha256)
 
     @classmethod
-    def from_dict(cls, value: dict[str, object]) -> "CorpusDocument":
+    def from_dict(cls, value: dict[str, object]) -> CorpusDocument:
         publication_types = value.get("publication_types")
         if not isinstance(publication_types, list):
             raise ValueError("publication_types must be a list")

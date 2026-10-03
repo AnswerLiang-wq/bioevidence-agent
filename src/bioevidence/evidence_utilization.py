@@ -8,8 +8,8 @@ import platform
 import statistics
 import sys
 from collections import Counter
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 from .corpus import CorpusDocument, read_corpus, sha256_file
 from .pubmedqa import (
@@ -19,7 +19,6 @@ from .pubmedqa import (
     TRAIN_FILENAME,
     read_jsonl,
 )
-
 
 CONTROL_BASELINE_ID = "bioevidence-pubmedqa-evidence-utilization-cv-v1"
 CV_SEED = 20260729

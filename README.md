@@ -3,9 +3,39 @@
 BioEvidence Agent is a portfolio project with two deliberately separate
 entry points:
 
-Current release: **v0.4.1**, an integrity-only maintenance release over the
-v0.4.0 portfolio closeout. It adds no model, benchmark, deployment, or human
-study.
+Release status: **v0.5.0 is a local candidate and has not been published.** No
+tag, GitHub release, or deployment exists for it.
+
+Linux CI has run for this candidate. Commit
+`734277f67bfe31354c6da8813cadfce5c31cae30` passed the lightweight matrix on
+Python 3.10–3.13
+([run 37102392291](https://github.com/AnswerLiang-wq/bioevidence-agent/actions/runs/37102392291)):
+each leg reported 339 passed and 3 skipped. The three skips are guarded
+cross-checks against machine-local frozen artifacts — the prepared benchmark
+under `data/` and records under the ignored `private/` — that a public checkout
+does not carry, so they run only locally, where the full suite is 342 passing.
+**That result belongs to `734277f` alone.** Any later commit, including the one
+that updates this paragraph, carries its own CI result and is not covered by
+that run.
+
+What v0.5.0 adds over v0.4.1:
+
+- a runnable LLM agent and its controls — `llm_agent`, `fixed_context_agent`,
+  `prompt_variants`, `audit` — plus the product-response contract checks;
+- evaluation tooling for the frozen-sample and pipeline comparisons
+  (`pubmedqa_sample`, `scripts/compare_pipelines.py`) and offline tests for
+  both, which script the model transport and call no API;
+- two frozen public evaluation samples, a machine-readable experiment summary,
+  and three documents: [claims registry](docs/claims_registry.md),
+  [experiment log](docs/experiment_log.md) and
+  [interview notes](docs/interview_prep.md);
+- synthetic fixture records and a `react-demo` command that walks the ReAct
+  loop against them with a scripted client, so the loop is inspectable without
+  a key or a network call.
+
+The published release remains **v0.4.1**, an integrity-only maintenance
+release over the v0.4.0 portfolio closeout. It adds no model, benchmark,
+deployment, or human study.
 
 The exported evidence-pack contract is `product-evidence-pack-v0.2`. It
 replaces the ambiguous v0.1 audit key `all_sources_pubmed` with the narrower
@@ -15,6 +45,17 @@ replaces the ambiguous v0.1 audit key `all_sources_pubmed` with the narrower
 |---|---|---|
 | **Agent Engineering** | reproducible public-benchmark retrieval, answer diagnostics, typed tools, and byte-verifiable citation lineage | BM25 + pinned multilingual-E5 + equal-weight RRF + pinned cross-encoder reranker |
 | **AI Product Case Study** | a local, human-in-the-loop PubMed evidence-card workflow | fixed PMIDs or PubMed ESearch/EFetch, followed by local BM25 |
+
+Two reading paths run through this repository:
+
+- **Engineering and evaluation.** Start with the
+  [three API evaluation rounds](#three-api-evaluation-rounds) note and the
+  [public-benchmark results](#real-public-benchmark-results) further down, then
+  follow the [experiment log](docs/experiment_log.md) for full sample, scoring
+  and reproduction detail.
+- **Product reasoning.** Start with the
+  [AI Product Case Study](docs/product_case/PORTFOLIO_CASE_STUDY.md), then come
+  back to the numbers with the trade-offs already in mind.
 
 The web Product Demo does **not** run the full hybrid benchmark stack. The two
 paths reuse the same evidence types and provenance checks, but answer
@@ -36,10 +77,9 @@ question
                                                └─ bounded tool trace
 ```
 
-For the product reasoning and trade-offs, start with the
-[AI Product Case Study](docs/product_case/PORTFOLIO_CASE_STUDY.md). For the
-implementation and experiments, continue with the public benchmark results
-below.
+The implementation and the frozen benchmark results follow below; the
+[AI Product Case Study](docs/product_case/PORTFOLIO_CASE_STUDY.md) covers the
+product reasoning behind the same evidence types.
 
 ## Five-minute Product Demo
 
@@ -135,6 +175,54 @@ but reduced macro-F1 by 2.6 points. It exceeded shuffled-context accuracy by
 conclusion is that the fixed linear model is context-sensitive, but this is
 not strong evidence of reliable evidence use. The answerer—not source
 localization—remains the bottleneck.
+
+## Three API evaluation rounds
+
+Separate from the local-CPU benchmark above, three further rounds ran the same
+agent strategy against the **DeepSeek API** (`deepseek-flash`). They are kept
+apart from the frozen local results deliberately: different execution model,
+different samples, and — for v3 — a different scoring policy.
+
+**Why three rounds.** v1 established a baseline on a fresh stratified sample.
+v2 added a fixed-context arm, comparing the full agent strategy with reading a
+single static context block. v3 asked whether clarifying *when* the `mixed`
+verdict applies changes how the agent handles `maybe` cases. Each round was
+reported using its own frozen sample and scoring policy. Pre-run frozen
+protocols are archived for v2 and v3; the reviewed archive does not provide a
+v1 frozen protocol.
+
+| Round | Sample (pool → drawn) | Scoring policy | Arm A macro-F1 | Same-round rule baseline | Additional arm |
+|---|---|---|---|---|---|
+| v1† | 500 → 50, no exclusion | legacy | 0.5638 (covers 49 of 50) | 0.4196 (covers 50) | — |
+| v2 | 450 → 50, excluding v1 | legacy | 0.6003 | 0.4216 | fixed-context arm B: 0.5388 |
+| v3 | 400 → 50, excluding v1 ∪ v2 | v3 | 0.5700 | 0.3344 | prompt-variant arm C: 0.6074 |
+
+† v1 uses the same planned 50-case sample for both arms. Agent A's legacy
+macro-F1 covers 49 completed cases (one `errored` case excluded); the rule
+baseline covers all 50.
+
+Under **legacy** scoring, `mixed` matches no gold label and failed cases leave
+the macro-F1 denominator; under the **v3** policy, `mixed` maps to `maybe` and
+all 50 attempted cases enter the metric, a failed case contributing one false
+negative to its own gold class. The agent arm scored above that round's rule
+baseline in each of the three rounds. Those are **three separate per-round
+observations**: the samples do not overlap, and the policy differs in v3, so
+the figures are neither comparable nor a repeated verification of one result.
+
+The v3 joint criterion was **not met**: Δmacro-F1 = 0.037372796459921864 against
+a pre-declared 0.04 threshold, so `criteria_met = false`. The second condition
+did hold (arm C was correct on 2 of 5 `maybe` cases; arm A on 1 of 5). A single
+50-case run has no reported confidence interval and establishes no general validity.
+Nothing here isolates the tool loop: the v2 arms differ in evidence selection as
+well as loop presence, and the v3 arms differ only in prompt material.
+
+Costs are **estimates** at recorded peak cache-miss rates, not bills; the v1
+round includes one case whose usage was never fully reported.
+
+Sample quotas, exclusion sets, seeds, per-class scoring and known gaps:
+[experiment log](docs/experiment_log.md). Machine-readable aggregates:
+[public summary](reports/agent_experiments_summary_v1.json). Claim-level
+provenance: [claims registry](docs/claims_registry.md).
 
 ## Install and run the core CLI demo
 
@@ -233,16 +321,32 @@ See:
 - [limitations and claim boundaries](docs/limitations.md)
 - [AI Product Case Study](docs/product_case/PORTFOLIO_CASE_STUDY.md)
 - [synthetic scope-control report](reports/product_scope_controls_v1.md)
-- [resume and interview notes](docs/resume_and_interview.md)
-- [v0.4.1 release manifest](reports/release_manifest_v0.4.1.json)
+- [experiment log](docs/experiment_log.md) — frozen conditions for the three
+  API evaluation rounds and their archival gaps: samples, exclusion sets,
+  seeds, scoring policies
+- [public summary (JSON)](reports/agent_experiments_summary_v1.json) —
+  machine-readable aggregate for the same rounds
+- [claims registry](docs/claims_registry.md) — every published claim with its
+  strength grade and source field
+- [interview notes for the engineering and product stages](docs/resume_and_interview.md)
+  — covers the local-CPU retrieval benchmark, the negative controls and the
+  pilot decision; predates the three API evaluation rounds
+- [interview notes for the API evaluation rounds](docs/interview_prep.md) —
+  covers v1/v2/v3 only; does not replace or restate the document above
+- [v0.5.0 release manifest](reports/release_manifest_v0.5.0.json) — local
+  candidate; its verification block transcribes only checks actually run
+- [historical v0.4.1 release manifest](reports/release_manifest_v0.4.1.json)
 - [historical v0.4.0 release manifest](reports/release_manifest_v0.4.0.json)
 
 ## Formative pilot status
 
-One target-user formative pilot was run to test the research protocol. Both
-task rows had conflicting or incomplete measurement records, so the number of
-evaluable tasks is **0**. The pilot is retained as a process lesson—not as a
-success metric. This repository therefore makes no claim about user value,
+Stopping the study was a product decision, and it followed a measurement
+failure — not a result to be softened. One target-user formative pilot was run
+to test the research protocol. Both task rows had conflicting or incomplete
+measurement records, so the number of evaluable tasks is **0**. Because more
+participants cannot repair an unstable measurement protocol, recruitment was
+stopped rather than extended. The pilot is retained as a process lesson—not as
+a success metric. This repository therefore makes no claim about user value,
 time saved, task completion, trust, reuse intent, or VEPS improvement.
 
 The pilot exposed mode, timing, record-consistency, and evidence-scope risks.
@@ -262,6 +366,14 @@ validation or biomedical NLI accuracy.
 - not a semantic hallucination-rate estimate;
 - not proof that exact citations entail every generated claim.
 - not evidence of validated user value or workflow efficiency.
+- not a combined result across the three API evaluation rounds: their samples
+  differ and v3 uses a different scoring policy, so no cross-round total is
+  claimed.
+- not a statistical confirmation of any hypothesis tested in those rounds; a
+  single 50-case run per round was reported without a confidence interval or
+  significance test.
+- not an attribution of performance to the tool loop, which these arms do not
+  isolate.
 
 The 500 official test labels are public. Structural metrics such as exact-span
 and source-hash integrity establish provenance, not semantic correctness.
@@ -272,10 +384,15 @@ Model scores are not evidence strength.
 - Dataset: public expert-labeled PubMedQA PQA-L, 1,000 records.
 - Split: official 500 test IDs; the remaining 500 are used for training/CV.
 - Corpus: frozen 1,000-document closed corpus.
-- Monetary model/API cost: USD 0.00; all inference was local CPU.
-- Full v0.2 end-to-end latency: median 1.109 s, p95 1.235 s/query.
+- Monetary model/API cost for the **local-CPU retrieval and answering runs above**:
+  USD 0.00; all inference was local CPU. This applies to the frozen
+  title-assisted, abstract-only and evidence-control runs only. It does **not**
+  cover the three later API evaluation rounds, which used a paid hosted model
+  and whose costs are reported separately as estimates.
+- Full v0.2 end-to-end latency: median 1.109 s, p95 1.235 s/query (local CPU,
+  same scope as the line above).
 - Abstract-only reranked retrieval latency: median 1.109 s, p95 1.252
-  s/query, excluding model load and one-time indexing.
+  s/query, excluding model load and one-time indexing (local CPU).
 
 ## License
 

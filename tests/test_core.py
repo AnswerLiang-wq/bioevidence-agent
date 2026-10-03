@@ -17,7 +17,9 @@ def _fixture_path() -> Path:
 
 def test_packaged_fixture_is_hash_valid_and_bm25_retrievable() -> None:
     documents = read_corpus(_fixture_path())
-    assert len(documents) == 3
+    # Corpus was expanded from 3 to 10 documents (PMIDs 1001-1010).
+    # All 10 include hash validation on load; any corruption raises immediately.
+    assert len(documents) == 10
     result = BM25Index(documents).search(
         "mitochondria programmed cell death",
         top_k=3,

@@ -5,13 +5,12 @@ from __future__ import annotations
 import hashlib
 import json
 import urllib.request
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Sequence
 
 from .corpus import CorpusDocument, sha256_file, write_corpus
 from .pubmed import PubMedArticle
-
 
 PUBMEDQA_REPOSITORY = "https://github.com/pubmedqa/pubmedqa"
 PUBMEDQA_COMMIT = "1cbae8e92f72f20c8d3747cbb3bf5bc53554d997"

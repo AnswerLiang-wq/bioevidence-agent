@@ -3,6 +3,10 @@
 The manifest mirrors the v0.3.0 schema and freezes the current release facts.
 Run it only after staging every file that should ship (the manifest must be
 committed after generation so `scripts/verify_release.py` can validate it).
+
+The `verification` block is transcribed from an evidence record produced by the
+current run (`--evidence`).  Nothing in this script asserts a check passed on
+its own; a check absent from the record is reported as not executed.
 """
 
 from __future__ import annotations
@@ -12,10 +16,32 @@ import hashlib
 import json
 import subprocess
 import sys
-import tomllib
 from pathlib import Path, PurePosixPath
 
+try:  # Python 3.11+
+    import tomllib
+except ModuleNotFoundError:  # Python 3.10 ships no tomllib
+    import tomli as tomllib
+
 ROOT = Path(__file__).resolve().parents[1]
+
+#: Checks the manifest may report.  A check is only ever reported as executed
+#: when the evidence record carries it with a recorded exit code.
+KNOWN_CHECKS = (
+    "ruff",
+    "tests",
+    "wheel_build",
+    "fresh_wheel_install",
+    "out_of_tree_demo",
+    "public_boundary_scan",
+    "examples",
+    "demo_core_flow",
+    "scope_controls",
+    "screenshots",
+)
+
+#: Statuses a check may carry in the evidence record.
+CHECK_STATUSES = ("executed", "not_executed", "historical")
 
 
 def sha256_file(path: Path) -> str:
@@ -53,10 +79,99 @@ def default_output_path(root: Path = ROOT) -> Path:
     return root / "reports" / f"release_manifest_v{release_version(root)}.json"
 
 
+def load_evidence(path: Path) -> dict[str, object]:
+    """Read the verification record produced by the current run.
+
+    The record is the only source for the manifest's verification block.  A
+    check it does not carry is reported as not executed, never as passed, so a
+    manifest cannot claim a verification this run did not perform.
+
+    The record must also name the release it verified.  Binding that identity
+    here is what stops a record made for an earlier version from being
+    transcribed into a later version's manifest.
+    """
+
+    if not path.is_file():
+        raise FileNotFoundError(f"verification evidence record is missing: {path}")
+    record = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(record, dict):
+        raise ValueError("verification evidence record must be a JSON object")
+    release = record.get("release")
+    if not isinstance(release, str) or not release.strip():
+        raise ValueError(
+            "verification evidence record has no release identity; refusing to "
+            "attribute unversioned evidence to a release"
+        )
+    checks = record.get("checks")
+    if not isinstance(checks, list) or not checks:
+        raise ValueError("verification evidence record has no checks")
+    seen: dict[str, dict[str, object]] = {}
+    for entry in checks:
+        if not isinstance(entry, dict):
+            raise ValueError("each evidence check must be a JSON object")
+        check_id = entry.get("id")
+        if check_id not in KNOWN_CHECKS:
+            raise ValueError(f"unknown evidence check id: {check_id!r}")
+        if check_id in seen:
+            raise ValueError(f"duplicate evidence check id: {check_id!r}")
+        status = entry.get("status")
+        if status not in CHECK_STATUSES:
+            raise ValueError(f"invalid status for {check_id!r}: {status!r}")
+        if status == "executed" and not isinstance(entry.get("exit_code"), int):
+            raise ValueError(f"executed check {check_id!r} must record an exit code")
+        seen[check_id] = entry
+    return {"record": record, "release": release, "checks": seen}
+
+
+def build_verification(evidence: dict[str, object]) -> dict[str, object]:
+    """Turn the evidence record into the manifest's verification block."""
+
+    checks: dict[str, object] = evidence["checks"]  # type: ignore[assignment]
+    executed: dict[str, object] = {}
+    not_executed: list[str] = []
+    historical: dict[str, object] = {}
+    for check_id in KNOWN_CHECKS:
+        entry = checks.get(check_id)
+        if entry is None or entry.get("status") == "not_executed":
+            not_executed.append(check_id)
+        elif entry.get("status") == "historical":
+            historical[check_id] = {
+                key: entry[key]
+                for key in ("note", "source", "as_of")
+                if key in entry
+            }
+        else:
+            executed[check_id] = {
+                key: entry[key]
+                for key in ("command", "exit_code", "passed", "failed", "skipped")
+                if key in entry
+            }
+    return {
+        "basis": (
+            "transcribed from the run record captured before this manifest was "
+            "generated; not an independent assertion by the generator"
+        ),
+        "checks_executed_this_round": executed,
+        "checks_not_executed_this_round": not_executed,
+        "historical_references": historical,
+        "github_publication_status": "not_asserted_by_prepublication_manifest",
+    }
+
+
 def build_manifest(
-    root: Path = ROOT, *, output_path: Path | None = None
+    root: Path = ROOT,
+    *,
+    output_path: Path | None = None,
+    evidence: dict[str, object],
 ) -> dict[str, object]:
     version = release_version(root)
+    release_id = f"bioevidence-agent-v{version}"
+    evidence_release = evidence.get("release")
+    if evidence_release != release_id:
+        raise ValueError(
+            "verification evidence does not belong to this release: "
+            f"record claims {evidence_release!r}, target is {release_id!r}"
+        )
     wheel = f"artifacts/bioevidence_agent-{version}-py3-none-any.whl"
     wheel_path = root.joinpath(*PurePosixPath(wheel).parts)
     if not wheel_path.is_file():
@@ -75,7 +190,7 @@ def build_manifest(
 
     return {
         "manifest_version": "1.0.0",
-        "release_id": f"bioevidence-agent-v{version}",
+        "release_id": release_id,
         "release_scope": (
             "solo public portfolio closeout release; local source-bound Product "
             "Demo, deterministic engineering diagnostics, and synthetic scope "
@@ -124,21 +239,7 @@ def build_manifest(
             "wheel": wheel,
             "wheel_sha256": sha256_file(wheel_path),
         },
-        "verification": {
-            "demo_core_flow_passed": True,
-            "examples_generated": True,
-            "fresh_wheel_install_passed": True,
-            "github_publication_status": (
-                "not_asserted_by_prepublication_manifest"
-            ),
-            "out_of_tree_demo_passed": True,
-            "portfolio_tests_passed": 65,
-            "privacy_scan_passed": True,
-            "ruff_passed": True,
-            "screenshots_captured": True,
-            "scope_controls_passed": 8,
-            "wheel_build_passed": True,
-        },
+        "verification": build_verification(evidence),
         "artifacts": artifacts,
     }
 
@@ -152,9 +253,28 @@ def main(argv: list[str] | None = None) -> int:
         default=default_output,
         help="manifest output path (default: %(default)s)",
     )
+    parser.add_argument(
+        "--evidence",
+        type=Path,
+        required=True,
+        help=(
+            "JSON record of the checks this run actually executed; the sole "
+            "source for the manifest verification block"
+        ),
+    )
     args = parser.parse_args(argv)
     output_path = args.output if args.output.is_absolute() else ROOT / args.output
-    manifest = build_manifest(output_path=output_path)
+    evidence_path = (
+        args.evidence if args.evidence.is_absolute() else ROOT / args.evidence
+    )
+    try:
+        evidence = load_evidence(evidence_path)
+        manifest = build_manifest(output_path=output_path, evidence=evidence)
+    except (FileNotFoundError, ValueError) as error:
+        # Refuse before writing: a rejected record must not create or replace
+        # an existing manifest.
+        print(f"refusing to write manifest: {error}", file=sys.stderr)
+        return 2
     output_path.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

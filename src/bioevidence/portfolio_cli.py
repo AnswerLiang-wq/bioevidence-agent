@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import dataclass
 from importlib.resources import files
 from pathlib import Path
+from typing import Any
 
 from .corpus import read_corpus, sha256_file
 from .evidence_utilization import run_evidence_utilization_controls
+from .llm_agent import LLMEvidenceAgent
 from .pubmedqa import CORPUS_FILENAME, prepare_pubmedqa
 from .pubmedqa_eval import evaluate_pubmedqa
 from .pubmedqa_stress import (
@@ -39,6 +42,251 @@ from .vector import (
     read_index_manifest,
 )
 
+# ---------------------------------------------------------------------------
+# Scripted fake LLM client — used by react-demo to show the full ReAct loop
+# without requiring a live API key.  The response sequence mirrors what a
+# real DeepSeek model would do for the statin RCT question.
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class _FakeUsage:
+    prompt_tokens: int = 12
+    completion_tokens: int = 6
+
+
+@dataclass
+class _FakeFunction:
+    name: str
+    arguments: str
+
+
+@dataclass
+class _FakeToolCall:
+    id: str
+    function: _FakeFunction
+
+
+@dataclass
+class _FakeMessage:
+    content: str | None
+    tool_calls: list[_FakeToolCall] | None
+
+    def model_dump(self, *, exclude_none: bool = False) -> dict[str, Any]:
+        result: dict[str, Any] = {"role": "assistant"}
+        if self.content is not None:
+            result["content"] = self.content
+        if self.tool_calls:
+            result["tool_calls"] = [
+                {
+                    "id": tc.id,
+                    "type": "function",
+                    "function": {
+                        "name": tc.function.name,
+                        "arguments": tc.function.arguments,
+                    },
+                }
+                for tc in self.tool_calls
+            ]
+        return result
+
+
+@dataclass
+class _FakeChoice:
+    message: _FakeMessage
+
+
+@dataclass
+class _FakeCompletion:
+    choices: list[_FakeChoice]
+    usage: _FakeUsage = None  # type: ignore[assignment]
+
+    def __post_init__(self) -> None:
+        if self.usage is None:
+            self.usage = _FakeUsage()
+
+
+def _tc(name: str, args: dict[str, Any], call_id: str) -> _FakeToolCall:
+    return _FakeToolCall(
+        id=call_id,
+        function=_FakeFunction(name=name, arguments=json.dumps(args)),
+    )
+
+
+def _resp(*tool_calls: _FakeToolCall) -> _FakeCompletion:
+    return _FakeCompletion(
+        choices=[
+            _FakeChoice(
+                message=_FakeMessage(content=None, tool_calls=list(tool_calls))
+            )
+        ],
+    )
+
+
+# ---------------------------------------------------------------------------
+# Scenario catalog — each entry has a fixed question and a pre-built scripted
+# PMID sequence.  Only questions in this catalog are supported by react-demo;
+# free-form input is intentionally not accepted.
+# ---------------------------------------------------------------------------
+
+_REACT_DEMO_SCENARIOS: dict[str, dict[str, object]] = {
+    "statins": {
+        "question": (
+            "Do statins reduce major cardiovascular events in randomized controlled trials?"
+        ),
+        "target_pmid": "1004",
+        "finish_verdict": "supported",
+        "finish_answer": (
+            "A synthetic fixture RCT (PMID 1004) found that statin therapy reduced major "
+            "cardiovascular events by 28% over 5 years (HR 0.72, 95% CI 0.61–0.85) with "
+            "no significant increase in myopathy. The fixture evidence supports "
+            "cardiovascular benefit. NOTE: This document is a synthetic fixture for "
+            "demonstration purposes and does not represent a real published trial."
+        ),
+        "finish_claim": (
+            "Statins significantly reduce major cardiovascular events (synthetic fixture data)."
+        ),
+        "finish_reason": (
+            "Single fixture RCT directly answering the question; scripted demo scenario."
+        ),
+    },
+    "metformin": {
+        "question": (
+            "Does metformin reduce HbA1c compared to placebo in type 2 diabetes?"
+        ),
+        "target_pmid": "1005",
+        "finish_verdict": "supported",
+        "finish_answer": (
+            "A synthetic fixture RCT (PMID 1005) found metformin reduced HbA1c by 1.5% "
+            "versus 0.3% in placebo over 12 months (p < 0.001). Weight was stable in the "
+            "metformin group. NOTE: This document is a synthetic fixture and does not "
+            "represent a real published trial."
+        ),
+        "finish_claim": (
+            "Metformin significantly reduces HbA1c versus placebo (synthetic fixture data)."
+        ),
+        "finish_reason": (
+            "Single fixture RCT with clear primary endpoint; scripted demo scenario."
+        ),
+    },
+    "aspirin-primary": {
+        "question": (
+            "Does aspirin provide net benefit for primary cardiovascular prevention "
+            "in low-risk adults?"
+        ),
+        "target_pmid": "1006",
+        "finish_verdict": "contradicted",
+        "finish_answer": (
+            "A synthetic fixture RCT (PMID 1006) found aspirin did not significantly reduce "
+            "first myocardial infarction (HR 0.96) and increased major GI bleeding by 44% "
+            "over 7 years. Net benefit was absent in the low-risk population. NOTE: This "
+            "document is a synthetic fixture and does not represent a real published trial."
+        ),
+        "finish_claim": (
+            "Aspirin shows net harm, not benefit, in low-risk primary prevention "
+            "(synthetic fixture data)."
+        ),
+        "finish_reason": (
+            "Fixture RCT shows net harm; verdict is contradicted for the stated claim; "
+            "scripted demo scenario."
+        ),
+    },
+    "pembrolizumab": {
+        "question": (
+            "Does pembrolizumab plus chemotherapy improve overall survival in "
+            "metastatic non-small cell lung cancer?"
+        ),
+        "target_pmid": "1008",
+        "finish_verdict": "supported",
+        "finish_answer": (
+            "A synthetic fixture RCT (PMID 1008) found pembrolizumab plus chemotherapy "
+            "improved overall survival versus chemotherapy alone (median 21.9 vs 14.2 months, "
+            "HR 0.62). NOTE: This document is a synthetic fixture and does not represent a "
+            "real published trial."
+        ),
+        "finish_claim": (
+            "Pembrolizumab plus chemotherapy improves OS in metastatic NSCLC "
+            "(synthetic fixture data)."
+        ),
+        "finish_reason": (
+            "Fixture RCT shows clear OS benefit; scripted demo scenario."
+        ),
+    },
+}
+
+
+def _build_scripted_responses(scenario: dict[str, object]) -> list[_FakeCompletion]:
+    """Return the four-step ReAct script for the given scenario dict."""
+    question = str(scenario["question"])
+    pmid = str(scenario["target_pmid"])
+    return [
+        # Step 1 — search
+        _resp(
+            _tc(
+                "search_literature",
+                {"query": question, "top_k": 3},
+                "tc_search",
+            )
+        ),
+        # Step 2 — fetch the target PMID
+        _resp(_tc("fetch_record", {"pmid": pmid}, "tc_fetch")),
+        # Step 3 — inspect evidence
+        _resp(
+            _tc(
+                "inspect_evidence",
+                {"pmid": pmid, "query": question, "max_snippets": 2},
+                "tc_inspect",
+            )
+        ),
+        # Step 4 — finish
+        _resp(
+            _tc(
+                "finish",
+                {
+                    "verdict": scenario["finish_verdict"],
+                    "answer": scenario["finish_answer"],
+                    "claim": scenario["finish_claim"],
+                    "cited_pmids": [pmid],
+                    "decisive_reason": scenario["finish_reason"],
+                },
+                "tc_finish",
+            )
+        ),
+    ]
+
+
+def _make_agent_with_fake_client(
+    tools: LiteratureTools,
+    scripted_responses: list[_FakeCompletion],
+    max_steps: int = 8,
+) -> LLMEvidenceAgent:
+    """Build an LLMEvidenceAgent with a scripted fake client (no API key needed)."""
+
+    class _ScriptedClient:
+        def __init__(self, responses: list[_FakeCompletion]) -> None:
+            self._responses = list(responses)
+            self._index = 0
+            self.chat = self  # support self.chat.completions.create(...)
+            self.completions = self
+
+        def create(self, **_kwargs: Any) -> _FakeCompletion:
+            if self._index >= len(self._responses):
+                raise RuntimeError(
+                    "ScriptedClient exhausted: more LLM calls than scripted responses."
+                )
+            result = self._responses[self._index]
+            self._index += 1
+            return result
+
+    agent = LLMEvidenceAgent.__new__(LLMEvidenceAgent)
+    agent._tools = tools
+    agent._model = "scripted-demo"
+    agent._max_steps = max_steps
+    agent._max_tokens_per_call = 1024
+    agent._base_url = "https://api.deepseek.com/v1"
+    agent._client = _ScriptedClient(scripted_responses)
+    return agent
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="bioevidence")
@@ -50,6 +298,32 @@ def build_parser() -> argparse.ArgumentParser:
     )
     demo.add_argument("--question", required=True)
     demo.add_argument("--corpus", type=Path)
+
+    react_demo = commands.add_parser(
+        "react-demo",
+        help=(
+            "Walk through the full ReAct tool-use loop with a scripted fake LLM "
+            "(no API key required). Shows search → fetch → inspect → finish with "
+            "complete provenance output. Uses synthetic fixture corpus only."
+        ),
+    )
+    react_demo.add_argument(
+        "--scenario",
+        choices=list(_REACT_DEMO_SCENARIOS.keys()),
+        default="statins",
+        help=(
+            "Which scripted scenario to run. Each scenario has a fixed question and "
+            "pre-built scripted LLM responses targeting a specific fixture PMID. "
+            f"Choices: {', '.join(_REACT_DEMO_SCENARIOS.keys())} (default: statins)."
+        ),
+    )
+    react_demo.add_argument("--corpus", type=Path)
+    react_demo.add_argument(
+        "--max-steps",
+        type=int,
+        default=8,
+        help="Maximum ReAct loop steps (default: 8).",
+    )
 
     prepare = commands.add_parser(
         "prepare",
@@ -116,6 +390,8 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "demo":
         return _demo(args)
+    if args.command == "react-demo":
+        return _react_demo(args)
     if args.command == "prepare":
         return _prepare(args)
     if args.command == "vector-index-build":
@@ -169,6 +445,60 @@ def _demo(args: argparse.Namespace) -> int:
     }
     print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
     return 0
+
+
+def _react_demo(args: argparse.Namespace) -> int:
+    corpus_path = args.corpus or Path(
+        str(files("bioevidence").joinpath("fixtures/tiny_corpus.jsonl"))
+    )
+    from .corpus import sha256_file as _sha256_file
+
+    documents = read_corpus(corpus_path)
+    tools = LiteratureTools(documents)
+    scenario = _REACT_DEMO_SCENARIOS[args.scenario]
+    question = str(scenario["question"])
+    scripted = _build_scripted_responses(scenario)
+    agent = _make_agent_with_fake_client(tools, scripted, max_steps=args.max_steps)
+    agent_response = agent.run(question=question, request_id=f"react-demo-{args.scenario}")
+
+    # Verify the agent response passes the product contract before printing.
+    # If it has errors, they surface in the envelope rather than silently corrupting output.
+    from .product_contracts import validate_product_response as _validate
+    contract_errors = _validate(agent_response)
+
+    # Wrap in a demo envelope so the output is clearly distinguished from a production
+    # API response.  The envelope is NOT a product response; the agent_response within it
+    # IS, and it is validated above.  The two layers have different purposes and different
+    # consumers: the envelope is for human readers of the demo; the inner response is what
+    # an integration would parse.
+    envelope = {
+        "demo_envelope": {
+            "scenario": args.scenario,
+            "question": question,
+            "scripted_mode": True,
+            "scripted_mode_note": (
+                "This demo uses a scripted fake LLM client — no API key required. "
+                "The tool-call sequence (search → fetch → inspect → finish) is identical "
+                "to a live DeepSeek run; only the model decision step is scripted."
+            ),
+            "corpus_is_synthetic": True,
+            "corpus_note": (
+                "All documents in tiny_corpus.jsonl (PMIDs 1001-1010) are synthetic "
+                "fixtures generated for demonstration purposes. They do NOT correspond "
+                "to real published papers. PMIDs 1001-1003 are simple three-sentence "
+                "demos; PMIDs 1004-1010 are LLM-generated RCT-style abstracts with "
+                "plausible but invented statistics."
+            ),
+            "corpus_path": str(corpus_path),
+            "corpus_sha256": _sha256_file(corpus_path),
+            "corpus_size": len(documents),
+            "agent_response_contract_valid": len(contract_errors) == 0,
+            "agent_response_contract_errors": contract_errors,
+        },
+        "agent_response": agent_response,
+    }
+    print(json.dumps(envelope, ensure_ascii=False, indent=2, sort_keys=True))
+    return 0 if not contract_errors else 1
 
 
 def _prepare(args: argparse.Namespace) -> int:

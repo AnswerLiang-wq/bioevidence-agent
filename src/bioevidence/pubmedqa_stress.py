@@ -10,9 +10,9 @@ import statistics
 import sys
 import time
 from collections import Counter
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Sequence
 
 import numpy as np
 
@@ -28,7 +28,6 @@ from .pubmedqa import (
 )
 from .reranker import PairScorer, RerankResult
 from .vector import TextEncoder
-
 
 ABSTRACT_ONLY_BASELINE_ID = "bioevidence-pubmedqa-abstract-only-retrieval-v1"
 ABSTRACT_INDEX_MANIFEST = "manifest.json"
@@ -152,7 +151,7 @@ class AbstractOnlyVectorIndex:
         *,
         encoder: TextEncoder,
         batch_size: int,
-    ) -> "AbstractOnlyVectorIndex":
+    ) -> AbstractOnlyVectorIndex:
         embeddings = encoder.encode(
             [passage.abstract for passage in passages],
             input_type="passage",
@@ -254,7 +253,7 @@ class AbstractOnlyVectorIndex:
         *,
         passages: Sequence[AbstractPassage],
         corpus_path: Path,
-    ) -> "AbstractOnlyVectorIndex":
+    ) -> AbstractOnlyVectorIndex:
         manifest = json.loads(
             (index_dir / ABSTRACT_INDEX_MANIFEST).read_text(encoding="utf-8")
         )

@@ -85,6 +85,29 @@
               <span>我确认这是科研文献核验任务，不含患者、个人、未公开或机密信息。</span>
             </label>
 
+            <section class="scope-checklist" aria-labelledby="scope-checklist-title">
+              <div class="scope-checklist-heading">
+                <div>
+                  <p class="section-kicker">DIRECT SUPPORT CHECK</p>
+                  <h3 id="scope-checklist-title">先核对主张范围</h3>
+                </div>
+                <span class="scope-checklist-badge">人工核对</span>
+              </div>
+              <p class="scope-checklist-copy">
+                逐张证据卡检查下列维度。这里是 review reminder，不是模型 verdict；缺少信息时请标记为不明确并保留全文核验需求。
+              </p>
+              <ul class="scope-checklist-items">
+                <li><span aria-hidden="true">○</span><strong>Population</strong><small>人群 / 物种 / 模型是否一致？</small></li>
+                <li><span aria-hidden="true">○</span><strong>Intervention</strong><small>干预、剂量或方案是否一致？</small></li>
+                <li><span aria-hidden="true">○</span><strong>Endpoint / Outcome</strong><small>主要终点及方向是否一致？</small></li>
+                <li><span aria-hidden="true">○</span><strong>Context</strong><small>共同治疗 / 背景治疗是否影响适用边界？</small></li>
+              </ul>
+              <div class="scope-boundary-callout">
+                <strong>Scope boundary</strong>
+                <span>Drug + disease match alone is not sufficient to establish direct support.</span>
+              </div>
+            </section>
+
             <div id="message" class="message" role="status" hidden></div>
 
             <button id="search-button" class="primary-button" type="button">
@@ -144,7 +167,7 @@
     </main>
 
     <footer>
-      <strong>BioEvidence Agent v0.4.1</strong>
+      <strong>BioEvidence Agent v0.5.0</strong>
       <span>Abstract-level research support · Verify before use</span>
     </footer>
     <script src="/app.js" defer></script>
