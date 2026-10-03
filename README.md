@@ -3,20 +3,8 @@
 BioEvidence Agent is a portfolio project with two deliberately separate
 entry points:
 
-Release status: **v0.5.0 is a local candidate and has not been published.** No
-tag, GitHub release, or deployment exists for it.
-
-Linux CI has run for this candidate. Commit
-`734277f67bfe31354c6da8813cadfce5c31cae30` passed the lightweight matrix on
-Python 3.10–3.13
-([run 37102392291](https://github.com/AnswerLiang-wq/bioevidence-agent/actions/runs/37102392291)):
-each leg reported 339 passed and 3 skipped. The three skips are guarded
-cross-checks against machine-local frozen artifacts — the prepared benchmark
-under `data/` and records under the ignored `private/` — that a public checkout
-does not carry, so they run only locally, where the full suite is 342 passing.
-**That result belongs to `734277f` alone.** Any later commit, including the one
-that updates this paragraph, carries its own CI result and is not covered by
-that run.
+Current release: **v0.5.0**. Release date, downloadable assets, and CI run
+record are in [GitHub Releases](https://github.com/AnswerLiang-wq/bioevidence-agent/releases).
 
 What v0.5.0 adds over v0.4.1:
 
@@ -32,10 +20,6 @@ What v0.5.0 adds over v0.4.1:
 - synthetic fixture records and a `react-demo` command that walks the ReAct
   loop against them with a scripted client, so the loop is inspectable without
   a key or a network call.
-
-The published release remains **v0.4.1**, an integrity-only maintenance
-release over the v0.4.0 portfolio closeout. It adds no model, benchmark,
-deployment, or human study.
 
 The exported evidence-pack contract is `product-evidence-pack-v0.2`. It
 replaces the ambiguous v0.1 audit key `all_sources_pubmed` with the narrower
@@ -333,8 +317,7 @@ See:
   pilot decision; predates the three API evaluation rounds
 - [interview notes for the API evaluation rounds](docs/interview_prep.md) —
   covers v1/v2/v3 only; does not replace or restate the document above
-- [v0.5.0 release manifest](reports/release_manifest_v0.5.0.json) — local
-  candidate; its verification block transcribes only checks actually run
+- [v0.5.0 release manifest](reports/release_manifest_v0.5.0.json)
 - [historical v0.4.1 release manifest](reports/release_manifest_v0.4.1.json)
 - [historical v0.4.0 release manifest](reports/release_manifest_v0.4.0.json)
 

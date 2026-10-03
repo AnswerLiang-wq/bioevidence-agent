@@ -6,6 +6,7 @@ authors:
   - family-names: "Liang"
     given-names: "Chenyu"
 license: MIT
+date-released: "2026-10-03"
 repository-code: "https://github.com/AnswerLiang-wq/bioevidence-agent"
 keywords:
   - biomedical information retrieval

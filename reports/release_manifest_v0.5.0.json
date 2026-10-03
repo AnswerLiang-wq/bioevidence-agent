@@ -3,12 +3,12 @@
     ".github/workflows/ci.yml": "5033a15c346625e22dc055340ec11fe384c976042f0692cfd4b81f76f2a166da",
     ".github/workflows/heavy-evaluation.yml": "c44dd895bf855f0a7782661031928231ddc0526695a5680ace9ba6d8cd2710b0",
     ".gitignore": "2d692941aacf96177ad55fa6f2a5ca47196e314b4cc6d34f4672d64db5f2d828",
-    "CITATION.cff": "d8cf8758fc6862e1bdf913965208d1be0cd4778e9e2ab9ce7a76c07f14662712",
+    "CITATION.cff": "13a4e075a411affbb5c45a102ebe752578587f92b52ee52c6e28a317b3787965",
     "DECISION_LOG.md": "3eecef32378a4e1aa415f08ad5822cc5c72e64833f5bce0d7db9e184f25984ac",
     "EXPERIMENT_LOG.md": "a818f7d299bc9c788dccd6f6dacca511708d7337d3edff69c23ec3c7808f740c",
     "LICENSE": "c02af6f5f0357b7309ddfddb608e1183b1779b229050a673f5b5235f7f79a16b",
     "PRODUCT_ONE_PAGER.md": "9127acd51e6a8ca548217e40c84bfbc184c23bc6050866a3b7396a4eab3469ca",
-    "README.md": "9134dee663bb25901b3def23372b110e3f16e28fb695ac12e2a0f487477dd3f6",
+    "README.md": "2f5b8c315c14dba8515987efa103854da6e536d183cf9596b6db97759a51027c",
     "THIRD_PARTY_NOTICES.md": "46d71da9e06926ef80ee0630f4c43f13b712f37dcb67fc9a6c44dd99b79a647c",
     "apps/__init__.py": "a861698d2a1b1d6d3fbb5ba74d5c8c068a7dc8ab1a0025fb3db83efafb461aaf",
     "apps/product_demo/README.md": "642628ed96108d0e70bf382c69f759c6d202c186366d66033f136425381e98d2",
@@ -25,7 +25,7 @@
     "artifacts/bioevidence_agent-0.3.0-py3-none-any.whl": "139c80b074bcbd3d443f4182ad4c70adfb527d06600ece7aaaa099dbd84d18fa",
     "artifacts/bioevidence_agent-0.4.0-py3-none-any.whl": "e0fcfa67c76f753b115fc15ae8d8f8c805c2aa524df843242746e3bb0b6cd622",
     "artifacts/bioevidence_agent-0.4.1-py3-none-any.whl": "13d6351c49a073be5a11864a76fcc9ee866257e18714538bbc33457162d3edd2",
-    "artifacts/bioevidence_agent-0.5.0-py3-none-any.whl": "d905ea5c5f23dcd0fb8fbfa17528c0215d3fe2dca5c5aecb62d2b13ce6dc73de",
+    "artifacts/bioevidence_agent-0.5.0-py3-none-any.whl": "0ede473e9ff04163fc568afdffdcc68f18a4b940e9fbb4d2a5bbd64cb327cd11",
     "docs/architecture.md": "ec4e09d2538b33c88258dfa386579fb4080c4181e3facf49c9649b8f4e5c60d4",
     "docs/claims_registry.md": "7a862e23c1eb0a5610cdc50049301dff465306a0b6e29fb772c85206074c0657",
     "docs/experiment_log.md": "87d1ab930ed114395fbe208ba39757eab1b4ea8ac3b9e5bc327e1e78f08b1975",
@@ -141,7 +141,7 @@
   "package": {
     "version": "0.5.0",
     "wheel": "artifacts/bioevidence_agent-0.5.0-py3-none-any.whl",
-    "wheel_sha256": "d905ea5c5f23dcd0fb8fbfa17528c0215d3fe2dca5c5aecb62d2b13ce6dc73de"
+    "wheel_sha256": "0ede473e9ff04163fc568afdffdcc68f18a4b940e9fbb4d2a5bbd64cb327cd11"
   },
   "release_id": "bioevidence-agent-v0.5.0",
   "release_scope": "solo public portfolio closeout release; local source-bound Product Demo, deterministic engineering diagnostics, and synthetic scope controls - not blind or clinical validation and not user-value evidence",
