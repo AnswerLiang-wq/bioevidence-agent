@@ -4,6 +4,9 @@ import hashlib
 import json
 import subprocess
 import sys
+import zipfile
+from email import policy
+from email.parser import BytesParser
 from pathlib import Path
 
 import pytest
@@ -231,3 +234,40 @@ def test_release_manifest_cli_refuses_stale_evidence_without_writing(
     assert result.returncode != 0
     assert "refusing to write manifest" in result.stderr
     assert output.read_text(encoding="utf-8") == "previous manifest\n"
+
+
+def _release_wheel_path() -> Path:
+    """The committed release wheel for the version declared by the project."""
+
+    project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    metadata = project.split("[project]", 1)[1].split("[", 1)[0]
+    version = __version__
+    assert f'\nversion = "{version}"\n' in metadata
+    return ROOT / "artifacts" / f"bioevidence_agent-{version}-py3-none-any.whl"
+
+
+def test_release_wheel_long_description_matches_readme() -> None:
+    """The committed wheel must ship the README it was built from.
+
+    A wheel built before the README was finalised embeds the older text in its
+    METADATA long description, so installers would read a release status that
+    disagrees with the repository.  Compare the distributed bytes, not the
+    repository file alone.
+    """
+
+    wheel = _release_wheel_path()
+    assert wheel.is_file(), f"release wheel is missing: {wheel}"
+    with zipfile.ZipFile(wheel) as archive:
+        metadata_name = f"bioevidence_agent-{__version__}.dist-info/METADATA"
+        raw = archive.read(metadata_name)
+    message = BytesParser(policy=policy.compat32).parsebytes(raw)
+    distributed = message.get_payload(decode=True)
+    assert distributed is not None, "wheel METADATA has no decodable body"
+
+    readme = (ROOT / "README.md").read_bytes()
+    assert message.get("Version") == __version__
+    assert distributed == readme, (
+        "release wheel long description does not match README.md: "
+        f"wheel={hashlib.sha256(distributed).hexdigest()} "
+        f"readme={hashlib.sha256(readme).hexdigest()}; rebuild the wheel"
+    )

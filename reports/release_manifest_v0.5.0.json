@@ -8,7 +8,7 @@
     "EXPERIMENT_LOG.md": "a818f7d299bc9c788dccd6f6dacca511708d7337d3edff69c23ec3c7808f740c",
     "LICENSE": "c02af6f5f0357b7309ddfddb608e1183b1779b229050a673f5b5235f7f79a16b",
     "PRODUCT_ONE_PAGER.md": "9127acd51e6a8ca548217e40c84bfbc184c23bc6050866a3b7396a4eab3469ca",
-    "README.md": "7667ff3af99a23b31ace49fdeee70a7302cde7829c3b331d46af2127149ebeb7",
+    "README.md": "9134dee663bb25901b3def23372b110e3f16e28fb695ac12e2a0f487477dd3f6",
     "THIRD_PARTY_NOTICES.md": "46d71da9e06926ef80ee0630f4c43f13b712f37dcb67fc9a6c44dd99b79a647c",
     "apps/__init__.py": "a861698d2a1b1d6d3fbb5ba74d5c8c068a7dc8ab1a0025fb3db83efafb461aaf",
     "apps/product_demo/README.md": "642628ed96108d0e70bf382c69f759c6d202c186366d66033f136425381e98d2",
@@ -25,7 +25,7 @@
     "artifacts/bioevidence_agent-0.3.0-py3-none-any.whl": "139c80b074bcbd3d443f4182ad4c70adfb527d06600ece7aaaa099dbd84d18fa",
     "artifacts/bioevidence_agent-0.4.0-py3-none-any.whl": "e0fcfa67c76f753b115fc15ae8d8f8c805c2aa524df843242746e3bb0b6cd622",
     "artifacts/bioevidence_agent-0.4.1-py3-none-any.whl": "13d6351c49a073be5a11864a76fcc9ee866257e18714538bbc33457162d3edd2",
-    "artifacts/bioevidence_agent-0.5.0-py3-none-any.whl": "1c5a37c51565853de9b445b84e0cdb3b19a08d2a34544fb8db152e48d21dbad2",
+    "artifacts/bioevidence_agent-0.5.0-py3-none-any.whl": "d905ea5c5f23dcd0fb8fbfa17528c0215d3fe2dca5c5aecb62d2b13ce6dc73de",
     "docs/architecture.md": "ec4e09d2538b33c88258dfa386579fb4080c4181e3facf49c9649b8f4e5c60d4",
     "docs/claims_registry.md": "7a862e23c1eb0a5610cdc50049301dff465306a0b6e29fb772c85206074c0657",
     "docs/experiment_log.md": "87d1ab930ed114395fbe208ba39757eab1b4ea8ac3b9e5bc327e1e78f08b1975",
@@ -100,7 +100,7 @@
     "tests/test_llm_agent.py": "89638cf3f6812857fa96a50b329face249fa5525199b8327f20e11dbd83baad4",
     "tests/test_pubmedqa_comparison.py": "5be967e46481f34639cc275cf8032f68dbd1461692ca18852d628b75d6251632",
     "tests/test_react_demo.py": "c3d807f21dabd999ea22623a50a43a9ce389781cabb3415d5297644df9e4c4f3",
-    "tests/test_release.py": "c41da76327264c49bb39bc71d6243c421279fcca134dea831937b447179b8585"
+    "tests/test_release.py": "56af4c99cee08b17637af5cd1287523264f63563e6b60d5fd44190e38ef477a3"
   },
   "claims_not_made": [
     "private blind performance",
@@ -141,7 +141,7 @@
   "package": {
     "version": "0.5.0",
     "wheel": "artifacts/bioevidence_agent-0.5.0-py3-none-any.whl",
-    "wheel_sha256": "1c5a37c51565853de9b445b84e0cdb3b19a08d2a34544fb8db152e48d21dbad2"
+    "wheel_sha256": "d905ea5c5f23dcd0fb8fbfa17528c0215d3fe2dca5c5aecb62d2b13ce6dc73de"
   },
   "release_id": "bioevidence-agent-v0.5.0",
   "release_scope": "solo public portfolio closeout release; local source-bound Product Demo, deterministic engineering diagnostics, and synthetic scope controls - not blind or clinical validation and not user-value evidence",
@@ -179,7 +179,7 @@
         "command": "python -m pytest -q",
         "exit_code": 0,
         "failed": 0,
-        "passed": 342,
+        "passed": 343,
         "skipped": 0
       },
       "wheel_build": {

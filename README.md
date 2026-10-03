@@ -4,9 +4,19 @@ BioEvidence Agent is a portfolio project with two deliberately separate
 entry points:
 
 Release status: **v0.5.0 is a local candidate and has not been published.** No
-tag, GitHub release, or deployment exists for it, and the Linux CI matrix has
-not been run for this version. What has been verified locally is listed with
-the manifest below.
+tag, GitHub release, or deployment exists for it.
+
+Linux CI has run for this candidate. Commit
+`734277f67bfe31354c6da8813cadfce5c31cae30` passed the lightweight matrix on
+Python 3.10–3.13
+([run 37102392291](https://github.com/AnswerLiang-wq/bioevidence-agent/actions/runs/37102392291)):
+each leg reported 339 passed and 3 skipped. The three skips are guarded
+cross-checks against machine-local frozen artifacts — the prepared benchmark
+under `data/` and records under the ignored `private/` — that a public checkout
+does not carry, so they run only locally, where the full suite is 342 passing.
+**That result belongs to `734277f` alone.** Any later commit, including the one
+that updates this paragraph, carries its own CI result and is not covered by
+that run.
 
 What v0.5.0 adds over v0.4.1:
 
