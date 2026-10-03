@@ -11,11 +11,18 @@ PyYAML==6.0.2
 regex==2024.11.6
 requests==2.32.4
 charset-normalizer==3.4.2
-idna==3.10
+# idna is intentionally not pinned here.  ci.lock supplies idna==3.20, which
+# satisfies every constraint in this file (httpx2 needs >=3.18, requests needs
+# >=2.5,<4).  Re-pinning it to the older 3.10 that the requests stack alone would
+# allow makes the whole file unresolvable against ci.lock's openai stack.
 urllib3==2.5.0
 certifi==2025.7.14
 tqdm==4.67.1
-typing-extensions==4.14.1
+# typing-extensions is intentionally not pinned here.  ci.lock supplies 4.16.0,
+# which is the only version satisfying every constraint in this file: anyio
+# requires >=4.16.0 while torch only needs >=4.10.0 and openai caps <5.  Pinning
+# the older 4.14.1 that the torch stack alone would allow is what made this file
+# unresolvable.
 networkx==3.4.2
 Jinja2==3.1.6
 MarkupSafe==3.0.2

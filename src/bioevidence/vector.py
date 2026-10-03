@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol, Sequence
+from typing import Protocol
 
 import numpy as np
 
 from .corpus import CorpusDocument, sha256_file
-
 
 DEFAULT_MODEL_ID = "intfloat/multilingual-e5-small"
 DEFAULT_MODEL_REVISION = "fd1525a9fd15316a2d503bf26ab031a61d056e98"
@@ -142,7 +142,7 @@ class VectorIndex:
         *,
         encoder: TextEncoder,
         batch_size: int = 8,
-    ) -> "VectorIndex":
+    ) -> VectorIndex:
         passages = [
             f"Title: {document.title}\nAbstract: {document.abstract}"
             for document in documents
@@ -235,7 +235,7 @@ class VectorIndex:
         *,
         documents: Sequence[CorpusDocument],
         corpus_path: Path,
-    ) -> "VectorIndex":
+    ) -> VectorIndex:
         manifest = read_index_manifest(index_dir)
         embeddings_path = index_dir / INDEX_EMBEDDINGS
         if sha256_file(corpus_path) != manifest.get("corpus_sha256"):

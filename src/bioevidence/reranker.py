@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import time
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Protocol, Sequence
+from typing import Protocol
 
 from .corpus import CorpusDocument
-
 
 DEFAULT_RERANKER_MODEL_ID = "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1"
 DEFAULT_RERANKER_REVISION = "1427fd652930e4ba29e8149678df786c240d8825"

@@ -9,7 +9,6 @@ import re
 import subprocess
 from pathlib import Path, PurePosixPath
 
-
 ROOT = Path(__file__).resolve().parents[1]
 PRIVATE_PARTS = {"private", "session_data"}
 IGNORED_TRACKED_PARTS = {".git"}
@@ -41,7 +40,7 @@ def default_manifest_path(root: Path = ROOT) -> Path:
 
     project = (root / "pyproject.toml").read_text(encoding="utf-8")
     project_metadata = project.split("[project]", 1)[-1].split("[", 1)[0]
-    match = re.search(r'^version = "(\d+\.\d+\.\d+)"$', project_metadata, re.M)
+    match = re.search(r'^version = "(\d+\.\d+\.\d+)"$', project_metadata, re.MULTILINE)
     if match is None:
         raise ValueError("project version is missing or invalid")
     version = match.group(1)

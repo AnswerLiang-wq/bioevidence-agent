@@ -12,7 +12,6 @@ from apps.product_demo.scope_controls import (
 )
 from scripts import run_product_scope_controls
 
-
 CONTROLS = load_scope_controls()
 
 

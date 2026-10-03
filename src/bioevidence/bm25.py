@@ -9,7 +9,6 @@ from dataclasses import dataclass
 
 from .corpus import CorpusDocument
 
-
 TOKEN_RE = re.compile(r"[a-z0-9]+|[\u4e00-\u9fff]", re.IGNORECASE)
 
 

@@ -6,13 +6,13 @@ import hashlib
 import json
 import re
 import time
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, is_dataclass
-from typing import Callable, TypeVar, cast
+from typing import TypeVar, cast
 
 from .bm25 import tokenize
 from .corpus import CorpusDocument
 from .retrievers import BM25Retriever, Retriever
-
 
 T = TypeVar("T")
 
@@ -338,8 +338,7 @@ def _normalize_doi(value: str | None) -> str:
         return ""
     normalized = value.strip().lower()
     for prefix in ("https://doi.org/", "http://doi.org/", "doi:"):
-        if normalized.startswith(prefix):
-            normalized = normalized[len(prefix) :]
+        normalized = normalized.removeprefix(prefix)
     return normalized
 
 

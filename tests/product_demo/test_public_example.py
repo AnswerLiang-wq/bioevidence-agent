@@ -5,7 +5,6 @@ import json
 
 from scripts.generate_product_example import CuratedExampleClient, main
 
-
 DECISIVE_HCQ_SNIPPET = (
     "Death within 28 days occurred in 421 patients (27.0%) in the "
     "hydroxychloroquine group and in 790 (25.0%) in the usual-care group."

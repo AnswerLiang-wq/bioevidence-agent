@@ -37,7 +37,7 @@ jobs:
           fi
       - name: Test
         run: python -m pytest -q
-      - name: Verify v0.4.1 release hashes and public boundary
+      - name: Verify v0.5.0 release hashes and public boundary
         run: python scripts/verify_release.py
       - name: Build wheel and sdist
         run: python -m build
@@ -47,9 +47,9 @@ jobs:
           SMOKE_JSON="${RUNNER_TEMP}/bioevidence-demo.json"
           python -m venv "${SMOKE_ENV}"
           "${SMOKE_ENV}/bin/python" -m pip install \
-            "${GITHUB_WORKSPACE}"/artifacts/bioevidence_agent-0.4.1-py3-none-any.whl
+            "${GITHUB_WORKSPACE}"/artifacts/bioevidence_agent-0.5.0-py3-none-any.whl
           "${SMOKE_ENV}/bin/python" -c \
-            'import bioevidence; assert bioevidence.__version__ == "0.4.1"'
+            'import bioevidence; assert bioevidence.__version__ == "0.5.0"'
           "${SMOKE_ENV}/bin/bioevidence" demo \
             --question "Do mitochondria participate in programmed cell death?" \
             > "${SMOKE_JSON}"

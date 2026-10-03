@@ -4,10 +4,13 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from bioevidence.corpus import CorpusDocument, sha256_file
 from bioevidence.evidence_utilization import (
     SYSTEMS as CONTROL_SYSTEMS,
+)
+from bioevidence.evidence_utilization import (
     _shuffled_donors,
     _stratified_folds,
 )
@@ -15,13 +18,14 @@ from bioevidence.hybrid import reciprocal_rank_fusion
 from bioevidence.pubmed import PubMedArticle
 from bioevidence.pubmedqa_stress import (
     SYSTEMS as RETRIEVAL_SYSTEMS,
+)
+from bioevidence.pubmedqa_stress import (
     AbstractOnlyBM25,
     AbstractOnlyVectorIndex,
     abstract_passages,
     rerank_abstract_candidates,
 )
 from scripts.verify_release import audit_tracked_tree
-
 
 ROOT = Path(__file__).resolve().parents[1]
 ABSTRACT_REPORT = ROOT / "reports/pubmedqa_abstract_only_retrieval_v1.json"
@@ -117,6 +121,7 @@ def test_title_is_absent_from_bm25_e5_and_reranker_passages() -> None:
 
 
 def test_fold_mapping_is_complete_and_shuffle_is_a_derangement() -> None:
+    pytest.importorskip("sklearn", reason="requires 'benchmark' extra: pip install scikit-learn")
     labels = ("yes", "no", "maybe")
     rows = [
         {

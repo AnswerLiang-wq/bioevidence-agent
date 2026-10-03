@@ -1,0 +1,201 @@
+{
+  "artifacts": {
+    ".github/workflows/ci.yml": "5033a15c346625e22dc055340ec11fe384c976042f0692cfd4b81f76f2a166da",
+    ".github/workflows/heavy-evaluation.yml": "c44dd895bf855f0a7782661031928231ddc0526695a5680ace9ba6d8cd2710b0",
+    ".gitignore": "2d692941aacf96177ad55fa6f2a5ca47196e314b4cc6d34f4672d64db5f2d828",
+    "CITATION.cff": "d8cf8758fc6862e1bdf913965208d1be0cd4778e9e2ab9ce7a76c07f14662712",
+    "DECISION_LOG.md": "3eecef32378a4e1aa415f08ad5822cc5c72e64833f5bce0d7db9e184f25984ac",
+    "EXPERIMENT_LOG.md": "a818f7d299bc9c788dccd6f6dacca511708d7337d3edff69c23ec3c7808f740c",
+    "LICENSE": "c02af6f5f0357b7309ddfddb608e1183b1779b229050a673f5b5235f7f79a16b",
+    "PRODUCT_ONE_PAGER.md": "9127acd51e6a8ca548217e40c84bfbc184c23bc6050866a3b7396a4eab3469ca",
+    "README.md": "7667ff3af99a23b31ace49fdeee70a7302cde7829c3b331d46af2127149ebeb7",
+    "THIRD_PARTY_NOTICES.md": "46d71da9e06926ef80ee0630f4c43f13b712f37dcb67fc9a6c44dd99b79a647c",
+    "apps/__init__.py": "a861698d2a1b1d6d3fbb5ba74d5c8c068a7dc8ab1a0025fb3db83efafb461aaf",
+    "apps/product_demo/README.md": "642628ed96108d0e70bf382c69f759c6d202c186366d66033f136425381e98d2",
+    "apps/product_demo/__init__.py": "4a51d989cc8652feeea469437ade5863899bb661b886bc29d2e3a0402ffdcdc8",
+    "apps/product_demo/event_store.py": "81d1579677e9ca883cd87408b5a77cf37018fecb6a650e1ae947784c7d2a8da7",
+    "apps/product_demo/fixtures/scope_negative_controls_v1.json": "2497ad27b3bad6b9f5bb365541e69e8c5def7d2dc9d6a9bfe17a98b789a94730",
+    "apps/product_demo/scope_controls.py": "47be2b176452a7d9d4d9eda77a90525dc9535df1cd8c2f0b45e1c56b6d7a937d",
+    "apps/product_demo/server.py": "49c8028111f2da70e1702bb20eda9fedbc3ed4ae0749d95c000ae5505327843a",
+    "apps/product_demo/service.py": "37ca0e9c7bdc66e1301ba90f1db50aed7995b9aaa7d74902fcea245fb5d1133a",
+    "apps/product_demo/standard_tasks.json": "0b9aa89ac53b312a4fd7215e808038fb4d5b62340bd73b6b2d1f5d2aad27b575",
+    "apps/product_demo/static/app.js": "876b9a34f3c8cfb02f0cea3c00ad5a027942b2eaab2e7e4f2d5a8c064cede6dd",
+    "apps/product_demo/static/index.html": "075fddc2b43e29c1cfc5155eb777c156dd155a4d9d715887659f028f876f83c5",
+    "apps/product_demo/static/styles.css": "e5038f07f0da8182b7eb3f692f9497cb7b0e090487666c406775e8c6f6b0cf64",
+    "artifacts/bioevidence_agent-0.3.0-py3-none-any.whl": "139c80b074bcbd3d443f4182ad4c70adfb527d06600ece7aaaa099dbd84d18fa",
+    "artifacts/bioevidence_agent-0.4.0-py3-none-any.whl": "e0fcfa67c76f753b115fc15ae8d8f8c805c2aa524df843242746e3bb0b6cd622",
+    "artifacts/bioevidence_agent-0.4.1-py3-none-any.whl": "13d6351c49a073be5a11864a76fcc9ee866257e18714538bbc33457162d3edd2",
+    "artifacts/bioevidence_agent-0.5.0-py3-none-any.whl": "1c5a37c51565853de9b445b84e0cdb3b19a08d2a34544fb8db152e48d21dbad2",
+    "docs/architecture.md": "ec4e09d2538b33c88258dfa386579fb4080c4181e3facf49c9649b8f4e5c60d4",
+    "docs/claims_registry.md": "7a862e23c1eb0a5610cdc50049301dff465306a0b6e29fb772c85206074c0657",
+    "docs/experiment_log.md": "87d1ab930ed114395fbe208ba39757eab1b4ea8ac3b9e5bc327e1e78f08b1975",
+    "docs/interview_prep.md": "f79f389ad48d6ad1440c1de20865ad3ba8baa27315f9a9ff6355a35c708cc982",
+    "docs/limitations.md": "9090c072ab2f11bd3d6346a59d479cf2261ce17a54d9e04ec7f5991755b290b8",
+    "docs/methodology.md": "639a47ccadc8d6c1b0a61a081060f7af85f8ba9fb683a29daa2606f67e60e45c",
+    "docs/product_case/INTERNAL_TEST_REPORT.md": "5404220f6d7131de0fb62bbca277e6c581e71b7b597f448e438ae55efd4be293",
+    "docs/product_case/PHASE0_AUDIT.md": "129e871d6d803046fd7d7fc23bc324a8528756e436280f01ac31dd34229cf4ae",
+    "docs/product_case/PORTFOLIO_CASE_STUDY.md": "04cc7013b0f6473822747e41fa807453013c67490e797f67d9ac55109224a995",
+    "docs/product_case/screenshots/product_demo_evidence_export.png": "eb37abac08d4cfaf63d6f8b9f9abcfcf02fe3e46eb6e2a417628a38ab01a4c23",
+    "docs/product_case/screenshots/product_demo_standard_cards.png": "90678a16f5e0add31cdc0aaa44ec4d33cf6d1e3aea660ba74da6df7df2a1720c",
+    "docs/resume_and_interview.md": "fa3f230cae6e404a40aa1e579678fd481d9f3225fdd3fb61af61f8d6452ce5b7",
+    "examples/public_evidence_pack_example.json": "542a62f8745981d564c1dee4b5e1872d5758a7d5e5c35a33ce5113cdd18b57d0",
+    "examples/public_evidence_pack_example.md": "316e43a8b767a30a399e8439a842ec2e3eac3ef0f9661a6383b81779cd191633",
+    "pyproject.toml": "41ee9d06c14d1769219aed1845834cd3b21d31db0a1179513f358f251cc32dd8",
+    "reports/agent_experiments_summary_v1.json": "40cf006571c54b0fe1eb7feed2cdc9a19085b3c6c3c0959f387ec302427e4387",
+    "reports/eval_sample_50_v1_seed20260729.json": "bcc8753ff470b775ef17f07cf066b4cd659fe7b50459cd85159f98a0acd94b82",
+    "reports/eval_sample_v2_50_seed20261002.json": "5fe5c4ab1b44c5aae9994c284c01eae13603cd23838c1da1b58e05b296d0a64d",
+    "reports/failures/abstract_only_rank_drops.json": "1c5f39c3f6af6ae7062c30a2794598cafe15a54e6e93c10c974430512eb34baf",
+    "reports/failures/title_assisted_answer_failures.json": "1379d97f6914ed3bf79acecabd617830cbd2efe3349f123373804aa2363c318d",
+    "reports/product_scope_controls_v1.json": "6f841827de1387a7316dff49862537de25edc0c874d34eeec33a48ba3beed6ad",
+    "reports/product_scope_controls_v1.md": "a63ef6c837bb2ae675937112e2b6ae8d117722b58963ec5ef8e30bf432fcb55b",
+    "reports/pubmedqa_abstract_only_retrieval_v1.json": "7dbd41e62b2696cb6c720395856fb96fd71253acca771b28cc809aad62cc267f",
+    "reports/pubmedqa_abstract_only_retrieval_v1.md": "993792bfec71f71a71f446c398c3012c4991056b51d97acdb4fec32c66765f56",
+    "reports/pubmedqa_evidence_utilization_cv_v1.json": "7e00c23628ee33a8a4ada1510b157fe305bb8039e8758ed39a06e14642add2cc",
+    "reports/pubmedqa_evidence_utilization_cv_v1.md": "e3be6e37ead7b37836296e91f141fcdefd266a28cd5035c3d0605498f775c849",
+    "reports/pubmedqa_title_assisted_v1.json": "bce09c77d17b964ee770c2e6894b61bd1d97f6df7691c8499670627e60a6d974",
+    "reports/pubmedqa_title_assisted_v1.md": "d4a25c7588963eea7cefc525246976abc26dd51718e7e7e0dff53d00bd21c7b1",
+    "reports/release_manifest_v0.3.0.json": "7d1c791dcf5f410c55135541110bc377846df1fa2221fddc631b9b14b17a340d",
+    "reports/release_manifest_v0.4.0.json": "5bb442689f890d81ea3a17fbd224f003dc7d208e253d1ef3b8371afc379f18ed",
+    "reports/release_manifest_v0.4.1.json": "9c8e8a4b0395cea228c705e166874c7ea0e2686ae9fc01ae46eeb456b666024c",
+    "requirements/ci.lock": "126d8ef0199aa505a01421928fc90f11afdb45ad557466fd35bb814c2840e9ef",
+    "requirements/heavy.lock": "d00a2ad49adeb46896af3bf8b38274c6c17616d1cb03bd1f37dc10f8e0569a2d",
+    "scripts/capture_product_screenshots.py": "d017acb3c3fde25e1ca149d1bbf73086330da927e6b50016bb5627fcb4e94112",
+    "scripts/compare_pipelines.py": "97a7ae2e76d1050f990fdfe21f49329aa9f3a3bc821c8f6dac854ce20bac4ea9",
+    "scripts/generate_product_example.py": "5f5a1d5c4306d0535da9ea9bf9406646620f98b3ccc9d4feed2a6c3234f565c9",
+    "scripts/generate_release_manifest.py": "e98fc2d03058adc005db670de37e6203fc801632228a633d407864a3982efeb0",
+    "scripts/live_smoke_test.py": "8492628ed55e7409c9c2cbf4837cc41db42db9fe8a063bf2521832081d9a69aa",
+    "scripts/run_product_demo.py": "9be4580a60a7c68630fb1f7babff55ef9f0bb7d74541f78ddba1eebcf7e1cd4f",
+    "scripts/run_product_scope_controls.py": "96876d4d54319b0b3ea3e38ae4c214dc6e56baad3ae1dbfe3c6cebe310db82ef",
+    "scripts/verify_release.py": "de5411b1171ab9dfc2d14efdafe08162fe1852631a70e5f2ed75720f49141bdf",
+    "src/bioevidence/__init__.py": "2484686b3c462bcb2ba1c8a65e5c48204a44599cc572eb383dd4f63c5c08ba10",
+    "src/bioevidence/audit.py": "f42bea0a14c1d100bff1ab8cb0af3f57b3900375efb02ca8ca208b440c82f75e",
+    "src/bioevidence/bm25.py": "368e2f3b397bff61db34c71b9407794d2591f42d874e87ec5856d1a82589c27f",
+    "src/bioevidence/corpus.py": "e8f79a8dee9a6bc2de24223c6b8a80b9152126ef8aec3c3c1b6db7b7f3bc8d3d",
+    "src/bioevidence/evidence_utilization.py": "e410ee2f204f5b17224b1ee83ce91da669880053ef0edcbd17af49e491a2600c",
+    "src/bioevidence/fixed_context_agent.py": "49cc899578027a3a29ac61959c8fb4a57672ba33234dd7b41d8927b1d9adba56",
+    "src/bioevidence/fixtures/__init__.py": "8949028c36a081cc1a9888bb0e406166df6d9c63ad76561919d435e6ba91ca2b",
+    "src/bioevidence/fixtures/tiny_corpus.jsonl": "cc358f2b4a8ade2cccde73ee5c1415a871ead64efbda2a9e268326dab90be4c2",
+    "src/bioevidence/hybrid.py": "76a603b82727e2724b95c008e66a06ec3e0734959ccb222572cecf52e983bd3b",
+    "src/bioevidence/llm_agent.py": "63e64f9348d28e78602433f3cbd5e66491ef63ba94e99563fa72806b723d7022",
+    "src/bioevidence/portfolio_cli.py": "5fcfcf8e76840ef8c06191eaa85b987ed37b251075c180441f595034fbdda439",
+    "src/bioevidence/product_contracts.py": "f581991ce64467798048f1f350aff8cf8e56be115c5efdc8d3091bd046f448f7",
+    "src/bioevidence/prompt_variants.py": "4972966f4645efd30c59505798f5611b74ed58d273624a750446e3221cc09136",
+    "src/bioevidence/pubmed.py": "42d7563c65e1d65608bf7016f4b2632fb395e6687d4061f06a34ec887bba3e00",
+    "src/bioevidence/pubmedqa.py": "d0c449f8fa0911bf935520a1a2c20730c2c3e717605d26249028322355e5d338",
+    "src/bioevidence/pubmedqa_agent.py": "5dc6ab3c4a9c0d66d48fec756a04a31f1def363c58d5ac3f81bd3167aacd6aa5",
+    "src/bioevidence/pubmedqa_eval.py": "babe06963cb9642e3383f49ae5cbf155da9f930961fa57399faffe6a82cc29b0",
+    "src/bioevidence/pubmedqa_sample.py": "5eb2d8112a4634c40b9a7494c6e77f591acc7d46199d7f167540d62ecd874db5",
+    "src/bioevidence/pubmedqa_stress.py": "0d0720f4c52fd1c0d5cbd1f5ee1466811e2643d4a6b39f52a76a172e6efbefce",
+    "src/bioevidence/reranker.py": "0b1bb96596fd696d1826ea99b9e579af6c77bdb812b6cd97ff24611b1ac1785a",
+    "src/bioevidence/retrievers.py": "cb9364e11a103cd69cd2db748ea9ca9cb4e59f641fd6a596150bcb43a1e7284d",
+    "src/bioevidence/tools.py": "2e73a2878a32adca2b0ad99fef1cfca83c8161d32d33d46a8301cf91630286fd",
+    "src/bioevidence/vector.py": "585259562dc59753eae2ba4d04fb9f107a20b6a9708efb5f2bc9c992fab2eb14",
+    "tests/product_demo/test_public_example.py": "c10ba60d44d45620b0352bcebb0950f66ffd8697a7cf08753291318d9c7d5012",
+    "tests/product_demo/test_scope_controls.py": "75f13f201ba0891e90a8e46b236e4f193471461b6b34b6d3755a055dbf1ed146",
+    "tests/product_demo/test_server.py": "731d5e76eb4f1a5e88a94494ac175700d5588f472d48265f33c3fe857deac035",
+    "tests/product_demo/test_service.py": "b522f4134771cbf2b1288616d903fda38a85cc588e545c38e22bfe7486640335",
+    "tests/test_core.py": "5fc5931f40449813964f2dffc8c1d4afa8faf8f5b4aff826a97068240533bbe9",
+    "tests/test_diagnostics.py": "979495972ad70ee9c1aada047db3483be171e0f1d8dd7d258f35665c7feb74a9",
+    "tests/test_live_smoke_test.py": "d8a8ed0083290c101d75de7c18bf56f427c6de0a3347c20018bff9f978fe8f56",
+    "tests/test_llm_agent.py": "89638cf3f6812857fa96a50b329face249fa5525199b8327f20e11dbd83baad4",
+    "tests/test_pubmedqa_comparison.py": "5be967e46481f34639cc275cf8032f68dbd1461692ca18852d628b75d6251632",
+    "tests/test_react_demo.py": "c3d807f21dabd999ea22623a50a43a9ce389781cabb3415d5297644df9e4c4f3",
+    "tests/test_release.py": "c41da76327264c49bb39bc71d6243c421279fcca134dea831937b447179b8585"
+  },
+  "claims_not_made": [
+    "private blind performance",
+    "open-world retrieval completeness",
+    "semantic hallucination rate",
+    "clinical validity or medical advice",
+    "validated user value, time saving, task completion, trust, reuse intent, or VEPS improvement"
+  ],
+  "excluded": [
+    "Day27-63 logs and archival governance/ACL workspaces",
+    "raw PubMedQA files and test labels",
+    "model weights and caches",
+    "dense embeddings and local run rankings",
+    "secrets, temporary files, and local absolute paths",
+    "raw PILOT01 participant records and row-level aggregates (kept under ignored private/)"
+  ],
+  "frozen_results": {
+    "abstract_only": {
+      "rank_drop_count": 12,
+      "reranked_mrr": 0.982,
+      "reranked_recall_at_10": 0.99,
+      "test_cases": 500
+    },
+    "evidence_controls": {
+      "correct_context_accuracy": 0.536,
+      "exact_mcnemar_p": 0.06614291,
+      "non_test_oof_cases": 500,
+      "shuffled_context_accuracy": 0.486
+    },
+    "title_assisted": {
+      "answer_accuracy": 0.558,
+      "answer_macro_f1": 0.383221,
+      "reranked_recall_at_10": 1.0,
+      "test_cases": 500
+    }
+  },
+  "manifest_version": "1.0.0",
+  "package": {
+    "version": "0.5.0",
+    "wheel": "artifacts/bioevidence_agent-0.5.0-py3-none-any.whl",
+    "wheel_sha256": "1c5a37c51565853de9b445b84e0cdb3b19a08d2a34544fb8db152e48d21dbad2"
+  },
+  "release_id": "bioevidence-agent-v0.5.0",
+  "release_scope": "solo public portfolio closeout release; local source-bound Product Demo, deterministic engineering diagnostics, and synthetic scope controls - not blind or clinical validation and not user-value evidence",
+  "verification": {
+    "basis": "transcribed from the run record captured before this manifest was generated; not an independent assertion by the generator",
+    "checks_executed_this_round": {
+      "demo_core_flow": {
+        "command": "bioevidence react-demo --scenario {statins,metformin,aspirin-primary,pembrolizumab}",
+        "exit_code": 0
+      },
+      "fresh_wheel_install": {
+        "command": "python -m venv <smoke venv outside the repository> && python -m pip install artifacts/bioevidence_agent-0.5.0-py3-none-any.whl",
+        "exit_code": 0
+      },
+      "out_of_tree_demo": {
+        "command": "bioevidence demo --question 'Do mitochondria participate in programmed cell death?'",
+        "exit_code": 0
+      },
+      "public_boundary_scan": {
+        "command": "python scripts/verify_release.py",
+        "exit_code": 0
+      },
+      "ruff": {
+        "command": "python -m ruff check src apps tests scripts",
+        "exit_code": 0
+      },
+      "scope_controls": {
+        "command": "python -m pytest -q tests/product_demo/test_scope_controls.py",
+        "exit_code": 0,
+        "failed": 0,
+        "passed": 11,
+        "skipped": 0
+      },
+      "tests": {
+        "command": "python -m pytest -q",
+        "exit_code": 0,
+        "failed": 0,
+        "passed": 342,
+        "skipped": 0
+      },
+      "wheel_build": {
+        "command": "python -m build",
+        "exit_code": 0
+      }
+    },
+    "checks_not_executed_this_round": [
+      "examples"
+    ],
+    "github_publication_status": "not_asserted_by_prepublication_manifest",
+    "historical_references": {
+      "screenshots": {
+        "as_of": "not re-verified in this round",
+        "note": "Existing screenshots are from an earlier capture and were not re-taken this round."
+      }
+    }
+  }
+}

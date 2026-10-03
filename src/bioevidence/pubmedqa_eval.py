@@ -8,8 +8,8 @@ import platform
 import statistics
 import sys
 import time
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 from .bm25 import BM25Index
 from .corpus import CorpusDocument, read_corpus, sha256_file
@@ -29,7 +29,6 @@ from .pubmedqa_agent import PubMedQAEvidenceAgent
 from .reranker import PairScorer, rerank_candidates
 from .retrievers import RetrievalHit
 from .vector import INDEX_MANIFEST, TextEncoder, VectorIndex
-
 
 FINAL_SYSTEM = "hybrid_reranked"
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -10,12 +11,15 @@ import pytest
 from apps.product_demo.service import PRODUCT_VERSION
 from bioevidence import __version__
 from bioevidence.pubmed import USER_AGENT
+from scripts.generate_release_manifest import (
+    build_manifest,
+    load_evidence,
+)
 from scripts.verify_release import (
     validate_public_text,
     validate_relative_path,
     verify_release,
 )
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -28,11 +32,11 @@ def test_public_version_is_consistent() -> None:
     )
 
     project_metadata = project.split("[project]", 1)[1].split("[", 1)[0]
-    assert '\nversion = "0.4.1"\n' in project_metadata
-    assert __version__ == PRODUCT_VERSION == "0.4.1"
-    assert USER_AGENT.startswith("BioEvidenceAgent/0.4.1 ")
-    assert "\nversion: 0.4.1\n" in citation
-    assert "BioEvidence Agent v0.4.1" in page
+    assert '\nversion = "0.5.0"\n' in project_metadata
+    assert __version__ == PRODUCT_VERSION == "0.5.0"
+    assert USER_AGENT.startswith("BioEvidenceAgent/0.5.0 ")
+    assert "\nversion: 0.5.0\n" in citation
+    assert "BioEvidence Agent v0.5.0" in page
 
 
 def test_release_path_validator_accepts_public_relative_path() -> None:
@@ -110,3 +114,120 @@ def test_release_verifier_rejects_unmanifested_tracked_file(
 
     with pytest.raises(ValueError, match="artifact set does not match"):
         verify_release(manifest, root=tmp_path)
+
+
+TEMP_VERSION = "9.9.9"
+TEMP_RELEASE_ID = f"bioevidence-agent-v{TEMP_VERSION}"
+
+
+def _release_repo(tmp_path: Path) -> Path:
+    """A throwaway Git repo that looks like a release root."""
+
+    repo = tmp_path / "release"
+    (repo / "artifacts").mkdir(parents=True)
+    (repo / "pyproject.toml").write_text(
+        f'[project]\nname = "bioevidence-agent"\nversion = "{TEMP_VERSION}"\n',
+        encoding="utf-8",
+    )
+    (repo / "artifacts" / f"bioevidence_agent-{TEMP_VERSION}-py3-none-any.whl").write_bytes(
+        b"wheel"
+    )
+    (repo / "content.txt").write_text("shipped\n", encoding="utf-8")
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+    subprocess.run(["git", "add", "."], cwd=repo, check=True)
+    return repo
+
+
+def _evidence_record(tmp_path: Path, *, release: object = TEMP_RELEASE_ID) -> Path:
+    checks: list[dict[str, object]] = [
+        {"id": "ruff", "status": "executed", "exit_code": 0},
+        {"id": "tests", "status": "executed", "exit_code": 0, "passed": 12,
+         "failed": 0, "skipped": 0},
+        {"id": "examples", "status": "not_executed"},
+        {"id": "screenshots", "status": "historical", "note": "earlier capture"},
+    ]
+    record: dict[str, object] = {"record_version": "1.0.0", "checks": checks}
+    if release is not None:
+        record["release"] = release
+    path = tmp_path / "evidence.json"
+    path.write_text(json.dumps(record), encoding="utf-8")
+    return path
+
+
+def test_release_manifest_generator_accepts_matching_evidence(
+    tmp_path: Path,
+) -> None:
+    repo = _release_repo(tmp_path)
+    evidence = load_evidence(_evidence_record(tmp_path))
+
+    manifest = build_manifest(root=repo, evidence=evidence)
+
+    assert manifest["release_id"] == TEMP_RELEASE_ID
+    assert manifest["package"]["version"] == TEMP_VERSION
+    assert "content.txt" in manifest["artifacts"]
+
+
+def test_release_manifest_generator_rejects_stale_evidence_release(
+    tmp_path: Path,
+) -> None:
+    repo = _release_repo(tmp_path)
+    stale = _evidence_record(tmp_path, release="bioevidence-agent-v0.4.1")
+
+    with pytest.raises(ValueError, match="does not belong to this release"):
+        build_manifest(root=repo, evidence=load_evidence(stale))
+
+
+def test_release_manifest_generator_rejects_missing_evidence_identity(
+    tmp_path: Path,
+) -> None:
+    missing = _evidence_record(tmp_path, release=None)
+
+    with pytest.raises(ValueError, match="no release identity"):
+        load_evidence(missing)
+
+
+def test_release_manifest_generator_does_not_claim_unexecuted_checks(
+    tmp_path: Path,
+) -> None:
+    repo = _release_repo(tmp_path)
+    evidence = load_evidence(_evidence_record(tmp_path))
+
+    verification = build_manifest(root=repo, evidence=evidence)["verification"]
+
+    executed = verification["checks_executed_this_round"]
+    assert set(executed) == {"ruff", "tests"}
+    assert executed["tests"]["passed"] == 12
+    assert "examples" in verification["checks_not_executed_this_round"]
+    assert verification["historical_references"]["screenshots"]["note"] == (
+        "earlier capture"
+    )
+    assert "screenshots" not in executed
+    assert not any(
+        value is True for value in verification.values() if not isinstance(value, dict)
+    )
+
+
+def test_release_manifest_cli_refuses_stale_evidence_without_writing(
+    tmp_path: Path,
+) -> None:
+    stale = _evidence_record(tmp_path, release="bioevidence-agent-v0.4.1")
+    output = tmp_path / "manifest.json"
+    output.write_text("previous manifest\n", encoding="utf-8")
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "generate_release_manifest.py"),
+            "--evidence",
+            str(stale),
+            "--output",
+            str(output),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode != 0
+    assert "refusing to write manifest" in result.stderr
+    assert output.read_text(encoding="utf-8") == "previous manifest\n"

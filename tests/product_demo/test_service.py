@@ -9,7 +9,6 @@ from apps.product_demo.event_store import EventStore, EventValidationError
 from apps.product_demo.service import ProductDemoError, ProductDemoService
 from bioevidence.pubmed import PubMedArticle, PubMedError
 
-
 QUESTION = "Remdesivir reduces all-cause mortality in hospitalized adults."
 
 
