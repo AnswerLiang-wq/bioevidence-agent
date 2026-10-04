@@ -43,9 +43,10 @@ from .vector import (
 )
 
 # ---------------------------------------------------------------------------
-# Scripted fake LLM client — used by react-demo to show the full ReAct loop
-# without requiring a live API key.  The response sequence mirrors what a
-# real DeepSeek model would do for the statin RCT question.
+# Scripted fake LLM client — used by react-demo to walk the ReAct loop without
+# requiring a live API key.  Each scenario pre-writes its own tool calls and
+# final answer; no model chooses them, so the sequence illustrates how the loop
+# behaves rather than reproducing what a live model would decide.
 # ---------------------------------------------------------------------------
 
 
@@ -302,9 +303,10 @@ def build_parser() -> argparse.ArgumentParser:
     react_demo = commands.add_parser(
         "react-demo",
         help=(
-            "Walk through the full ReAct tool-use loop with a scripted fake LLM "
-            "(no API key required). Shows search → fetch → inspect → finish with "
-            "complete provenance output. Uses synthetic fixture corpus only."
+            "Walk through the ReAct tool-use loop with a scripted fake LLM "
+            "(no API key required, no model request made). Reports the scripted "
+            "tool calls, the accepted finish result and the full provenance "
+            "record. Uses the synthetic fixture corpus only."
         ),
     )
     react_demo.add_argument(
@@ -477,16 +479,18 @@ def _react_demo(args: argparse.Namespace) -> int:
             "question": question,
             "scripted_mode": True,
             "scripted_mode_note": (
-                "This demo uses a scripted fake LLM client — no API key required. "
-                "The tool-call sequence (search → fetch → inspect → finish) is identical "
-                "to a live DeepSeek run; only the model decision step is scripted."
+                "This demo uses a scripted fake LLM client — no API key is required "
+                "and no model API request is made. The tool calls and the final answer "
+                "are pre-written in the scenario rather than chosen by a model, so the "
+                "run exercises the same ReAct loop, typed tools and product-contract "
+                "checks as the agent but does not show how a live model would act."
             ),
             "corpus_is_synthetic": True,
             "corpus_note": (
                 "All documents in tiny_corpus.jsonl (PMIDs 1001-1010) are synthetic "
                 "fixtures generated for demonstration purposes. They do NOT correspond "
-                "to real published papers. PMIDs 1001-1003 are simple three-sentence "
-                "demos; PMIDs 1004-1010 are LLM-generated RCT-style abstracts with "
+                "to real published papers. PMIDs 1001-1003 are single-sentence demos; "
+                "PMIDs 1004-1010 are LLM-generated RCT-style abstracts with "
                 "plausible but invented statistics."
             ),
             "corpus_path": str(corpus_path),

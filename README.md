@@ -3,10 +3,17 @@
 BioEvidence Agent is a portfolio project with two deliberately separate
 entry points:
 
-Current release: **v0.5.0**. Release date, downloadable assets, and CI run
-record are in [GitHub Releases](https://github.com/AnswerLiang-wq/bioevidence-agent/releases).
+Package / checkout version: **v0.5.1**. Publication status, release dates,
+downloadable assets and CI run records are listed in
+[GitHub Releases](https://github.com/AnswerLiang-wq/bioevidence-agent/releases).
 
-What v0.5.0 adds over v0.4.1:
+The v0.5.1 maintenance changes are: a run example and output excerpt for the
+`react-demo` entry point (see below), corrections to overstated wording in the
+CLI's scripted-mode note and help text, and a version-metadata sync across the
+package, the demo page, the citation file and the release tests. No agent,
+tool, retrieval or verdict logic was changed.
+
+What v0.5.0 added over v0.4.1 (historical — these are not v0.5.1 changes):
 
 - a runnable LLM agent and its controls — `llm_agent`, `fixed_context_agent`,
   `prompt_variants`, `audit` — plus the product-response contract checks;
@@ -218,10 +225,74 @@ bioevidence demo \
   --question "Do mitochondria participate in programmed cell death?"
 ```
 
-This CLI demo uses a packaged three-document synthetic fixture. It downloads no
-models, reads no gold labels, and prints the top PMID, exact snippet,
-document/snippet hashes, and all typed-tool calls. It deliberately does not
-invent a medical verdict.
+This CLI demo uses a packaged synthetic fixture (`tiny_corpus.jsonl`, ten
+documents). It downloads no models, reads no gold labels, and prints the top
+PMID, exact snippet, document/snippet hashes, and all typed-tool calls. It
+deliberately does not invent a medical verdict.
+
+### Scripted ReAct loop demo (`react-demo`)
+
+`react-demo` walks the same ReAct tool-use loop as the agent, but with a
+scripted fake client in place of a live model: no API key is required, no model
+request is made, and no models are downloaded. It runs against the synthetic
+fixture corpus packaged with the package.
+
+```bash
+python -m pip install .
+bioevidence react-demo --scenario statins
+```
+
+Scenarios: `statins` (default), `metformin`, `aspirin-primary`,
+`pembrolizumab`.
+
+Output from a clean install of a wheel built from the current checkout,
+abridged to the fields that carry the demo's meaning:
+
+```json
+{
+  "demo_envelope": {
+    "scenario": "statins",
+    "scripted_mode": true,
+    "corpus_is_synthetic": true,
+    "corpus_size": 10,
+    "agent_response_contract_valid": true,
+    "agent_response_contract_errors": []
+  },
+  "agent_response": {
+    "verdict": "supported",
+    "abstained": false,
+    "citations": [{"pmid": "1004", "direction": "supports"}],
+    "provenance": {
+      "tool_call_count": 3,
+      "tool_trace": [
+        {"sequence": 1, "tool_name": "search_literature", "status": "success"},
+        {"sequence": 2, "tool_name": "fetch_record", "status": "success"},
+        {"sequence": 3, "tool_name": "inspect_evidence", "status": "success"}
+      ],
+      "agent_run": {
+        "run_status": "completed",
+        "termination_reason": "finish tool accepted."
+      },
+      "model_api_cost_usd": null
+    }
+  }
+}
+```
+
+What this shows and what it does not:
+
+- The tool calls and the final answer are **pre-written in the scenario**, not
+  chosen by a model. The run exercises the loop, the typed tools and the
+  product-contract checks, but it does not show how a live model would decide
+  to act.
+- `provenance.tool_trace` holds the **three typed tool calls** above. The
+  accepted `finish` result is recorded separately, under
+  `provenance.agent_run` — it is not a fourth entry in the trace.
+- The corpus is **synthetic**. `tiny_corpus.jsonl` ships PMIDs 1001–1010, which
+  do not correspond to real published papers; PMID 1004 above is a generated
+  fixture, not a real trial. Treat every number in it as invented.
+- `agent_response_contract_valid` reports that the scripted response satisfies
+  the same product contract a live response must satisfy.
 
 For development:
 
@@ -317,7 +388,8 @@ See:
   pilot decision; predates the three API evaluation rounds
 - [interview notes for the API evaluation rounds](docs/interview_prep.md) —
   covers v1/v2/v3 only; does not replace or restate the document above
-- [v0.5.0 release manifest](reports/release_manifest_v0.5.0.json)
+- [v0.5.1 release manifest](reports/release_manifest_v0.5.1.json)
+- [historical v0.5.0 release manifest](reports/release_manifest_v0.5.0.json)
 - [historical v0.4.1 release manifest](reports/release_manifest_v0.4.1.json)
 - [historical v0.4.0 release manifest](reports/release_manifest_v0.4.0.json)
 

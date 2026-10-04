@@ -13,7 +13,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 
 EUTILS_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
-USER_AGENT = "BioEvidenceAgent/0.5.0 (research; PubMed metadata lookup)"
+USER_AGENT = "BioEvidenceAgent/0.5.1 (research; PubMed metadata lookup)"
 
 
 class PubMedError(RuntimeError):

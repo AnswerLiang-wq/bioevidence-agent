@@ -37,21 +37,62 @@ jobs:
           fi
       - name: Test
         run: python -m pytest -q
-      - name: Verify v0.5.0 release hashes and public boundary
+      - name: Verify v0.5.1 release hashes and public boundary
         run: python scripts/verify_release.py
       - name: Build wheel and sdist
         run: python -m build
       - name: Fresh out-of-tree release-wheel smoke
+        env:
+          PYTHONPATH: ""
+          DEEPSEEK_API_KEY: ""
         run: |
           SMOKE_ENV="${RUNNER_TEMP}/bioevidence-smoke"
-          SMOKE_JSON="${RUNNER_TEMP}/bioevidence-demo.json"
+          SMOKE_DIR="${RUNNER_TEMP}/bioevidence-smoke-run"
+          SMOKE_JSON="${SMOKE_DIR}/bioevidence-demo.json"
+          SMOKE_REACT_JSON="${SMOKE_DIR}/bioevidence-react-demo.json"
           python -m venv "${SMOKE_ENV}"
           "${SMOKE_ENV}/bin/python" -m pip install \
-            "${GITHUB_WORKSPACE}"/artifacts/bioevidence_agent-0.5.0-py3-none-any.whl
+            "${GITHUB_WORKSPACE}"/artifacts/bioevidence_agent-0.5.1-py3-none-any.whl
           "${SMOKE_ENV}/bin/python" -c \
-            'import bioevidence; assert bioevidence.__version__ == "0.5.0"'
+            'import bioevidence; assert bioevidence.__version__ == "0.5.1"'
+          mkdir -p "${SMOKE_DIR}"
+          cd "${SMOKE_DIR}"
           "${SMOKE_ENV}/bin/bioevidence" demo \
             --question "Do mitochondria participate in programmed cell death?" \
             > "${SMOKE_JSON}"
           SMOKE_JSON="${SMOKE_JSON}" "${SMOKE_ENV}/bin/python" -c \
             'import json, os; d=json.load(open(os.environ["SMOKE_JSON"])); assert d["retrieved"]["pmid"] == "1001"'
+          "${SMOKE_ENV}/bin/bioevidence" react-demo --scenario statins \
+            > "${SMOKE_REACT_JSON}"
+          cat > "${SMOKE_DIR}/assert_react_demo.py" <<'PY'
+          import json
+          import os
+
+          with open(os.environ["SMOKE_REACT_JSON"], encoding="utf-8") as handle:
+              payload = json.load(handle)
+          envelope = payload["demo_envelope"]
+          response = payload["agent_response"]
+          provenance = response["provenance"]
+
+          assert envelope["scripted_mode"] is True
+          assert envelope["corpus_is_synthetic"] is True
+          assert envelope["corpus_size"] == 10
+          assert envelope["agent_response_contract_valid"] is True
+          assert envelope["agent_response_contract_errors"] == []
+
+          assert response["verdict"] == "supported"
+          assert provenance["tool_call_count"] == 3
+          assert [t["tool_name"] for t in provenance["tool_trace"]] == [
+              "search_literature",
+              "fetch_record",
+              "inspect_evidence",
+          ]
+          assert provenance["agent_run"]["run_status"] == "completed"
+          assert (
+              provenance["agent_run"]["termination_reason"]
+              == "finish tool accepted."
+          )
+          assert provenance["model_api_cost_usd"] is None
+          PY
+          SMOKE_REACT_JSON="${SMOKE_REACT_JSON}" "${SMOKE_ENV}/bin/python" \
+            "${SMOKE_DIR}/assert_react_demo.py"

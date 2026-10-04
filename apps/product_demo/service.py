@@ -22,7 +22,7 @@ from bioevidence.tools import (
 )
 
 
-PRODUCT_VERSION = "0.5.0"
+PRODUCT_VERSION = "0.5.1"
 MAX_CARDS = 5
 LIVE_CANDIDATE_LIMIT = 15
 SESSION_ID_RE = re.compile(r"^[A-Za-z0-9-]{8,64}$")

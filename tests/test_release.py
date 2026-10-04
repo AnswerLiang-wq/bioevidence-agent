@@ -35,11 +35,11 @@ def test_public_version_is_consistent() -> None:
     )
 
     project_metadata = project.split("[project]", 1)[1].split("[", 1)[0]
-    assert '\nversion = "0.5.0"\n' in project_metadata
-    assert __version__ == PRODUCT_VERSION == "0.5.0"
-    assert USER_AGENT.startswith("BioEvidenceAgent/0.5.0 ")
-    assert "\nversion: 0.5.0\n" in citation
-    assert "BioEvidence Agent v0.5.0" in page
+    assert '\nversion = "0.5.1"\n' in project_metadata
+    assert __version__ == PRODUCT_VERSION == "0.5.1"
+    assert USER_AGENT.startswith("BioEvidenceAgent/0.5.1 ")
+    assert "\nversion: 0.5.1\n" in citation
+    assert "BioEvidence Agent v0.5.1" in page
 
 
 def test_release_path_validator_accepts_public_relative_path() -> None:
